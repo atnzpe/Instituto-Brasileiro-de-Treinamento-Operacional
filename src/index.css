@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Audiowide", sans-serif;
+  --font-accent: "Aleo", serif;
+  --font-body: "Poppins", sans-serif;
+
+  --color-brand-blue: #239ddb;
+  --color-brand-blue-light: #bde1f4;
+  --color-brand-ice: #eefeff;
+  --color-ink: #000000;
+  --color-body: rgb(51 51 51 / 0.8);
+  --color-muted: #555555;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-muted);
+    background-color: #ffffff;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+  }
+}
