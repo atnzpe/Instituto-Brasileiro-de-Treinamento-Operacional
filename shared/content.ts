@@ -17,6 +17,7 @@ export const nav: NavLink[] = [
 export interface FeatureCard {
   title: string
   description: string
+  href?: string
 }
 
 export interface HomeContent {
@@ -50,13 +51,14 @@ export const home: HomeContent = {
   hero: {
     eyebrow: 'Formação Operacional de Alto Nível',
     heading: ['Instituto Brasileiro de', 'Treinamento Operacional'],
-    image: '/images/hero.png',
+    image: '/images/hero.webp',
   },
   features: [
     {
       title: 'Atuação Nacional',
       description:
         'Rede de instrutores, representantes e centros de treinamento em expansão por todo o território brasileiro.',
+      href: '/rede-nacional',
     },
     {
       title: 'Formação Especializada',
@@ -171,7 +173,7 @@ export const quemSomos: QuemSomosContent = {
       slug: 'eduardo-lopes',
       name: 'Eduardo Lopes',
       role: 'Presidente',
-      photo: '/images/team/eduardo-lopes.png',
+      photo: '/images/team/eduardo-lopes.webp',
       bio: [
         'Fundador do Instituto Brasileiro de Treinamento Operacional (IBTO)',
         'Ex-integrante do Diretório Principal de Inteligência da Ucrânia (GUR)',
@@ -279,7 +281,7 @@ export const quemSomos: QuemSomosContent = {
       slug: 'julio-cesar-moura',
       name: 'Julio Cesar Moura',
       role: 'Vice-presidente',
-      photo: '/images/team/julio-cesar-moura.jpg',
+      photo: '/images/team/julio-cesar-moura.webp',
       bio: [
         'Co-fundador do Instituto Brasileiro de Treinamento Operacional',
         'Major do Exército Brasileiro',
@@ -362,7 +364,7 @@ export const quemSomos: QuemSomosContent = {
       slug: 'wagner-dabalos',
       name: 'Wagner Dabalos',
       role: 'Diretor Técnico',
-      photo: '/images/team/wagner-dabalos.jpg',
+      photo: '/images/team/wagner-dabalos.webp',
       bio: [
         'Ex-Militar do Exército Brasileiro, com sólida experiência em defesa pessoal, segurança e treinamento operacional. Atua como instrutor especializado em Krav Maga, Kapap e técnicas de proteção pessoal, dedicando-se à capacitação de civis e profissionais da área de segurança por meio de treinamentos fundamentados em técnicas modernas e eficazes.',
         'Possui mais de 8 anos de experiência contínua em artes marciais e sistemas de combate, sendo reconhecido pela busca constante por aperfeiçoamento técnico e atualização profissional.',
@@ -435,21 +437,21 @@ export const areasDeAtuacao: AreasDeAtuacaoContent = {
   heading: 'Áreas de Atuação',
   subheading: 'Matérias credenciadas no Instituto Brasileiro de Treinamento Operacional',
   services: [
-    { title: 'Operador de Armas de Fogo', image: '/images/services/operador-armas-de-fogo.png' },
-    { title: 'Tactical Combat Casualty Care', image: '/images/services/tccc.png' },
-    { title: 'Sobrevivência Urbana', image: '/images/services/sobrevivencia-urbana.png' },
-    { title: 'Krav Maga', image: '/images/services/krav-maga.png' },
-    { title: 'Combate com Faca', image: '/images/services/combate-com-faca.png' },
-    { title: 'Selva', image: '/images/services/selva.png' },
-    { title: 'Tiro Tático', image: '/images/services/tiro-tatico.png' },
-    { title: 'APH Tático', image: '/images/services/aph-tatico.png' },
-    { title: 'Combate Corpo-a-corpo', image: '/images/services/combate-corpo-a-corpo.png' },
-    { title: 'Defesa Pessoal', image: '/images/services/defesa-pessoal.png' },
-    { title: 'Combate com Bastão', image: '/images/services/combate-com-bastao.png' },
-    { title: 'KAPAP', image: '/images/services/kapap.png' },
-    { title: 'Operações com Drones', image: '/images/services/operacoes-com-drones.png' },
-    { title: 'Imobilizações Táticas', image: '/images/services/imobilizacoes-taticas.png' },
-    { title: 'Close Quarters Battle', image: '/images/services/close-quarters-battle.png' },
+    { title: 'Operador de Armas de Fogo', image: '/images/services/operador-armas-de-fogo.webp' },
+    { title: 'Tactical Combat Casualty Care', image: '/images/services/tccc.webp' },
+    { title: 'Sobrevivência Urbana', image: '/images/services/sobrevivencia-urbana.webp' },
+    { title: 'Krav Maga', image: '/images/services/krav-maga.webp' },
+    { title: 'Combate com Faca', image: '/images/services/combate-com-faca.webp' },
+    { title: 'Selva', image: '/images/services/selva.webp' },
+    { title: 'Tiro Tático', image: '/images/services/tiro-tatico.webp' },
+    { title: 'APH Tático', image: '/images/services/aph-tatico.webp' },
+    { title: 'Combate Corpo-a-corpo', image: '/images/services/combate-corpo-a-corpo.webp' },
+    { title: 'Defesa Pessoal', image: '/images/services/defesa-pessoal.webp' },
+    { title: 'Combate com Bastão', image: '/images/services/combate-com-bastao.webp' },
+    { title: 'KAPAP', image: '/images/services/kapap.webp' },
+    { title: 'Operações com Drones', image: '/images/services/operacoes-com-drones.webp' },
+    { title: 'Imobilizações Táticas', image: '/images/services/imobilizacoes-taticas.webp' },
+    { title: 'Close Quarters Battle', image: '/images/services/close-quarters-battle.webp' },
   ],
 }
 
@@ -464,24 +466,52 @@ export const contato: ContatoContent = {
     {
       label: 'WhatsApp',
       href: 'https://wa.me/5519983669878?text=Olá%20vi%20o%20site%20ib-to.org%20e%20gostaria%20de%20mais%20informações',
-      icon: '/images/social/whatsapp.png',
+      icon: '/images/social/whatsapp.webp',
     },
     {
       label: 'Facebook',
       href: 'https://www.facebook.com/profile.php?id=100089250625788',
-      icon: '/images/social/facebook.png',
+      icon: '/images/social/facebook.webp',
     },
     {
       label: 'Instagram',
       href: 'https://www.instagram.com/i.b.t.o_/',
-      icon: '/images/social/instagram.png',
+      icon: '/images/social/instagram.webp',
     },
   ],
 }
 
-export const siteContent = { nav, home, quemSomos, areasDeAtuacao, contato }
+// Directory of affiliated representatives/instructors/monitors by state,
+// modeled after https://www.wkmf.com.br/monitoresfiliados and
+// /instrutoresfiliados (a sister federation's site). No real entries yet —
+// `representantes` stays empty until IBTO provides the actual roster
+// (name, role, city/state, phone, optional photo) to fill it in.
+export interface Representative {
+  name: string
+  role: string
+  city: string
+  state: string
+  phone?: string
+  photo?: string
+  instrutorResponsavel?: string
+}
+
+export interface RedeNacionalContent {
+  heading: string
+  subheading: string
+  representantes: Representative[]
+}
+
+export const redeNacional: RedeNacionalContent = {
+  heading: 'Rede Nacional',
+  subheading:
+    'Representantes, instrutores, monitores e centros de treinamento credenciados pelo IBTO em todo o Brasil.',
+  representantes: [],
+}
+
+export const siteContent = { nav, home, quemSomos, areasDeAtuacao, contato, redeNacional }
 export type SiteContent = typeof siteContent
-export type PageSlug = 'home' | 'quem-somos' | 'areas-de-atuacao' | 'contato'
+export type PageSlug = 'home' | 'quem-somos' | 'areas-de-atuacao' | 'contato' | 'rede-nacional'
 
 export function getPageContent(slug: PageSlug) {
   switch (slug) {
@@ -493,5 +523,7 @@ export function getPageContent(slug: PageSlug) {
       return areasDeAtuacao
     case 'contato':
       return contato
+    case 'rede-nacional':
+      return redeNacional
   }
 }

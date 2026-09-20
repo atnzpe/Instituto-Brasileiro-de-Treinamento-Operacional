@@ -4,7 +4,7 @@ export function SecondaryBanner({ banner }: { banner: HomeContent['banner'] }) {
   return (
     <section className="relative isolate overflow-hidden bg-ink py-24 text-center text-white">
       <img
-        src="/images/logo.png"
+        src="/images/logo.webp"
         alt=""
         className="pointer-events-none absolute left-1/2 top-1/2 h-[28rem] w-auto -translate-x-1/2 -translate-y-1/2 opacity-10"
       />
@@ -16,7 +16,7 @@ export function SecondaryBanner({ banner }: { banner: HomeContent['banner'] }) {
             </span>
           ))}
         </h2>
-        <p className="mt-6 text-brand-blue-light">{banner.body}</p>
+        <p className="mt-6 text-brand-gold-light">{banner.body}</p>
       </div>
     </section>
   )

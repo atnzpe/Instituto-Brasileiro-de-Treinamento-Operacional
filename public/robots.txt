@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ib-to.org/sitemap.xml

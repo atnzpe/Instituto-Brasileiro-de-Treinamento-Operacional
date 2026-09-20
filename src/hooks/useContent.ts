@@ -5,11 +5,13 @@ import {
   home as staticHome,
   nav as staticNav,
   quemSomos as staticQuemSomos,
+  redeNacional as staticRedeNacional,
   type AreasDeAtuacaoContent,
   type ContatoContent,
   type HomeContent,
   type NavLink,
   type QuemSomosContent,
+  type RedeNacionalContent,
 } from '../../shared/content'
 import { fetchNav, fetchPageContent } from '../lib/api'
 
@@ -54,5 +56,13 @@ export function useContatoContent() {
     queryKey: ['content', 'contato'],
     queryFn: () => fetchPageContent<ContatoContent>('contato'),
     initialData: staticContato,
+  })
+}
+
+export function useRedeNacionalContent() {
+  return useQuery<RedeNacionalContent>({
+    queryKey: ['content', 'rede-nacional'],
+    queryFn: () => fetchPageContent<RedeNacionalContent>('rede-nacional'),
+    initialData: staticRedeNacional,
   })
 }

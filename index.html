@@ -2,12 +2,18 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/webp" href="/images/logo.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Instituto Brasileiro de Treinamento Operacional (IBTO) — formação operacional de alto nível para civis, profissionais de segurança, policiais e militares."
-    />
+    <meta name="theme-color" content="#0a0a0a" />
+    <!-- Per-page title/description/OG are set by each route's `head()`
+         (see src/routes/*.tsx) via TanStack Router's <HeadContent/>, so they
+         reflect the actual page instead of one generic string everywhere. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://ib-to.org/images/hero.webp" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://ib-to.org/images/hero.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,6 +24,22 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- VLibras (gov.br): Brazilian Sign Language (Libras) translation widget.
+         Official embed snippet from https://vlibras.gov.br/ — kept as plain
+         markup/script rather than React components since it manages its own
+         DOM outside the app tree. -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app')
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
