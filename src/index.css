@@ -5,9 +5,19 @@
   --font-accent: "Aleo", serif;
   --font-body: "Poppins", sans-serif;
 
-  --color-brand-blue: #239ddb;
-  --color-brand-blue-light: #bde1f4;
-  --color-brand-ice: #eefeff;
+  /* Palette derived from the IBTO emblem (black + engraved bronze/khaki metal)
+     instead of an unrelated tech-blue, so the site matches the actual brand mark.
+
+     brand-gold is used as TEXT and as button backgrounds on light surfaces
+     (nav active state, eyebrows, CTAs) — kept dark enough for ~6.4:1 contrast
+     on white, clearing WCAG AA (4.5:1) for normal-size text.
+     QA_REPORT.html BUG-008: the previous blue only reached ~3:1. */
+  --color-brand-gold: #6b5d3a;
+  /* Lighter khaki highlight from the emblem — only for dark backgrounds
+     (e.g. bg-ink), where it stays high-contrast (~11:1 on black). */
+  --color-brand-gold-light: #c9bd94;
+  /* Warm sand tint for light section backgrounds, replacing the old icy blue. */
+  --color-brand-sand: #f4f1e8;
   --color-ink: #000000;
   --color-body: rgb(51 51 51 / 0.8);
   --color-muted: #555555;
@@ -26,5 +36,25 @@
   h4 {
     font-family: var(--font-display);
     color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* QA_REPORT.html P3: no way for keyboard users to bypass the header nav.
+     Hidden until focused, then pinned to the top-left corner. */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 100;
+    border-radius: 0 0 0.5rem 0.5rem;
+    background-color: var(--color-ink);
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .skip-link:focus {
+    top: 0;
   }
 }

@@ -1,0 +1,19 @@
+# Instituto Brasileiro de Treinamento Operacional (IBTO)
+
+> Instituição brasileira de formação e capacitação operacional — treinamentos de defesa pessoal, sobrevivência, atendimento pré-hospitalar tático, segurança e desenvolvimento profissional para civis, profissionais de segurança, policiais e militares.
+
+O IBTO foi fundado por militares e ex-militares com experiência real em combate, treinamento operacional, defesa e segurança. Os programas cobrem áreas como Krav Maga, Kapap, Combate Corpo a Corpo, Combate com Faca, Combate com Bastão, Close Quarters Battle, Defesa Pessoal, Sobrevivência Urbana, Selva, Tiro Tático, Operador de Armas de Fogo, Tactical Combat Casualty Care (TCCC), APH Tático, Imobilizações Táticas e Operações com Drones.
+
+## Páginas
+
+- [Início](https://ib-to.org/): apresentação institucional, áreas de treinamento e chamadas para as demais páginas.
+- [Áreas de atuação](https://ib-to.org/areas-de-atuacao): lista completa das matérias/treinamentos credenciados pelo instituto.
+- [Quem somos](https://ib-to.org/quem-somos): história, missão, visão, valores e a diretoria (Eduardo Lopes — Presidente; Julio Cesar Moura — Vice-presidente).
+- [Contato](https://ib-to.org/contato): formulário de contato e canais (WhatsApp, Facebook, Instagram).
+- [Rede Nacional](https://ib-to.org/rede-nacional): representantes, instrutores, monitores e centros de treinamento credenciados por estado (em expansão).
+
+## Notas para agentes e crawlers
+
+- Site em português do Brasil (pt-BR).
+- Não há login, cadastro, checkout ou área administrativa pública — todo o conteúdo relevante está nas quatro páginas acima.
+- `sitemap.xml` na raiz lista as URLs canônicas.

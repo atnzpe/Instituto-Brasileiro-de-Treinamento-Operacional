@@ -9,10 +9,10 @@ export function ContactLinks({ links }: { links: ContatoContent['links'] }) {
           href={link.href}
           target="_blank"
           rel="noreferrer"
-          className="flex flex-col items-center gap-3 rounded-2xl border border-black/5 bg-white px-10 py-8 shadow-sm transition-shadow hover:shadow-md"
+          className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-10 py-8 transition-colors hover:bg-white/10"
         >
-          <img src={link.icon} alt={link.label} className="h-14 w-14 object-contain" />
-          <span className="text-sm font-semibold text-ink">{link.label}</span>
+          <img src={link.icon} alt={link.label} className="h-16 w-16 object-contain" />
+          <span className="text-sm font-semibold text-brand-gold-light">{link.label}</span>
         </a>
       ))}
     </div>

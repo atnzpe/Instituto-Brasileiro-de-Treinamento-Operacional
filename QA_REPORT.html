@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QA Report — ib-to.org | Auditoria Completa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1216;
+      --bg-elev: #171b21;
+      --bg-soft: #1e242c;
+      --line: #2c343f;
+      --text: #e8edf2;
+      --muted: #9aa5b3;
+      --accent: #e8a54b;
+      --ok: #3dbe7a;
+      --warn: #e8a54b;
+      --bad: #e85d5d;
+      --p1: #e85d5d;
+      --p2: #e8a54b;
+      --p3: #6b8cae;
+      --pass: #3dbe7a;
+      --fail: #e85d5d;
+      --radius: 10px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(232, 165, 75, 0.08), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(107, 140, 174, 0.1), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+
+    /* Top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 18, 22, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+    }
+    .brand {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--bad);
+      box-shadow: 0 0 0 4px rgba(232, 93, 93, 0.18);
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1rem;
+      font-size: 0.9rem;
+    }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 0.85rem;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      margin: 0 0 0.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .hero-lead {
+      max-width: 52rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0 0 1.75rem;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+    .meta-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+    }
+    .meta-card span {
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .meta-card strong { font-size: 0.95rem; font-weight: 600; word-break: break-word; }
+
+    /* Verdict banner */
+    .verdict {
+      margin: 1.75rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .verdict-badge {
+      background: linear-gradient(135deg, #3a1515, #241010);
+      border: 1px solid rgba(232, 93, 93, 0.45);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.35rem;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+    .verdict-badge .label {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #f0a0a0;
+    }
+    .verdict-badge .value {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--bad);
+      margin-top: 0.15rem;
+    }
+    .verdict-stats {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.65rem;
+    }
+    .stat {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.85rem 0.9rem;
+      text-align: center;
+    }
+    .stat b {
+      display: block;
+      font-size: 1.45rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+    }
+    .stat small { color: var(--muted); font-size: 0.78rem; }
+    .stat.score b { color: var(--accent); }
+    .stat.p1 b { color: var(--p1); }
+    .stat.p2 b { color: var(--p2); }
+    .stat.p3 b { color: var(--p3); }
+
+    /* Sections */
+    section {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    section:last-of-type { border-bottom: 0; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1.1rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    h2 .num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.5rem 0 0.65rem;
+    }
+    p { margin: 0 0 0.9rem; color: var(--muted); }
+    p strong, li strong { color: var(--text); }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.2rem; color: var(--muted); }
+    li { margin: 0.35rem 0; }
+    li::marker { color: var(--accent); }
+
+    .callout {
+      background: var(--bg-elev);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+    }
+    .callout.fail { border-left-color: var(--bad); }
+    .callout.ok { border-left-color: var(--ok); }
+
+    /* Score bars */
+    .score-list { display: grid; gap: 0.7rem; }
+    .score-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 200px) 1fr 52px;
+      gap: 0.75rem;
+      align-items: center;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.7rem 0.9rem;
+    }
+    .score-row .cat {
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    .bar {
+      height: 8px;
+      background: var(--bg-soft);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #8b5a20, var(--accent));
+    }
+    .bar.low > i { background: linear-gradient(90deg, #7a2a2a, var(--bad)); }
+    .bar.mid > i { background: linear-gradient(90deg, #8b5a20, var(--accent)); }
+    .bar.high > i { background: linear-gradient(90deg, #1f6b45, var(--ok)); }
+    .score-row .val {
+      font-family: "IBM Plex Mono", monospace;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* Issue cards */
+    .issue {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.2rem;
+      margin: 0.85rem 0;
+    }
+    .issue-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .issue-head h3 { margin: 0; flex: 1 1 220px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.22rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+    .tag.p1 { color: #ffc4c4; background: rgba(232, 93, 93, 0.15); border-color: rgba(232, 93, 93, 0.35); }
+    .tag.p2 { color: #ffd9a8; background: rgba(232, 165, 75, 0.14); border-color: rgba(232, 165, 75, 0.35); }
+    .tag.p3 { color: #b7cce0; background: rgba(107, 140, 174, 0.14); border-color: rgba(107, 140, 174, 0.35); }
+    .tag.cat { color: var(--muted); background: var(--bg-soft); border-color: var(--line); }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.35rem 0.85rem;
+      font-size: 0.92rem;
+    }
+    .kv dt { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; }
+    .kv dd { margin: 0; color: var(--text); }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 560px;
+    }
+    th, td {
+      padding: 0.7rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      background: var(--bg-soft);
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .pill.pass { background: rgba(61, 190, 122, 0.15); color: var(--ok); }
+    .pill.fail { background: rgba(232, 93, 93, 0.15); color: var(--bad); }
+    .pill.na { background: rgba(154, 165, 179, 0.15); color: var(--muted); }
+    .pill.warn { background: rgba(232, 165, 75, 0.15); color: var(--warn); }
+
+    /* Evidence gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.85rem;
+    }
+    figure {
+      margin: 0;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      object-position: top center;
+      background: #000;
+    }
+    figcaption {
+      padding: 0.65rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    /* Checklist */
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.85rem;
+    }
+    .check-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+    .check-card h3 { margin: 0 0 0.65rem; font-size: 0.95rem; }
+    .check-card label {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 0.4rem 0;
+      cursor: default;
+    }
+    .check-card input { margin-top: 0.25rem; accent-color: var(--accent); }
+
+    .map-box {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      background: #0a0c0f;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      color: #b8c4d0;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.65;
+    }
+
+    footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .score-row { grid-template-columns: 1fr 48px; }
+      .score-row .bar { grid-column: 1 / -1; order: 3; }
+      .kv { grid-template-columns: 1fr; }
+      .kv dt { margin-top: 0.35rem; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .topbar { position: static; background: #fff; }
+      .meta-card, .issue, .score-row, .table-wrap, .check-card, .verdict-badge, .stat {
+        background: #fff;
+        border-color: #ccc;
+        box-shadow: none;
+      }
+      p, li, .hero-lead, figcaption { color: #333; }
+      a { color: #0645ad; }
+      .verdict-badge .value, .stat.p1 b { color: #b00020; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>QA Report · ib-to.org</span>
+      </div>
+      <nav class="nav-links" aria-label="Seções do relatório">
+        <a href="#resumo">Resumo</a>
+        <a href="#score">Score</a>
+        <a href="#p1">P1</a>
+        <a href="#p2">P2</a>
+        <a href="#perf">Performance</a>
+        <a href="#a11y">A11y</a>
+        <a href="#fixes">Fixes</a>
+        <a href="#evidencias">Evidências</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Auditoria completa de site · Rodada #2</p>
+        <h1>Instituto Brasileiro de Treinamento Operacional</h1>
+        <p class="hero-lead">
+          Relatório de QA sobre o site em produção
+          <a href="https://ib-to.org/" target="_blank" rel="noopener noreferrer">https://ib-to.org/</a>.
+          Código-fonte não disponível — auditoria black-box via Playwright + inspeção de HTML/meta/network.
+        </p>
+
+        <div class="meta-grid">
+          <div class="meta-card"><span>Alvo</span><strong>ib-to.org</strong></div>
+          <div class="meta-card"><span>Data</span><strong>11 Set 2026</strong></div>
+          <div class="meta-card"><span>Stack</span><strong>Brizy + Apache</strong></div>
+          <div class="meta-card"><span>Método</span><strong>Playwright / Chromium lab</strong></div>
+        </div>
+
+        <div class="verdict">
+          <div class="verdict-badge">
+            <span class="label">Veredito</span>
+            <span class="value">REPROVADO</span>
+          </div>
+          <div class="verdict-stats">
+            <div class="stat score"><b>4.4</b><small>Score /10</small></div>
+            <div class="stat"><b>0</b><small>P0</small></div>
+            <div class="stat p1"><b>5</b><small>P1</small></div>
+            <div class="stat p2"><b>10</b><small>P2</small></div>
+            <div class="stat p3"><b>5+</b><small>P3</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1 Resumo -->
+    <section id="resumo">
+      <div class="wrap">
+        <h2><span class="num">01</span> Resumo executivo</h2>
+        <div class="callout fail">
+          <strong style="color:var(--text)">Contrato de veredito:</strong>
+          APROVADO somente com zero P0/P1 em fluxos críticos, mobile utilizável, LCP &lt; 2.5s (ou justificativa), 404 real e menu acessível por teclado.
+          <br /><strong style="color:var(--bad)">Resultado: FALHOU</strong> — múltiplos P1 confirmados.
+        </div>
+        <p>
+          O site <strong>sobe e comunica a marca</strong> com estética tática consistente.
+          As páginas principais (<code>/</code>, <code>/areas-de-atuacao</code>, <code>/quem-somos</code>, <code>/contato</code>) respondem HTTP 200.
+          A qualidade atual, porém, <strong>não está pronta para aprovação</strong>.
+        </p>
+        <ol>
+          <li><strong>Performance crítica</strong> — LCP 3,8s · TTFB ~3,6s · ~12,2 MB no load (PNGs 1,5–2,6 MB).</li>
+          <li><strong>Menu mobile inutilizável</strong> — ícone ~25×25px, cor quase preta no fundo escuro.</li>
+          <li><strong>Teclado quebrado no menu</strong> — Áreas / Quem somos / Contato com <code>tabIndex: -1</code>.</li>
+          <li><strong>Hero duplicado</strong> — título da marca sobreposto no desktop.</li>
+          <li><strong>Soft 404</strong> — URL inexistente redireciona para home com 200.</li>
+          <li><strong>SEO frágil</strong> — sem meta description, home sem H1, OG incompleto.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 2 Score -->
+    <section id="score">
+      <div class="wrap">
+        <h2><span class="num">02</span> Score por categoria</h2>
+        <div class="score-list">
+          <div class="score-row"><span class="name">UI / Design</span><div class="bar mid"><i style="width:50%"></i></div><span class="val">5/10</span></div>
+          <div class="score-row"><span class="name">UX</span><div class="bar mid"><i style="width:50%"></i></div><span class="val">5/10</span></div>
+          <div class="score-row"><span class="name">Responsividade</span><div class="bar mid"><i style="width:60%"></i></div><span class="val">6/10</span></div>
+          <div class="score-row"><span class="name">Funcionalidade</span><div class="bar mid"><i style="width:60%"></i></div><span class="val">6/10</span></div>
+          <div class="score-row"><span class="name">Performance</span><div class="bar low"><i style="width:20%"></i></div><span class="val">2/10</span></div>
+          <div class="score-row"><span class="name">Acessibilidade</span><div class="bar low"><i style="width:30%"></i></div><span class="val">3/10</span></div>
+          <div class="score-row"><span class="name">SEO</span><div class="bar low"><i style="width:40%"></i></div><span class="val">4/10</span></div>
+          <div class="score-row"><span class="name">Código / arquitetura</span><div class="bar low"><i style="width:40%"></i></div><span class="val">4/10</span></div>
+        </div>
+        <p style="margin-top:1rem"><strong>Score geral: 4.4/10</strong> — identidade visual presente, mas falhas estruturais de performance, mobile e a11y.</p>
+      </div>
+    </section>
+
+    <!-- 3 P0 -->
+    <section id="p0">
+      <div class="wrap">
+        <h2><span class="num">03</span> Critical Issues (P0)</h2>
+        <div class="callout ok">
+          Nenhum P0 confirmado. O site carrega e os fluxos principais existem para usuário com mouse em desktop.
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 P1 -->
+    <section id="p1">
+      <div class="wrap">
+        <h2><span class="num">04</span> High Priority (P1)</h2>
+
+        <article class="issue">
+          <div class="issue-head">
+            <span class="tag p1">P1</span>
+            <span class="tag cat">PERFORMANCE</span>
+            <h3>BUG-001 — Payload e LCP muito altos</h3>
+          </div>
+          <dl class="kv">
+            <dt>Página</dt><dd>Home <code>/</code> · Desktop 1440×900</dd>
+            <dt>Atual</dt><dd>LCP <strong>3824 ms</strong> · FCP <strong>3824 ms</strong> · TTFB <strong>3641 ms</strong> · ~<strong>12,2 MB</strong> · 24 requests. PNGs até 2612 KB (incl. assets ChatGPT / <code>iW=5000</code>).</dd>
+            <dt>Esperado</dt><dd>LCP &lt; 2,5s; imagens WebP/AVIF dimensionadas ao display.</dd>
+            <dt>Impacto</dt><dd>Abandono em 3G/4G; CWV/SEO ruins; custo de banda.</dd>
+            <dt>Rec.</dt><dd>Reexportar ≤ 1600–2000px; WebP/AVIF; compressão; evitar backgrounds 5000px.</dd>
+            <dt>Evidência</dt><dd><code>qa_evidence/audit_results.json</code> → home_metrics / heavy_assets</dd>
+          </dl>
+        </article>
+
+        <article class="issue">
+          <div class="issue-head">
+            <span class="tag p1">P1</span>
+            <span class="tag cat">BUG / UX</span>
+            <h3>BUG-002 — Menu mobile invisível / não funcional</h3>
+          </div>
+          <dl class="kv">
+            <dt>Página</dt><dd>Home · viewport 375×812</dd>
+            <dt>Atual</dt><dd>Ícone 25×25, cor <code>#1c1c1c</code> sobre fundo escuro. Clique sem evidência de drawer com links.</dd>
+            <dt>Esperado</dt><dd>Controle ≥ 44×44, contraste adequado, menu abre com os 4 itens.</dd>
+            <dt>Impacto</dt><dd>Usuário mobile não encontra navegação principal.</dd>
+            <dt>Rec.</dt><dd>Ícone claro; hit area 44px; validar menu Brizy mobile.</dd>
+            <dt>Evidência</dt><dd><code>home_mobile_375_nav_check.png</code>, <code>deep_checks.json</code></dd>
+          </dl>
+        </article>
+
+        <article class="issue">
+          <div class="issue-head">
+            <span class="tag p1">P1</span>
+            <span class="tag cat">ACCESSIBILITY</span>
+            <h3>BUG-003 — Menu com <code>tabIndex=-1</code></h3>
+          </div>
+          <dl class="kv">
+            <dt>Página</dt><dd>Nav global (todas)</dd>
+            <dt>Atual</dt><dd>Áreas / Quem somos / Contato com <code>tabIndex: -1</code>. Tab só alcança Início e Saber mais.</dd>
+            <dt>Esperado</dt><dd>Todos os links do menu focáveis na ordem visual.</dd>
+            <dt>Impacto</dt><dd>Teclado/leitores não acessam páginas principais via menu.</dd>
+            <dt>Rec.</dt><dd>Remover <code>tabindex=-1</code>; garantir ordem de foco.</dd>
+          </dl>
+        </article>
+
+        <article class="issue">
+          <div class="issue-head">
+            <span class="tag p1">P1</span>
+            <span class="tag cat">UI ISSUE</span>
+            <h3>BUG-004 — Título do hero duplicado</h3>
+          </div>
+          <dl class="kv">
+            <dt>Página</dt><dd>Home desktop</dd>
+            <dt>Atual</dt><dd>Dois blocos <code>brz-rich-text</code> com o mesmo título (sobreposição visual).</dd>
+            <dt>Esperado</dt><dd>Um único título legível.</dd>
+            <dt>Rec.</dt><dd>Remover camada duplicada no Brizy.</dd>
+            <dt>Evidência</dt><dd><code>home_desktop_1440.png</code></dd>
+          </dl>
+        </article>
+
+        <article class="issue">
+          <div class="issue-head">
+            <span class="tag p1">P1</span>
+            <span class="tag cat">BUG / SEO</span>
+            <h3>BUG-005 — Soft 404</h3>
+          </div>
+          <dl class="kv">
+            <dt>URL</dt><dd><code>/pagina-inexistente-qa-404</code></dd>
+            <dt>Atual</dt><dd>HTTP <strong>200</strong> + conteúdo da home.</dd>
+            <dt>Esperado</dt><dd>HTTP 404 + página “não encontrada”.</dd>
+            <dt>Impacto</dt><dd>UX confusa; SEO indexa soft-404s.</dd>
+            <dt>Rec.</dt><dd>Configurar 404 real no host/Brizy.</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5 P2 -->
+    <section id="p2">
+      <div class="wrap">
+        <h2><span class="num">05</span> Medium Priority (P2)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Problema</th><th>Categoria</th><th>Recomendação</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>BUG-006</td><td>Sem <code>meta description</code></td><td>SEO</td><td>140–160 caracteres por página</td></tr>
+              <tr><td>BUG-007</td><td>Home/Áreas/Quem somos sem <code>&lt;h1&gt;</code></td><td>A11y / SEO</td><td>Um H1 por página</td></tr>
+              <tr><td>BUG-008</td><td>Contraste do item ativo do menu (ciano 2.05:1)</td><td>A11y</td><td>Escurecer cor ou adicionar fundo</td></tr>
+              <tr><td>BUG-009</td><td>Contato sem formulário / sem mailto</td><td>UX</td><td>E-mail ou form com validação</td></tr>
+              <tr><td>BUG-010</td><td>Headers de segurança ausentes</td><td>Security</td><td>HSTS, CSP, XCTO, Referrer-Policy…</td></tr>
+              <tr><td>BUG-011</td><td>Imagens com <code>alt=""</code></td><td>A11y</td><td>Alt descritivo em logos</td></tr>
+              <tr><td>BUG-012</td><td><code>/favicon.ico</code> = 404</td><td>SEO/UI</td><td>Servir favicon.ico ou silenciar 404</td></tr>
+              <tr><td>BUG-013</td><td><code>sitemap.xml</code> intermitente (500)</td><td>SEO</td><td>Estabilizar no edge/CDN</td></tr>
+              <tr><td>BUG-014</td><td>Typos / headings partidos</td><td>Conteúdo</td><td>Revisão editorial</td></tr>
+              <tr><td>BUG-015</td><td>Open Graph incompleto</td><td>SEO</td><td>og:title + og:description</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>P3 — Low</h3>
+        <ul>
+          <li>Touch targets do menu desktop ~29px de altura (&lt; 44px).</li>
+          <li>Sem skip-link; landmarks sem <code>header</code>/<code>main</code>.</li>
+          <li>Arquivos <code>ChatGPT-Image-…</code> expõem origem do asset.</li>
+          <li><code>/services</code> redireciona para Áreas (URL legada).</li>
+          <li>Duplicação de nós de menu no DOM.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7 UX -->
+    <section id="ux">
+      <div class="wrap">
+        <h2><span class="num">07</span> UX / UI Review</h2>
+        <div class="check-grid">
+          <div class="check-card">
+            <h3>Pontos positivos</h3>
+            <ul>
+              <li>Identidade tática coerente</li>
+              <li>Redes de contato claras</li>
+              <li>Texto legível empilhado no mobile</li>
+            </ul>
+          </div>
+          <div class="check-card">
+            <h3>Problemas</h3>
+            <ul>
+              <li>Hero com título duplicado</li>
+              <li>Headings quebrados em Áreas</li>
+              <li>CTA fraco acima da dobra no mobile</li>
+              <li>Menu mobile força “página única”</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 Responsive -->
+    <section id="responsive">
+      <div class="wrap">
+        <h2><span class="num">08</span> Responsividade</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Página</th><th>Desktop</th><th>Tablet</th><th>Mobile</th><th>Problemas</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Home <code>/</code></td><td>OK*</td><td>OK</td><td>Parcial</td><td>Título duplicado; menu mobile P1</td></tr>
+              <tr><td><code>/areas-de-atuacao</code></td><td>OK</td><td>OK</td><td>OK layout</td><td>Sem overflow</td></tr>
+              <tr><td><code>/quem-somos</code></td><td>OK</td><td>OK</td><td>OK layout</td><td>Página longa</td></tr>
+              <tr><td><code>/contato</code></td><td>OK</td><td>OK</td><td>OK layout</td><td>Menu mobile herdado</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:0.9rem">Overflow horizontal: <strong>não detectado</strong> em 1920 · 1440 · 1280 · 1024 · 768 · 430 · 390 · 375 · 320.</p>
+      </div>
+    </section>
+
+    <!-- 9 Perf -->
+    <section id="perf">
+      <div class="wrap">
+        <h2><span class="num">09</span> Performance</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Métrica</th><th>Medido</th><th>Limite</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>LCP</td><td><strong>3824 ms</strong></td><td>&lt; 2500 ms</td><td><span class="pill fail">FAIL</span></td></tr>
+              <tr><td>CLS</td><td>0.0007</td><td>&lt; 0.1</td><td><span class="pill pass">PASS</span></td></tr>
+              <tr><td>INP</td><td>Não foi possível medir</td><td>&lt; 200 ms</td><td><span class="pill na">N/A</span></td></tr>
+              <tr><td>FCP</td><td><strong>3824 ms</strong></td><td>&lt; 1800 ms</td><td><span class="pill fail">FAIL</span></td></tr>
+              <tr><td>TTFB</td><td><strong>3641 ms</strong></td><td>ideal ≪ 800 ms</td><td><span class="pill fail">FAIL</span></td></tr>
+              <tr><td>Load</td><td>5545 ms</td><td>—</td><td><span class="pill warn">ALTO</span></td></tr>
+              <tr><td>Requests</td><td>24</td><td>—</td><td><span class="pill na">—</span></td></tr>
+              <tr><td>Transferência</td><td><strong>~12,2 MB</strong></td><td>—</td><td><span class="pill fail">FAIL</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:0.9rem"><strong>Gargalos:</strong> PNGs enormes (hero + CSS <code>iW=5000</code>); TTFB alto (servidor/CDN).</p>
+      </div>
+    </section>
+
+    <!-- 10 A11y -->
+    <section id="a11y">
+      <div class="wrap">
+        <h2><span class="num">10</span> Acessibilidade</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Achado</th><th>Impacto</th></tr></thead>
+            <tbody>
+              <tr><td><code>tabIndex=-1</code> em 3/4 links do menu</td><td>Bloqueia teclado (P1)</td></tr>
+              <tr><td>Sem H1 na home</td><td>Hierarquia / SR / SEO</td></tr>
+              <tr><td>Contraste ciano do item ativo</td><td>Falha AA em alguns fundos</td></tr>
+              <tr><td>Menu mobile 25px + baixo contraste</td><td>Toque e percepção</td></tr>
+              <tr><td><code>alt=""</code> em logos</td><td>SR não anuncia marca</td></tr>
+              <tr><td>Sem skip-link / sem <code>&lt;main&gt;</code></td><td>Navegação assistiva pior</td></tr>
+              <tr><td>Foco visível (outline)</td><td>Presente nos focáveis</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:0.9rem">Leitor de tela real (NVDA/VoiceOver): <strong>não executado nesta rodada</strong>.</p>
+      </div>
+    </section>
+
+    <!-- 11 Console -->
+    <section id="console">
+      <div class="wrap">
+        <h2><span class="num">11</span> Console / Network</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tipo</th><th>Detalhe</th></tr></thead>
+            <tbody>
+              <tr><td>Console error</td><td>Resource 404 associado a <code>/favicon.ico</code></td></tr>
+              <tr><td>Page errors JS</td><td>Nenhum capturado</td></tr>
+              <tr><td>Request failed</td><td>0 (Playwright)</td></tr>
+              <tr><td>Soft 404</td><td>URL fake → 200 home</td></tr>
+              <tr><td>Sitemap</td><td>200 no browser; 500 intermitente via fetch externo</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 Functional -->
+    <section id="funcional">
+      <div class="wrap">
+        <h2><span class="num">12</span> Testes funcionais</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Fluxo</th><th>Resultado</th><th>Sev.</th><th>Observação</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Abrir home</td><td><span class="pill pass">PASSOU</span></td><td>—</td><td>200</td></tr>
+              <tr><td>Nav → Áreas</td><td><span class="pill pass">PASSOU</span></td><td>P1 a11y</td><td>Mouse ok · teclado falha</td></tr>
+              <tr><td>Nav → Quem somos</td><td><span class="pill pass">PASSOU</span></td><td>P1 a11y</td><td>Mouse ok · teclado falha</td></tr>
+              <tr><td>Nav → Contato</td><td><span class="pill pass">PASSOU</span></td><td>P1 a11y</td><td>Sem formulário</td></tr>
+              <tr><td>WhatsApp / redes</td><td><span class="pill pass">PASSOU</span></td><td>—</td><td>Links externos ok</td></tr>
+              <tr><td>Menu mobile</td><td><span class="pill fail">FALHOU</span></td><td>P1</td><td>Ícone/menu</td></tr>
+              <tr><td>URL 404</td><td><span class="pill fail">FALHOU</span></td><td>P1</td><td>Soft 404</td></tr>
+              <tr><td>Formulário contato</td><td><span class="pill na">N/A</span></td><td>P2</td><td>Não existe</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Mapa da aplicação</h3>
+        <div class="map-box">/                    Home (hero, treinamentos, quem somos resumo)
+/areas-de-atuacao    Lista de matérias/treinamentos
+/quem-somos          Institucional + diretoria
+/contato             Redes + WhatsApp (sem form)
+/services            Redirect → /areas-de-atuacao</div>
+        <p>Não há login, cadastro, dashboard, checkout ou área admin pública.</p>
+      </div>
+    </section>
+
+    <!-- 13 Fixes -->
+    <section id="fixes">
+      <div class="wrap">
+        <h2><span class="num">13</span> Recommended Fixes</h2>
+        <ol>
+          <li><strong>P1</strong> Comprimir/substituir imagens; eliminar backgrounds 5000px; re-medir LCP.</li>
+          <li><strong>P1</strong> Corrigir menu mobile (contraste + tamanho + abrir/fechar).</li>
+          <li><strong>P1</strong> Remover <code>tabindex=-1</code> dos links do menu desktop.</li>
+          <li><strong>P1</strong> Remover texto duplicado do hero.</li>
+          <li><strong>P1</strong> Implementar 404 real (status + página).</li>
+          <li><strong>P2</strong> Meta description + H1 + OG description.</li>
+          <li><strong>P2</strong> Headers de segurança no Apache.</li>
+          <li><strong>P2</strong> Contato: e-mail/<code>mailto</code> e/ou formulário.</li>
+          <li><strong>P2</strong> Estabilizar <code>sitemap.xml</code>.</li>
+          <li><strong>P3</strong> Revisar textos (typos) e alts.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 14 Checklist -->
+    <section id="checklist">
+      <div class="wrap">
+        <h2><span class="num">14</span> Regression Checklist</h2>
+        <div class="check-grid">
+          <div class="check-card">
+            <h3>Funcional</h3>
+            <label><input type="checkbox" disabled /> Home, Áreas, Quem somos, Contato = 200</label>
+            <label><input type="checkbox" disabled /> Menu desktop (mouse) completo</label>
+            <label><input type="checkbox" disabled /> Menu desktop (Tab) completo</label>
+            <label><input type="checkbox" disabled /> Menu mobile abre e navega</label>
+            <label><input type="checkbox" disabled /> URL inexistente → 404 real</label>
+            <label><input type="checkbox" disabled /> WhatsApp / redes corretos</label>
+          </div>
+          <div class="check-card">
+            <h3>UI / Perf / A11y</h3>
+            <label><input type="checkbox" disabled /> Hero sem texto duplicado</label>
+            <label><input type="checkbox" disabled /> LCP lab &lt; 2.5s</label>
+            <label><input type="checkbox" disabled /> Transfer home &lt; ~2 MB</label>
+            <label><input type="checkbox" disabled /> H1 presente</label>
+            <label><input type="checkbox" disabled /> Contraste AA no menu ativo</label>
+            <label><input type="checkbox" disabled /> Hambúrguer ≥ 44px</label>
+          </div>
+          <div class="check-card">
+            <h3>SEO / Security</h3>
+            <label><input type="checkbox" disabled /> Meta description em todas as páginas</label>
+            <label><input type="checkbox" disabled /> sitemap.xml 200 estável</label>
+            <label><input type="checkbox" disabled /> HSTS + X-Content-Type-Options + Referrer-Policy</label>
+            <label><input type="checkbox" disabled /> Alts em logos informativos</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Evidências -->
+    <section id="evidencias">
+      <div class="wrap">
+        <h2><span class="num">15</span> Evidências (screenshots)</h2>
+        <p>Capturas geradas na auditoria (pasta <code>qa_evidence/</code>). Clique para abrir em tamanho real.</p>
+        <div class="gallery">
+          <figure>
+            <a href="qa_evidence/home_desktop_1440.png" target="_blank" rel="noopener"><img src="qa_evidence/home_desktop_1440.png" alt="Home desktop 1440" loading="lazy" /></a>
+            <figcaption>Home · desktop 1440</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/home_mobile_375.png" target="_blank" rel="noopener"><img src="qa_evidence/home_mobile_375.png" alt="Home mobile 375" loading="lazy" /></a>
+            <figcaption>Home · mobile 375</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/page_contato_1440.png" target="_blank" rel="noopener"><img src="qa_evidence/page_contato_1440.png" alt="Contato desktop" loading="lazy" /></a>
+            <figcaption>Contato · desktop</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/contato_mobile_375.png" target="_blank" rel="noopener"><img src="qa_evidence/contato_mobile_375.png" alt="Contato mobile" loading="lazy" /></a>
+            <figcaption>Contato · mobile 375</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/page_areas-de-atuacao_1440.png" target="_blank" rel="noopener"><img src="qa_evidence/page_areas-de-atuacao_1440.png" alt="Áreas de atuação" loading="lazy" /></a>
+            <figcaption>Áreas de atuação · 1440</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/page_quem-somos_1440.png" target="_blank" rel="noopener"><img src="qa_evidence/page_quem-somos_1440.png" alt="Quem somos" loading="lazy" /></a>
+            <figcaption>Quem somos · 1440</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/home_mobile_375_nav_check.png" target="_blank" rel="noopener"><img src="qa_evidence/home_mobile_375_nav_check.png" alt="Checagem menu mobile" loading="lazy" /></a>
+            <figcaption>Mobile · checagem de nav</figcaption>
+          </figure>
+          <figure>
+            <a href="qa_evidence/home_tablet_768.png" target="_blank" rel="noopener"><img src="qa_evidence/home_tablet_768.png" alt="Home tablet" loading="lazy" /></a>
+            <figcaption>Home · tablet 768</figcaption>
+          </figure>
+        </div>
+        <p style="margin-top:1rem">
+          JSON: <code>audit_results.json</code> · <code>summary.json</code> · <code>deep_checks.json</code><br />
+          Markdown: <a href="QA_REPORT.md">QA_REPORT.md</a>
+        </p>
+        <div class="callout">
+          <strong style="color:var(--text)">Limitação:</strong> sem código-fonte do cliente — correções dependem de acesso ao projeto Brizy / hosting.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      QA Report · ib-to.org · 11/09/2026 · Veredito: <strong style="color:var(--bad)">REPROVADO</strong> · Score 4.4/10
+    </div>
+  </footer>
+</body>
+</html>

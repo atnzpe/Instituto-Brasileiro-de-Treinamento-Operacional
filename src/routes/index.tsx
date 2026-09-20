@@ -15,13 +15,13 @@ function HomePage() {
   const { data: home } = useHomeContent()
 
   return (
-    <>
+    <div className="bg-ink">
       <Hero hero={home.hero} />
       <FeatureCards features={home.features} />
       <TrainingSection training={home.training} />
       <SecondaryBanner banner={home.banner} />
       <QuemSomosTeaser teaser={home.quemSomosTeaser} />
       <AreasTeaser teaser={home.areasTeaser} />
-    </>
+    </div>
   )
 }
