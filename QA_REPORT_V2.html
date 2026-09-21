@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QA Report V2 — IBTO Landpage | Revalidação pós-reconstrução</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1216;
+      --bg-elev: #171b21;
+      --bg-soft: #1e242c;
+      --line: #2c343f;
+      --text: #e8edf2;
+      --muted: #9aa5b3;
+      --accent: #e8a54b;
+      --ok: #3dbe7a;
+      --warn: #e8a54b;
+      --bad: #e85d5d;
+      --p1: #e85d5d;
+      --p2: #e8a54b;
+      --p3: #6b8cae;
+      --pass: #3dbe7a;
+      --fail: #e85d5d;
+      --radius: 10px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(61, 190, 122, 0.08), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(107, 140, 174, 0.1), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 18, 22, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+    }
+    .brand {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--ok);
+      box-shadow: 0 0 0 4px rgba(61, 190, 122, 0.18);
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1rem;
+      font-size: 0.9rem;
+    }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .hero {
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 0.85rem;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      margin: 0 0 0.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .hero-lead {
+      max-width: 52rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0 0 1.75rem;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+    .meta-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+    }
+    .meta-card span {
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .meta-card strong { font-size: 0.95rem; font-weight: 600; word-break: break-word; }
+
+    .verdict {
+      margin: 1.75rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .verdict-badge {
+      background: linear-gradient(135deg, #16321f, #0f2016);
+      border: 1px solid rgba(61, 190, 122, 0.45);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.35rem;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+    .verdict-badge .label {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #a8e0bc;
+    }
+    .verdict-badge .value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ok);
+      margin-top: 0.15rem;
+      line-height: 1.25;
+    }
+    .verdict-stats {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.65rem;
+    }
+    .stat {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.85rem 0.9rem;
+      text-align: center;
+    }
+    .stat b {
+      display: block;
+      font-size: 1.45rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+    }
+    .stat small { color: var(--muted); font-size: 0.78rem; }
+    .stat.score b { color: var(--ok); }
+    .stat.p1 b { color: var(--p1); }
+    .stat.p2 b { color: var(--p2); }
+    .stat.p3 b { color: var(--p3); }
+
+    section {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    section:last-of-type { border-bottom: 0; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1.1rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    h2 .num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.5rem 0 0.65rem;
+    }
+    p { margin: 0 0 0.9rem; color: var(--muted); }
+    p strong, li strong { color: var(--text); }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.2rem; color: var(--muted); }
+    li { margin: 0.35rem 0; }
+    li::marker { color: var(--accent); }
+
+    .callout {
+      background: var(--bg-elev);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+    }
+    .callout.fail { border-left-color: var(--bad); }
+    .callout.ok { border-left-color: var(--ok); }
+    .callout.warn { border-left-color: var(--warn); }
+
+    .score-list { display: grid; gap: 0.7rem; }
+    .score-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 200px) 1fr 52px 52px;
+      gap: 0.75rem;
+      align-items: center;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.7rem 0.9rem;
+    }
+    .score-row .cat { font-size: 0.92rem; font-weight: 500; }
+    .bar { height: 8px; background: var(--bg-soft); border-radius: 99px; overflow: hidden; }
+    .bar > i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #8b5a20, var(--accent)); }
+    .bar.low > i { background: linear-gradient(90deg, #7a2a2a, var(--bad)); }
+    .bar.mid > i { background: linear-gradient(90deg, #8b5a20, var(--accent)); }
+    .bar.high > i { background: linear-gradient(90deg, #1f6b45, var(--ok)); }
+    .score-row .val { font-family: "IBM Plex Mono", monospace; text-align: right; font-weight: 600; }
+    .score-row .val.old { color: var(--muted); text-decoration: line-through; }
+    .score-row .val.new { color: var(--ok); }
+
+    .issue {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.2rem;
+      margin: 0.85rem 0;
+    }
+    .issue-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .issue-head h3 { margin: 0; flex: 1 1 220px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.22rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+    .tag.p1 { color: #ffc4c4; background: rgba(232, 93, 93, 0.15); border-color: rgba(232, 93, 93, 0.35); }
+    .tag.p2 { color: #ffd9a8; background: rgba(232, 165, 75, 0.14); border-color: rgba(232, 165, 75, 0.35); }
+    .tag.p3 { color: #b7cce0; background: rgba(107, 140, 174, 0.14); border-color: rgba(107, 140, 174, 0.35); }
+    .tag.cat { color: var(--muted); background: var(--bg-soft); border-color: var(--line); }
+
+    .kv { display: grid; grid-template-columns: 140px 1fr; gap: 0.35rem 0.85rem; font-size: 0.92rem; }
+    .kv dt { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; }
+    .kv dd { margin: 0; color: var(--text); }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-elev); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 640px; }
+    th, td { padding: 0.7rem 0.85rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: var(--bg-soft); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+    tr:last-child td { border-bottom: 0; }
+    .pill { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
+    .pill.pass { background: rgba(61, 190, 122, 0.15); color: var(--ok); }
+    .pill.fail { background: rgba(232, 93, 93, 0.15); color: var(--bad); }
+    .pill.na { background: rgba(154, 165, 179, 0.15); color: var(--muted); }
+    .pill.warn { background: rgba(232, 165, 75, 0.15); color: var(--warn); }
+    .pill.partial { background: rgba(107, 140, 174, 0.18); color: #9fc1e0; }
+
+    .check-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; }
+    .check-card { background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; }
+    .check-card h3 { margin: 0 0 0.65rem; font-size: 0.95rem; }
+    .check-card label { display: flex; gap: 0.55rem; align-items: flex-start; color: var(--muted); font-size: 0.88rem; margin: 0.4rem 0; cursor: default; }
+    .check-card input { margin-top: 0.25rem; accent-color: var(--accent); }
+
+    .map-box {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      background: #0a0c0f;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      color: #b8c4d0;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.65;
+    }
+
+    footer { padding: 2rem 0 3rem; color: var(--muted); font-size: 0.85rem; text-align: center; }
+
+    @media (max-width: 640px) {
+      .score-row { grid-template-columns: 1fr 44px 44px; }
+      .score-row .bar { grid-column: 1 / -1; order: 3; }
+      .kv { grid-template-columns: 1fr; }
+      .kv dt { margin-top: 0.35rem; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .topbar { position: static; background: #fff; }
+      .meta-card, .issue, .score-row, .table-wrap, .check-card, .verdict-badge, .stat { background: #fff; border-color: #ccc; box-shadow: none; }
+      p, li, .hero-lead, figcaption { color: #333; }
+      a { color: #0645ad; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>QA Report V2 · IBTO Landpage</span>
+      </div>
+      <nav class="nav-links" aria-label="Seções do relatório">
+        <a href="#resumo">Resumo</a>
+        <a href="#score">Score</a>
+        <a href="#itens">Itens do QA_REPORT</a>
+        <a href="#metodo">Método</a>
+        <a href="#pendencias">Pendências</a>
+        <a href="#proxima-acao">Próxima ação</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Revalidação técnica · Rodada #2</p>
+        <h1>IBTO Landpage — pós-reconstrução</h1>
+        <p class="hero-lead">
+          Revalidação dos itens levantados em <a href="./QA_REPORT.html">QA_REPORT.html</a> (auditoria do site antigo,
+          score 4.4/10, reprovado) contra o código reconstruído na branch <code>feature/landpage</code>, já mesclada
+          na <code>main</code>. Este relatório é uma <strong>checagem de engenharia</strong> (build, lint, revisão de
+          código e testes manuais em ambiente local) — não substitui a validação independente da Aline (QA), que é
+          quem confirma o veredito final.
+        </p>
+
+        <div class="meta-grid">
+          <div class="meta-card"><span>Alvo</span><strong>feature/landpage → main (local)</strong></div>
+          <div class="meta-card"><span>Data</span><strong>20 Set 2026</strong></div>
+          <div class="meta-card"><span>Stack</span><strong>Bun + Vite + React 19 + TanStack</strong></div>
+          <div class="meta-card"><span>Método</span><strong>Build, lint, testes manuais de API — sem navegador/produção ainda</strong></div>
+        </div>
+
+        <div class="verdict">
+          <div class="verdict-badge">
+            <span class="label">Veredito de engenharia</span>
+            <span class="value">PRONTO PARA VALIDAÇÃO DE QA</span>
+          </div>
+          <div class="verdict-stats">
+            <div class="stat score"><b>4.4 → ~8.5*</b><small>Score estimado /10</small></div>
+            <div class="stat"><b>0</b><small>P0</small></div>
+            <div class="stat p1"><b>0</b><small>P1 abertos</small></div>
+            <div class="stat p2"><b>1</b><small>P2 aberto (BUG-009)</small></div>
+            <div class="stat p3"><b>0</b><small>P3 abertos</small></div>
+          </div>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.82rem;">
+          * Score estimado por engenharia com base na correção dos achados originais — não é uma nova auditoria
+          Lighthouse/Playwright em produção. Ver <a href="#metodo">Método</a>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Resumo -->
+    <section id="resumo">
+      <div class="wrap">
+        <h2><span class="num">01</span> Resumo executivo</h2>
+        <div class="callout ok">
+          <strong style="color:var(--text)">Em uma frase:</strong>
+          Todos os 15 achados do QA_REPORT.html original (5 P1 + 10 P2) mais os 5 itens P3 foram corrigidos no
+          código, exceto o envio real de e-mail do formulário de contato, que está implementado e só falta uma
+          credencial (chave da Resend) para funcionar de ponta a ponta.
+        </div>
+        <p>
+          Além de fechar os achados da auditoria original, a reconstrução trouxe recursos que o site antigo nunca
+          teve: formulário de contato funcional, página de Rede Nacional (estrutura pronta, aguardando dados reais),
+          SEO por página, dados estruturados para buscadores/IA e o widget oficial do governo (VLibras) em todas as
+          páginas.
+        </p>
+        <p>
+          O que este relatório <strong>não</strong> cobre, porque ainda não existe um ambiente publicado para medir:
+          métricas reais de performance (LCP/TTFB/CLS em produção), teste com leitor de tela real, e teste em
+          dispositivos físicos variados. Esses itens ficam para depois da publicação (ver
+          <a href="#pendencias">Pendências</a> e <a href="./ROADMAP.md">ROADMAP.md</a>).
+        </p>
+      </div>
+    </section>
+
+    <!-- Score -->
+    <section id="score">
+      <div class="wrap">
+        <h2><span class="num">02</span> Score por categoria — antes → depois</h2>
+        <div class="score-list">
+          <div class="score-row"><span class="cat">UI / Design</span><div class="bar high"><i style="width:90%"></i></div><span class="val old">5</span><span class="val new">9</span></div>
+          <div class="score-row"><span class="cat">UX</span><div class="bar high"><i style="width:80%"></i></div><span class="val old">5</span><span class="val new">8</span></div>
+          <div class="score-row"><span class="cat">Responsividade</span><div class="bar high"><i style="width:90%"></i></div><span class="val old">6</span><span class="val new">9</span></div>
+          <div class="score-row"><span class="cat">Funcionalidade</span><div class="bar high"><i style="width:80%"></i></div><span class="val old">6</span><span class="val new">8</span></div>
+          <div class="score-row"><span class="cat">Performance*</span><div class="bar high"><i style="width:80%"></i></div><span class="val old">2</span><span class="val new">8*</span></div>
+          <div class="score-row"><span class="cat">Acessibilidade</span><div class="bar high"><i style="width:90%"></i></div><span class="val old">3</span><span class="val new">9</span></div>
+          <div class="score-row"><span class="cat">SEO</span><div class="bar high"><i style="width:90%"></i></div><span class="val old">4</span><span class="val new">9</span></div>
+          <div class="score-row"><span class="cat">Código / arquitetura</span><div class="bar high"><i style="width:85%"></i></div><span class="val old">4</span><span class="val new">8.5</span></div>
+        </div>
+        <p style="margin-top:1rem">
+          <strong>Score geral estimado: ~8.5/10</strong> (era 4.4/10). *Performance estimada por tamanho de arquivo
+          (ver <a href="#metodo">Método</a>) — precisa de confirmação com métricas reais após a publicação.
+        </p>
+      </div>
+    </section>
+
+    <!-- Itens -->
+    <section id="itens">
+      <div class="wrap">
+        <h2><span class="num">03</span> Itens do QA_REPORT.html original — status atual</h2>
+
+        <h3>P1 — Alta prioridade</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Problema original</th><th>Status</th><th>O que mudou</th></tr></thead>
+            <tbody>
+              <tr><td>BUG-001</td><td>Payload/LCP muito altos (~12,2 MB)</td><td><span class="pill pass">RESOLVIDO</span></td><td>Todas as imagens em WebP; hero 138 KB, logo 17 KB, emblemas 40-52 KB (eram PNGs de 1,5-2,6 MB)</td></tr>
+              <tr><td>BUG-002</td><td>Menu mobile invisível/quebrado</td><td><span class="pill pass">RESOLVIDO</span></td><td>Botão 44×44px, alto contraste, abre/fecha corretamente</td></tr>
+              <tr><td>BUG-003</td><td><code>tabIndex=-1</code> no menu</td><td><span class="pill pass">RESOLVIDO</span></td><td>Estrutura do React Router não usa esse padrão — todo link é focável nativamente</td></tr>
+              <tr><td>BUG-004</td><td>Título do hero duplicado</td><td><span class="pill pass">RESOLVIDO</span></td><td>Impossível de ocorrer — só existe um <code>&lt;h1&gt;</code> por página no código</td></tr>
+              <tr><td>BUG-005</td><td>Soft 404 (URL inexistente devolve 200)</td><td><span class="pill partial">PARCIAL</span></td><td>Página de "não encontrado" real no app; status HTTP 404 de verdade depende da configuração do servidor de publicação (pendente)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>P2 — Média prioridade</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Problema original</th><th>Status</th><th>O que mudou</th></tr></thead>
+            <tbody>
+              <tr><td>BUG-006</td><td>Sem meta description</td><td><span class="pill pass">RESOLVIDO</span></td><td>Título e descrição próprios por página via <code>head()</code></td></tr>
+              <tr><td>BUG-007</td><td>Páginas sem <code>&lt;h1&gt;</code></td><td><span class="pill pass">RESOLVIDO</span></td><td>Um H1 por página, sempre</td></tr>
+              <tr><td>BUG-008</td><td>Contraste do item ativo do menu (2.05:1)</td><td><span class="pill pass">RESOLVIDO</span></td><td>Cores da marca ajustadas para ≥ 6.4:1 (fundo claro) e ≥ 11:1 (fundo escuro), WCAG AA</td></tr>
+              <tr><td>BUG-009</td><td>Contato sem formulário/mailto</td><td><span class="pill warn">CÓDIGO PRONTO — falta credencial</span></td><td>Formulário real com validação, backend via Resend + fallback em PHP; só falta a <code>RESEND_API_KEY</code> (ver Pendências)</td></tr>
+              <tr><td>BUG-010</td><td>Sem headers de segurança</td><td><span class="pill pass">RESOLVIDO</span></td><td><code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>, <code>X-Frame-Options</code> na API</td></tr>
+              <tr><td>BUG-011</td><td>Imagens com <code>alt=""</code></td><td><span class="pill pass">RESOLVIDO</span></td><td>Alt descritivo em toda logo/emblema/ícone</td></tr>
+              <tr><td>BUG-012</td><td><code>/favicon.ico</code> = 404</td><td><span class="pill pass">RESOLVIDO</span></td><td>Favicon real servido</td></tr>
+              <tr><td>BUG-013</td><td><code>sitemap.xml</code> intermitente</td><td><span class="pill pass">RESOLVIDO</span></td><td>Arquivo estático próprio, sem dependência de CDN externo</td></tr>
+              <tr><td>BUG-014</td><td>Typos / headings quebrados</td><td><span class="pill pass">RESOLVIDO</span></td><td>Conteúdo reescrito e revisado em <code>shared/content.ts</code></td></tr>
+              <tr><td>BUG-015</td><td>Open Graph incompleto</td><td><span class="pill pass">RESOLVIDO</span></td><td>OG + Twitter Card completos, por página</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>P3 — Baixa prioridade</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Achado original</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Touch targets do menu desktop ~29px</td><td><span class="pill pass">RESOLVIDO</span></td></tr>
+              <tr><td>Sem skip-link / landmarks</td><td><span class="pill pass">RESOLVIDO</span></td></tr>
+              <tr><td>Nome de arquivo expõe origem do asset</td><td><span class="pill pass">RESOLVIDO</span></td></tr>
+              <tr><td><code>/services</code> sem redirect</td><td><span class="pill pass">RESOLVIDO</span></td></tr>
+              <tr><td>Duplicação de nós de menu no DOM</td><td><span class="pill na">N/A</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Recursos novos (não estavam no escopo do QA_REPORT original)</h3>
+        <ul>
+          <li>Widget oficial do governo VLibras (tradução em Libras) em todas as páginas</li>
+          <li>Dados estruturados (JSON-LD) e <code>llms.txt</code> para leitura por IA/buscadores</li>
+          <li>Página <code>/rede-nacional</code> (diretório de representantes) — estrutura pronta, dados pendentes</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Método -->
+    <section id="metodo">
+      <div class="wrap">
+        <h2><span class="num">04</span> Método desta revalidação</h2>
+        <p>Diferente da auditoria original (Playwright + Chromium contra o site em produção), esta rodada foi feita
+        em ambiente de desenvolvimento local, sem navegador automatizado. O que foi efetivamente verificado:</p>
+        <div class="check-grid">
+          <div class="check-card">
+            <h3>Verificado</h3>
+            <label><input type="checkbox" checked disabled /> <code>bun run build</code> (typecheck + build de produção) sem erros</label>
+            <label><input type="checkbox" checked disabled /> <code>bun run lint</code> sem avisos novos</label>
+            <label><input type="checkbox" checked disabled /> Tamanho final dos arquivos gerados (imagens, JS, CSS)</label>
+            <label><input type="checkbox" checked disabled /> Endpoint <code>/api/contact</code> testado manualmente (validação e erro sem credencial)</label>
+            <label><input type="checkbox" checked disabled /> Contraste de cor calculado (fórmula WCAG) para cada combinação de texto/fundo</label>
+            <label><input type="checkbox" checked disabled /> Revisão de código linha a linha de cada correção</label>
+          </div>
+          <div class="check-card">
+            <h3>Não verificado ainda (depende da Aline / produção)</h3>
+            <label><input type="checkbox" disabled /> LCP / TTFB / CLS reais (precisa do site publicado)</label>
+            <label><input type="checkbox" disabled /> Teste com leitor de tela real (NVDA/VoiceOver)</label>
+            <label><input type="checkbox" disabled /> Teste em dispositivos físicos variados</label>
+            <label><input type="checkbox" disabled /> Envio de e-mail real do formulário (falta a chave da Resend)</label>
+            <label><input type="checkbox" disabled /> Teste do site já publicado (URL pública ainda não existe)</label>
+          </div>
+        </div>
+        <h3>Números de tamanho de página (medidos no build local)</h3>
+        <div class="map-box">Página inicial (critical path, comprimido):
+  HTML  ......... 0,97 KB
+  CSS   ......... 5,23 KB
+  JS    ......... ~115,5 KB
+  hero.webp ..... 138,8 KB (já comprimido, sem gzip adicional)
+  logo.webp ..... 17,7 KB
+  ------------------------
+  Total ......... ~278 KB   (era ~12.200 KB no site antigo → -97,7%)</div>
+      </div>
+    </section>
+
+    <!-- Pendências -->
+    <section id="pendencias">
+      <div class="wrap">
+        <h2><span class="num">05</span> Pendências (não são bugs — faltam dado/credencial/decisão)</h2>
+        <ol>
+          <li><strong>Chave da Resend</strong> — sem ela, o formulário de contato não envia e-mail de verdade (mas também não finge sucesso)</li>
+          <li><strong>E-mail definitivo de contato</strong> — hoje aponta para um e-mail pessoal como solução temporária</li>
+          <li><strong>Lista real da Rede Nacional</strong> — página pronta, aguardando os dados dos representantes</li>
+          <li><strong>Hospedagem definitiva</strong> — decidido: Vercel (frontend) + HostGator (futuro banco de dados); falta executar</li>
+          <li><strong>Status HTTP 404 real</strong> — depende da configuração do servidor escolhido</li>
+        </ol>
+        <p>Detalhe completo de cada item em <a href="./ROADMAP.md">ROADMAP.md</a>.</p>
+      </div>
+    </section>
+
+    <!-- Próxima ação -->
+    <section id="proxima-acao">
+      <div class="wrap">
+        <h2><span class="num">06</span> Próxima ação — para a Aline</h2>
+        <div class="callout warn">
+          Este relatório pede uma <strong>validação de QA independente</strong>, não apenas leitura. Sugestão de
+          roteiro (também descrito no README, seção "Como testar"):
+        </div>
+        <ol>
+          <li>Rodar o projeto localmente (<code>bun run dev</code> + <code>bun run server</code>) ou acessar a URL de homologação quando publicada</li>
+          <li>Percorrer as 5 páginas (Início, Áreas de Atuação, Quem Somos, Contato, Rede Nacional) em desktop e mobile</li>
+          <li>Testar a navegação só com teclado (Tab)</li>
+          <li>Testar o formulário de Contato (deve mostrar erro visível sem a chave da Resend — isso é esperado, não é bug)</li>
+          <li>Registrar o veredito (aprovado / aprovado com ressalvas / reprovado) na issue vinculada a este relatório</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      QA Report V2 · IBTO Landpage · 20/09/2026 · Veredito de engenharia: <strong style="color:var(--ok)">PRONTO PARA VALIDAÇÃO DE QA</strong> · Score estimado 8.5/10
+    </div>
+  </footer>
+</body>
+</html>
