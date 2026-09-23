@@ -7,6 +7,7 @@ const PAGE_SLUGS: PageSlug[] = [
   'areas-de-atuacao',
   'contato',
   'rede-nacional',
+  'cursos',
 ]
 const CACHE_TTL_SECONDS = 60
 const PORT = Number(process.env.PORT ?? 3001)

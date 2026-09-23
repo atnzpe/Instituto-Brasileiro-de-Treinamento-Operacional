@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AreasDeAtuacaoRouteImport } from './routes/areas-de-atuacao'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as CursosRouteImport } from './routes/cursos'
 import { Route as QuemSomosRouteImport } from './routes/quem-somos'
 import { Route as RedeNacionalRouteImport } from './routes/rede-nacional'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -29,6 +30,11 @@ const AreasDeAtuacaoRoute = AreasDeAtuacaoRouteImport.update({
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursosRoute = CursosRouteImport.update({
+  id: '/cursos',
+  path: '/cursos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuemSomosRoute = QuemSomosRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/areas-de-atuacao': typeof AreasDeAtuacaoRoute
   '/contato': typeof ContatoRoute
+  '/cursos': typeof CursosRoute
   '/quem-somos': typeof QuemSomosRoute
   '/rede-nacional': typeof RedeNacionalRoute
   '/services': typeof ServicesRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/areas-de-atuacao': typeof AreasDeAtuacaoRoute
   '/contato': typeof ContatoRoute
+  '/cursos': typeof CursosRoute
   '/quem-somos': typeof QuemSomosRoute
   '/rede-nacional': typeof RedeNacionalRoute
   '/services': typeof ServicesRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/areas-de-atuacao': typeof AreasDeAtuacaoRoute
   '/contato': typeof ContatoRoute
+  '/cursos': typeof CursosRoute
   '/quem-somos': typeof QuemSomosRoute
   '/rede-nacional': typeof RedeNacionalRoute
   '/services': typeof ServicesRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/areas-de-atuacao'
     | '/contato'
+    | '/cursos'
     | '/quem-somos'
     | '/rede-nacional'
     | '/services'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/areas-de-atuacao'
     | '/contato'
+    | '/cursos'
     | '/quem-somos'
     | '/rede-nacional'
     | '/services'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/areas-de-atuacao'
     | '/contato'
+    | '/cursos'
     | '/quem-somos'
     | '/rede-nacional'
     | '/services'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AreasDeAtuacaoRoute: typeof AreasDeAtuacaoRoute
   ContatoRoute: typeof ContatoRoute
+  CursosRoute: typeof CursosRoute
   QuemSomosRoute: typeof QuemSomosRoute
   RedeNacionalRoute: typeof RedeNacionalRoute
   ServicesRoute: typeof ServicesRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cursos': {
+      id: '/cursos'
+      path: '/cursos'
+      fullPath: '/cursos'
+      preLoaderRoute: typeof CursosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quem-somos': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AreasDeAtuacaoRoute: AreasDeAtuacaoRoute,
   ContatoRoute: ContatoRoute,
+  CursosRoute: CursosRoute,
   QuemSomosRoute: QuemSomosRoute,
   RedeNacionalRoute: RedeNacionalRoute,
   ServicesRoute: ServicesRoute,

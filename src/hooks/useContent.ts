@@ -5,9 +5,11 @@ import {
   home as staticHome,
   nav as staticNav,
   quemSomos as staticQuemSomos,
+  cursos as staticCursos,
   redeNacional as staticRedeNacional,
   type AreasDeAtuacaoContent,
   type ContatoContent,
+  type CursosContent,
   type HomeContent,
   type NavLink,
   type QuemSomosContent,
@@ -56,6 +58,14 @@ export function useContatoContent() {
     queryKey: ['content', 'contato'],
     queryFn: () => fetchPageContent<ContatoContent>('contato'),
     initialData: staticContato,
+  })
+}
+
+export function useCursosContent() {
+  return useQuery<CursosContent>({
+    queryKey: ['content', 'cursos'],
+    queryFn: () => fetchPageContent<CursosContent>('cursos'),
+    initialData: staticCursos,
   })
 }
 

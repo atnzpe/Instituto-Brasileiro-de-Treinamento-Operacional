@@ -11,9 +11,10 @@ O IBTO foi fundado por militares e ex-militares com experiência real em combate
 - [Quem somos](https://ib-to.org/quem-somos): história, missão, visão, valores e a diretoria (Eduardo Lopes — Presidente; Julio Cesar Moura — Vice-presidente).
 - [Contato](https://ib-to.org/contato): formulário de contato e canais (WhatsApp, Facebook, Instagram).
 - [Rede Nacional](https://ib-to.org/rede-nacional): representantes, instrutores, monitores e centros de treinamento credenciados por estado (em expansão).
+- [Cursos e Treinamentos](https://ib-to.org/cursos): catálogo de cursos livres online (Gestão de Risco Operacional, Cybersegurança Urbana, TCCC, Reconhecimento Aéreo, Introdução à Inteligência Operacional, entre outros) e treinamentos presenciais (ex.: Formação de Instrutores), com modalidades de acesso: gratuito e privado aos filiados, pago e aberto ao público, ou pago e restrito aos filiados.
 
 ## Notas para agentes e crawlers
 
 - Site em português do Brasil (pt-BR).
-- Não há login, cadastro, checkout ou área administrativa pública — todo o conteúdo relevante está nas quatro páginas acima.
+- Não há login, cadastro, checkout ou área administrativa pública — todo o conteúdo relevante está nas páginas acima.
 - `sitemap.xml` na raiz lista as URLs canônicas.

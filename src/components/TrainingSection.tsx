@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import type { HomeContent } from '../../shared/content'
 
 export function TrainingSection({ training }: { training: HomeContent['training'] }) {
@@ -23,6 +24,15 @@ export function TrainingSection({ training }: { training: HomeContent['training'
               <p className="mt-3 text-sm leading-relaxed text-white/70">{card.description}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link
+            to="/cursos"
+            className="inline-block rounded-full bg-brand-gold px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink"
+          >
+            Conheça os cursos e treinamentos
+          </Link>
         </div>
       </div>
     </section>
