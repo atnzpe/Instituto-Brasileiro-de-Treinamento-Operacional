@@ -15,6 +15,7 @@ Reconstrução do site institucional [ib-to.org](https://ib-to.org): mesmo conte
   - [Variáveis de ambiente](#variáveis-de-ambiente)
   - [Publicação (deploy)](#publicação-deploy)
 - [Como testar (QA)](#como-testar-qa)
+- [Fluxo de trabalho](#fluxo-de-trabalho)
 - [Fidelidade de conteúdo](#fidelidade-de-conteúdo)
 - [Próximos passos](#próximos-passos)
 
@@ -77,7 +78,7 @@ Você não precisa instalar nada nem entender de código para acompanhar o proje
 shared/content.ts        # todo o texto/conteúdo real do site — usado pelo front-end e pela API
 src/
   routes/                # páginas: /, /areas-de-atuacao, /quem-somos, /contato,
-                          # /rede-nacional, /services (redirecionamento legado)
+                          # /rede-nacional, /cursos, /services (redirecionamento legado)
   components/             # Header, Footer, Hero, TeamCard, ServiceGrid, ContactForm, etc.
   hooks/                  # useContent.ts (busca de conteúdo), useDocumentTitle.ts
   lib/api.ts              # funções que chamam a API de conteúdo e o endpoint de contato
@@ -124,7 +125,7 @@ Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo deta
 
 Dois caminhos possíveis, que podem ser combinados:
 
-1. **Hospedagem estática (ex.: HostGator)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor.
+1. **Hospedagem estática (ex.: HostGator)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor. Para homologação, use um subdomínio (ex.: `homolog.ib-to.org`, criado no cPanel em Domínios): o plano atual permite subdomínios ilimitados. O que o plano inclui e a proposta de backend estão no [ROADMAP.md](./ROADMAP.md).
 2. **Vercel** — publica a pasta `dist/` como site estático; cada branch/PR já ganha uma URL de teste automática (útil como ambiente de homologação). O endpoint de contato pode virar uma função serverless da própria Vercel, reaproveitando a mesma lógica do `server/index.ts`.
 
 ## Como testar (QA)
@@ -132,11 +133,43 @@ Dois caminhos possíveis, que podem ser combinados:
 Para quem for validar entregas (Aline ou qualquer pessoa do time):
 
 1. Rode o projeto localmente (seção acima) ou acesse a URL de homologação quando publicada.
-2. Confira as quatro páginas principais: Início, Áreas de Atuação, Quem Somos e Contato — mais a nova página Rede Nacional.
+2. Confira as quatro páginas principais: Início, Áreas de Atuação, Quem Somos e Contato — mais as novas páginas Rede Nacional e Cursos (em Cursos, clique em um curso para abrir o modal de detalhes e feche com o X, com Esc ou clicando fora).
 3. Teste em celular (ou reduza a janela do navegador) — o site foi construído mobile-first.
 4. Teste o menu só com o teclado (Tab) — todos os links devem ser alcançáveis.
 5. Teste o formulário de Contato — sem a `RESEND_API_KEY` configurada, ele deve mostrar uma mensagem de erro visível, nunca fingir que enviou.
 6. Compare com os achados do `QA_REPORT.html` e marque no `ROADMAP.md` o que já foi validado.
+
+## Fluxo de trabalho
+
+Toda entrega — de uma correção pequena a uma página nova — segue o mesmo caminho:
+
+```text
+Issue ➡️ Branch ➡️ Código/Commits ➡️ Testes ➡️ Documentar resultados na PR ➡️ teste humano ➡️ se teste humano ok ➡️ Push ➡️ Pull Request (PR) ➡️ Code Review ➡️ Merge ➡️ Deploy ➡️ Clean Up ➡️ Próxima Branch e Issue de acordo com o RoadMap
+```
+
+| Etapa | O que acontece | Quem |
+| --- | --- | --- |
+| Issue | Descreve o que precisa ser feito e o critério de aceite | Aline (PO) ou qualquer pessoa do time |
+| Branch | Criada a partir da `main` atualizada, com o nome do tipo de mudança | Dev |
+| Código/Commits | Commits pequenos, com mensagem em português dizendo o quê e por quê | Dev |
+| Testes | `bun run build` e `bun run lint` sem erros, mais teste manual do que mudou | Dev |
+| Documentar resultados na PR | O que foi testado e o resultado, na descrição do Pull Request | Dev |
+| Teste humano | Uma pessoa do time usa a funcionalidade rodando (local ou em homologação) e confere o critério de aceite | Aline (QA) |
+| Se OK: Push | Só depois do teste humano aprovado a branch é enviada ao GitHub | Dev |
+| Pull Request | Aberto ligando a issue (`Closes #número`) | Dev |
+| Code Review | Outra pessoa revisa o código | Time técnico |
+| Merge | A branch entra na `main` | Responsável pelo repositório |
+| Deploy | Publicação: primeiro em homologação, depois em produção | Dev |
+| Clean Up | Apagar a branch e atualizar a `main` local | Dev |
+| Próxima Branch e Issue | Escolhidas conforme o [ROADMAP.md](./ROADMAP.md) | Aline e time técnico |
+
+Se o teste humano reprovar, a entrega volta para "Código/Commits" e o caminho recomeça dali.
+
+Convenções:
+
+- **Branches**: `feature/nome` (funcionalidade nova), `fix/nome` (correção) e `docs/nome` (só documentação).
+- **Commits**: em português, no formato `tipo(assunto): o que mudou e por quê` — por exemplo `feat(cursos): adiciona catálogo com modal`. Tipos usados: `feat`, `fix`, `docs`, `chore`. Nada de mensagens vagas como "ajustes".
+- **Nunca** enviar direto para a `main`: tudo entra por Pull Request.
 
 ## Fidelidade de conteúdo
 
@@ -144,4 +177,4 @@ Todo texto, imagem, biografia da diretoria, emblema de serviço e link em `share
 
 ## Próximos passos
 
-Veja o detalhamento completo em [ROADMAP.md](./ROADMAP.md).
+Veja o detalhamento completo em [ROADMAP.md](./ROADMAP.md), que traz a ordem das próximas issues e branches e a proposta da plataforma de cursos (backend, pagamento, filiados e painel administrativo).
