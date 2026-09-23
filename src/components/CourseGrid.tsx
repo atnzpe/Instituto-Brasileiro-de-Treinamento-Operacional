@@ -59,6 +59,30 @@ export function CourseGrid({ data }: { data: CursosContent }) {
         })}
       </ul>
 
+      <section
+        aria-labelledby="cursos-online"
+        className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 text-center sm:p-8"
+      >
+        <h2 id="cursos-online" className="text-2xl text-white">
+          {data.onlinePlatform.title}
+        </h2>
+        <p className="mx-auto mt-3 max-w-2xl text-white/70">{data.onlinePlatform.description}</p>
+        {data.onlinePlatform.href ? (
+          <a
+            href={data.onlinePlatform.href}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-block rounded-full bg-brand-gold px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink"
+          >
+            {data.onlinePlatform.label}
+          </a>
+        ) : (
+          <span className="mt-6 inline-block rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white/70">
+            Em breve
+          </span>
+        )}
+      </section>
+
       <p className="mt-8 text-center text-sm text-white/70">{data.footnote}</p>
 
       <CourseModal

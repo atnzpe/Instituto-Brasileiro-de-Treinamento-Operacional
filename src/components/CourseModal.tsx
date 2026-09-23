@@ -27,6 +27,7 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
   if (course?.location) facts.push(['Local', course.location])
   if (course?.schedule) facts.push(['Datas e horário', course.schedule])
   if (course?.instructor) facts.push(['Instrutor', course.instructor])
+  if (course?.workload) facts.push(['Carga horária', course.workload])
   if (course?.price) facts.push(['Investimento', course.price])
 
   useEffect(() => {
@@ -106,6 +107,17 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
                     <span className="text-white">{module.title}</span>
                     <span className="block text-white/70">{module.instructor}</span>
                   </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {course.topics && course.topics.length > 0 && (
+            <>
+              <h3 className="mt-6 text-sm text-brand-gold-light uppercase">Conteúdo</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/80 marker:text-brand-gold-light">
+                {course.topics.map((topic) => (
+                  <li key={topic}>{topic}</li>
                 ))}
               </ul>
             </>

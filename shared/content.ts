@@ -535,8 +535,10 @@ export interface Course {
   schedule?: string
   location?: string
   instructor?: string
+  workload?: string
   price?: string
   modules?: CourseModule[]
+  topics?: string[]
   includes?: string[]
   whatsapp?: string[]
 }
@@ -546,6 +548,9 @@ export interface CursosContent {
   subheading: string
   accessModels: CourseAccessModel[]
   cursos: Course[]
+  // Online courses will live on a separate platform; `href` stays unset until
+  // that platform has a public address, and the page shows "Em breve" meanwhile.
+  onlinePlatform: { title: string; description: string; label: string; href?: string }
   footnote: string
   cta: { label: string; href: string }
 }
@@ -553,7 +558,7 @@ export interface CursosContent {
 export const cursos: CursosContent = {
   heading: 'Cursos e Treinamentos',
   subheading:
-    'Cursos livres online e treinamentos presenciais do IBTO em áreas como gestão de risco, segurança, atendimento tático e inteligência operacional.',
+    'Treinamentos, cursos e seminários presenciais do IBTO em defesa pessoal, combate, tiro, sobrevivência e atendimento tático.',
   accessModels: [
     {
       id: 'gratuito-filiados',
@@ -619,17 +624,51 @@ export const cursos: CursosContent = {
       includes: ['Certificado', 'Camisa do evento', 'E muito mais'],
       whatsapp: ['(81) 99162-3046', '(81) 99809-8742'],
     },
-    { slug: 'gestao-de-risco-operacional', title: 'Gestão de Risco Operacional', format: 'Online' },
-    { slug: 'ciberseguranca-urbana', title: 'Cybersegurança Urbana', format: 'Online' },
-    { slug: 'tccc', title: 'TCCC', format: 'Online' },
-    { slug: 'reconhecimento-aereo', title: 'Reconhecimento Aéreo', format: 'Online' },
     {
-      slug: 'introducao-a-inteligencia-operacional',
-      title: 'Introdução à Inteligência Operacional',
-      format: 'Online',
+      slug: 'seminario-bastao-tatico',
+      title: 'Seminário Bastão Tático',
+      format: 'Presencial',
+      summary: 'Domine. Defenda. Proteja. Seminário de bastão tático e proteção pessoal.',
+      access: 'pago-publico',
+      schedule: 'Sem data fixa · turmas sob consulta pelo WhatsApp',
+      location: 'Caxias do Sul - RS (sede da FIGAM)',
+      instructor: 'Mestre Rodrigo dos Santos — Faixa preta em Krav Maga, Kapap e Kenjutsu',
+      price: 'R$ 150',
+      topics: [
+        'Fundamentos do bastão tático',
+        'Defesa pessoal',
+        'Técnicas de controle e imobilização',
+        'Aplicações práticas para segurança e proteção pessoal',
+        'Treinamento técnico e tático',
+      ],
+      includes: ['Bastão tático', 'Certificado de participação'],
+      whatsapp: ['(54) 99662-7066'],
+    },
+    {
+      slug: 'sobrevivencia-urbana-nivel-1',
+      title: 'Curso Sobrevivência Urbana — Nível 1',
+      format: 'Presencial',
+      summary:
+        'Testes de resistência física e mental para avaliar todo o conhecimento adquirido no decorrer das instruções. Focado na realidade urbana hostil.',
+      schedule: 'Data a definir',
+      workload: '50 horas',
+      topics: [
+        'Combate corpo a corpo',
+        'Combate e defesa com facas',
+        'Sobrevivência urbana',
+        'Arma curta e longa',
+        'Preparação para emergências',
+        'Preparação física e mental',
+      ],
     },
   ],
-  footnote: 'Novos cursos em breve.',
+  onlinePlatform: {
+    title: 'Cursos online',
+    description:
+      'Estamos criando uma plataforma exclusiva para os cursos online do IBTO, como Gestão de Risco Operacional, Cybersegurança Urbana, TCCC, Reconhecimento Aéreo e Introdução à Inteligência Operacional.',
+    label: 'Acessar a plataforma de cursos',
+  },
+  footnote: 'Novos treinamentos em breve.',
   cta: { label: 'Tenho interesse', href: '/contato' },
 }
 
