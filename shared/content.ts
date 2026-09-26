@@ -509,9 +509,9 @@ export const redeNacional: RedeNacionalContent = {
   representantes: [],
 }
 
-// Online "Cursos Livres" catalog. Course titles come from IBTO; `access` and
-// `summary` are left unset on purpose until the institute confirms which of
-// the three access models each course uses and provides the real description.
+// In-person trainings shown on /cursos (online courses will live on a separate
+// platform, linked via `onlinePlatform`). Optional fields stay unset when the
+// poster doesn't give them — never fill them with guessed data.
 export type CourseAccess = 'gratuito-filiados' | 'pago-publico' | 'pago-filiados'
 
 export interface CourseAccessModel {
