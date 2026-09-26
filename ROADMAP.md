@@ -45,7 +45,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 - [ ] **Curso Sobrevivência Urbana Nível 1: dados que faltam** — data, local, preço, modalidade de acesso e um contato para inscrição (o cartaz não traz)
 - [ ] **Encontro nacional** — previsto para depois, possivelmente em janeiro, sem data. Cadastrar na página de Cursos quando houver data
 - [ ] **Endereço da plataforma de cursos online** — quando existir, preencher `onlinePlatform.href` em `shared/content.ts` e o botão "Acessar a plataforma de cursos" aparece no lugar do "Em breve"
-- [ ] **Hospedagem: terminar de conferir no cPanel** — o **Application Manager existe e está habilitado** (confirmado em 23/09/2026, sem nenhuma aplicação registrada ainda). Pela documentação, o formulário "Register Application" não tem uma lista de linguagens: o Node só funciona se a HostGator instalou os pacotes `ea-nodejs` (versões 16, 18, 20 ou 22, e só uma delas por vez). O jeito de confirmar é registrar um aplicativo mínimo de teste (`app.js`) num subdomínio e ver se responde. Falta também conferir a versão do PHP e se há acesso por terminal (SSH) e Composer
+- [ ] **Hospedagem: terminar de conferir no cPanel** — o **Application Manager existe e está habilitado** (confirmado em 23/09/2026, sem nenhuma aplicação registrada ainda). Pela documentação, o formulário "Register Application" não tem uma lista de linguagens, então o jeito de confirmar é registrar um aplicativo mínimo de teste num subdomínio e ver se responde. Vamos testar primeiro o **Python** (`passenger_wsgi.py`, que usa o Python do servidor) e só testar o Node (`app.js`, que depende dos pacotes `ea-nodejs`) se o Python falhar. **Resultado em 26/09/2026:** a aplicação `teste-python` foi registrada corretamente, mas o endereço devolve 403 e o log do Apache mostra `AH01276: Cannot serve directory /home1/edua1187/teste-python.ib-to.org/` — o servidor entrega a pasta vazia do subdomínio e o Passenger nunca chega a iniciar a aplicação (nem a pasta `logs` dela foi criada). **Resposta do suporte e tabela oficial de compatibilidades da HostGator (26/09/2026):** o atendimento não conseguiu confirmar o Passenger e indicou abrir chamado técnico; a [tabela de compatibilidades](https://suporte.hostgator.com.br/hc/pt-br/articles/30811116692115-Quais-s%C3%A3o-as-compatibilidades-da-HostGator) diz que, nos planos compartilhados (Start, P, M, Turbo, Plus e Revenda), o Python fica **limitado à versão 3.6** e o Django **até a 3.2** (ambos sem atualizações de segurança desde 2021 e 2024), e que **Node.js e SSH não são suportados**; versões modernas de Python, Node e SSH existem só em VPS ou servidor dedicado. Ver a decisão de backend em "Proposta"
 - [ ] **Erro 404 com status HTTP real e abrir rotas direto** — no servidor Apache da HostGator, abrir `/cursos` diretamente ou atualizar a página dá erro 404, porque as rotas existem só no navegador. A correção é um arquivo `.htaccess` que manda as rotas conhecidas para o `index.html` e devolve 404 de verdade para o resto; entra na issue de homologação
 
 ## 🧭 Proposta — homologação e plataforma de cursos online (aguarda aprovação de Eduardo e Aline)
@@ -55,6 +55,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 - **Cursos presenciais ficam no site oficial** (ib-to.org), na página `/cursos`.
 - **Cursos online terão uma plataforma à parte** (decisão do Eduardo, 23/09/2026): layout totalmente diferente do site, mais tecnológico, mais fácil de organizar e mais personalizável, seguindo os modelos Solyd, Resend e Dankicode. O site do IBTO terá apenas um link para ela.
 - **Toda a estrutura da HostGator será usada**, no frontend e no backend, inclusive para homologação.
+- **Backend da plataforma: PHP 8.2+ e MySQL no plano atual da HostGator** (decisão de 26/09/2026, depois que a tabela oficial mostrou que o plano compartilhado só tem Python 3.6 e não tem Node nem SSH). O layout da plataforma continua em React + Vite + Bun, publicado como arquivos estáticos.
 - **O DojoManager é só referência de lógica.** É outro projeto, sem relação com o IBTO: a infraestrutura, o banco e o código dele não serão usados aqui; serve apenas para consultar como certas regras de negócio foram pensadas.
 
 ### O que o plano da HostGator inclui
@@ -67,15 +68,42 @@ Lido do backup do cPanel de 13/09/2026 (plano `P_100`); vale confirmar no painel
 | Bancos MySQL | ilimitados | É o banco de dados natural da plataforma |
 | Disco e tráfego | cerca de 100 GB, sem limite declarado de tráfego | Sobra para o site e as imagens; não serve para hospedar vídeo das aulas (ver abaixo) |
 | Domínios adicionais | 0 | Só `ib-to.org` e seus subdomínios |
-| Aplicações Node/Python (Passenger) | até 4 | Em tese dá para rodar um servidor Node, se a ferramenta estiver habilitada no painel |
-| PHP | disponível (CGI desativado) | O `contact.php` funciona e o backend pode ser em PHP |
+| Aplicações Node/Python (Passenger) | até 4 no cadastro da conta | Pela tabela oficial da HostGator, no plano compartilhado só existe Python 3.6 (Django até 3.2) e **não existe Node.js**; o teste de 26/09 nem chegou a rodar o Python (ver Pendente) |
+| PHP | 8.2, 8.3, 8.4 e 8.5 (tabela oficial) | Versões atuais e com suporte; o `contact.php` já funciona e o backend pode ser em PHP |
+| MySQL | **Percona Server 5.7.44** no nosso servidor (conferido no phpMyAdmin em 26/09/2026) | Compatível com o Laravel 13 (aceita MySQL 5.7+). Atenção: o MySQL 5.7 saiu do suporte oficial em outubro de 2023; o banco só é acessível de dentro do servidor, o que reduz o risco. Vale perguntar à HostGator se a conta pode ir para um servidor com MySQL 8.0 |
+| PHP padrão da conta | **8.3** (`ea-php83`), conferido no MultiPHP Manager em 26/09/2026 | Já atende o mínimo do Laravel 13 |
+| SSH / Terminal | não suportado no compartilhado (tabela oficial) | Não dá para instalar pacotes no servidor; tudo o que o backend usar precisa ser enviado pronto |
+| Cron e cliente Git | suportados | Tarefas agendadas e publicação a partir do GitHub |
+| PostgreSQL | não suportado no compartilhado | Usar MySQL |
 | Redis | não faz parte do plano | O cache do servidor atual já funciona sem ele |
 | Caixas de e-mail | ilimitadas | Dá para criar `contato@ib-to.org` |
+
+### Outras ferramentas do cPanel úteis para o projeto
+
+Levantadas na documentação oficial (`docs.cpanel.net/cpanel`) em 26/09/2026. Várias dependem de a HostGator tê-las ativado, então a coluna "Conferir no painel" diz o que olhar.
+
+| Ferramenta | Para que serve aqui | Conferir no painel |
+| --- | --- | --- |
+| **Git Version Control** (Arquivos) | Clonar o repositório do GitHub dentro da hospedagem e publicar com um arquivo `.cpanel.yml`, que copia arquivos para a pasta do site (`/bin/cp`). A documentação não prevê rodar o build (`bun run build`) no servidor, então o build continua sendo feito na nossa máquina | Se o ícone existe; repositório privado exige chave SSH |
+| **Terminal** e **SSH Access** | Linha de comando no servidor: instalar pacotes (Python, Composer), ver logs, rodar migrações do banco | Se existem; a própria documentação avisa que nem todo provedor libera |
+| **Cron Jobs** | Tarefas agendadas, por exemplo tirar do ar os cursos com data vencida ou enviar lembretes, com um script PHP rodando sozinho | Disponível na seção Avançado |
+| **MySQL / MariaDB** e **phpMyAdmin** | Banco da plataforma e ferramenta visual para consultar e editar dados | Disponível (bancos ilimitados) |
+| **PostgreSQL** | Alternativa ao MySQL, só se a HostGator o tiver instalado | Se aparece "PostgreSQL Databases" |
+| **Remote Database Access** | Permitir que um servidor de fora acesse o MySQL. Não precisamos, porque tudo fica na HostGator; deixar desligado é mais seguro | — |
+| **MultiPHP Manager** | Escolher a versão do PHP por domínio e subdomínio | Versão atual do PHP |
+| **Domínios** | Criar subdomínios (sem marcar "Share document root", que é permanente) e forçar HTTPS | — |
+| **SSL/TLS Status** (AutoSSL) | Certificado HTTPS gratuito e automático para os subdomínios | Se `homolog.ib-to.org` aparece com certificado válido |
+| **Erros** (Métricas) | Log de erros do servidor; foi ele que mostrou por que o teste do Python deu 403 | — |
+| **Backup** | Cópia completa da conta antes de mudanças grandes | Fazer um backup antes de publicar em produção |
 
 ### Como publicar o site em homologação
 
 - Endereço: `homolog.ib-to.org`, criado no cPanel (Domínios).
 - Sobe-se apenas o conteúdo de `dist/` (resultado de `bun run build`). A pasta `public/` não é enviada: o Vite copia o conteúdo dela para dentro de `dist/`, e é assim que `contact.php`, `robots.txt`, `sitemap.xml` e as imagens chegam ao servidor. O Bun só é necessário na máquina de quem gera o build, não na HostGator.
+- Como enviar o `dist/`, do mais simples ao mais automático:
+  1. **Gerenciador de Arquivos**: compactar o `dist/` em `.zip`, carregar e extrair na pasta do subdomínio. Bom para a primeira publicação.
+  2. **FTP**: um programa como o FileZilla envia a pasta inteira; dá para criar uma conta FTP só para isso em "FTP Accounts".
+  3. **Git Version Control**: o servidor puxa o repositório do GitHub e um `.cpanel.yml` copia os arquivos para o site. Como o servidor não roda o build, o `dist/` gerado teria de ser versionado numa branch só de publicação. Fica para depois que a homologação estiver funcionando.
 - Falta criar um `.htaccess` (ver Pendente) para as rotas e o 404 de verdade.
 - Copiar `config.example.php` para `config.php` no servidor e preencher a chave da Resend.
 - Conferir se o HTTPS está ativo no subdomínio.
@@ -84,14 +112,18 @@ Lido do backup do cPanel de 13/09/2026 (plano `P_100`); vale confirmar no painel
 
 - **Endereço:** um subdomínio próprio (sugestão `cursos.ib-to.org`, com `cursos-homolog.ib-to.org` para testes).
 - **Projeto separado**, com repositório próprio, para o layout e a evolução independentes do site institucional.
-- **Backend na HostGator**, com duas opções:
+- **Backend**: ✅ **decidido em 26/09/2026 — opção A (PHP + MySQL no plano atual).** A preferência inicial do time era Python, mas a tabela oficial da HostGator mudou o quadro. As opções avaliadas, para registro:
 
-| Opção | Como funciona | Vantagem | Ponto de atenção |
-| --- | --- | --- | --- |
-| A. PHP + MySQL | API e painel em PHP, dados no MySQL | Sempre disponível no plano; o `contact.php` já é um primeiro exemplo | Depende de o time trabalhar com PHP e de haver Composer/SSH para um framework |
-| B. Node.js + MySQL | Servidor Node pelo Application Manager, dados no MySQL | Mesma linguagem (TypeScript) do site | Depende de a HostGator ter instalado o Node (`ea-nodejs`), a confirmar com um aplicativo de teste (o Application Manager já existe); o servidor atual é em Bun e precisaria ser portado para Node; recursos limitados de hospedagem compartilhada |
+| Opção | Como funciona | Custo | Vantagem | Ponto de atenção |
+| --- | --- | --- | --- | --- |
+| **A. PHP + MySQL no plano atual (recomendada)** | API e painel em PHP 8.2+, dados no MySQL, tudo na hospedagem que já é paga | Nenhum extra | Versões atuais e com suporte; roda hoje (o `contact.php` já prova); cron e MySQL inclusos | Mais uma linguagem para o time aprender (PHP também é considerado amigável para iniciantes). Sem SSH, as bibliotecas do backend são instaladas na nossa máquina e enviadas prontas |
+| B. Python moderno + MySQL em VPS | Contratar VPS na HostGator: Python e Django atuais, SSH e Node disponíveis | Mensalidade maior (consultar a HostGator) | Linguagem preferida do time; Django traz painel admin, login e controle de usuários prontos | Custo, e o VPS exige cuidar do servidor (atualizações e segurança) |
+| Não recomendada | Python 3.6 / Django 3.2 no plano atual | Nenhum extra | — | Ambos sem atualizações de segurança há anos; inaceitável para uma plataforma com login, dados de filiados e pagamento. Além disso, o teste nem chegou a rodar |
 
-  Recomendação: o Application Manager já existe no painel; se o aplicativo mínimo de teste rodar em uma versão moderna do Node (18, 20 ou 22), a opção B; se não rodar, a opção A.
+Node.js fica descartado no plano atual (não suportado).
+
+Em qualquer caso, o layout da plataforma continua em React + Vite, publicado como arquivos estáticos; só a API muda de linguagem.
+
 - **Vídeo das aulas:** não é recomendável hospedar arquivos de vídeo numa hospedagem compartilhada (gastam muito tráfego e processamento). O caminho comum é incorporar vídeos de um serviço próprio para isso (por exemplo YouTube não listado ou Vimeo); é uma decisão de Eduardo.
 - **Painel administrativo e controle de filiados:** a serem construídos dentro da plataforma (cursos, aulas, inscritos, filiados).
 
@@ -117,7 +149,7 @@ Sugestão: começar a homologação com o fluxo manual e integrar o gateway em s
 
 ### Decisões que dependem de vocês
 
-1. Backend da plataforma: Node (se o Application Manager existir) ou PHP
+1. ~~Backend da plataforma~~ — decidido: PHP + MySQL no plano atual (26/09/2026). Forma de organizar o PHP: **recomendado Laravel 13** (exige PHP 8.3+; segurança por padrão, padrão de mercado; comparação em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#laravel-ou-php-simples)), aguardando confirmação
 2. Vídeo das aulas: serviço externo incorporado ou outra solução
 3. Pagamento: fluxo manual agora ou já escolher o gateway
 4. Definir "filiado": quem é, como entra, se paga anuidade e como isso libera os cursos restritos
@@ -132,7 +164,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | --- | --- | --- | --- |
 | 1 | `feature/cursos` (em andamento) | Grade de treinamentos presenciais com modal e aviso da plataforma online | Teste humano |
 | 2 | `feature/homologacao-hostgator` | `homolog.ib-to.org` com o site publicado, `.htaccess` (rotas e 404 de verdade), `contact.php` configurado e HTTPS conferido | Acesso ao cPanel |
-| 3 | `docs/plataforma-cursos-definicao` | Registrar a stack do backend (Node ou PHP), o vídeo, o gateway e o repositório da plataforma, depois de olhar o cPanel | Decisões 1 a 3 |
+| 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
 | 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
 | 5 | `feature/plataforma-filiados` | Cadastro e login; modalidades e acesso restrito | Decisão 4 |
 | 6 | `feature/plataforma-admin` | Painel: cursos, aulas, inscritos (CSV) e filiados | 4 e 5 |
@@ -140,6 +172,18 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
+
+### Primeiras tarefas da equipe
+
+Três entregas pequenas para começar, com passo a passo em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md). A Tarefa 1 informou a decisão da linha 3 acima: no plano compartilhado, Python só na versão 3.6 e sem Node (tabela oficial da HostGator).
+
+| Tarefa | Issue / branch | Entrega | Responsável | Depende de |
+| --- | --- | --- | --- | --- |
+| 1 | ✅ Fechar o teste da HostGator (concluída em 26/09/2026: plano só tem Python 3.6, sem Node e sem SSH; decidido PHP + MySQL; limpeza feita; PHP 8.3 e MySQL 5.7.44 anotados) | Resultado anotado e aplicações de teste removidas | Gleyson | — |
+| 2 | `feature/rede-nacional-dados` | Página `/rede-nacional` com os representantes reais | Gleyson | Dados e autorização do Eduardo |
+| 3 | `feature/cursos-dados-atualizados` | Dados dos cursos confirmados (telefones, Bastão Tático, Sobrevivência Urbana) | Gleyson | `feature/cursos` mesclada e confirmações do Eduardo |
+| 4 | Preparar ambiente local de PHP e Laravel (só na máquina, sem branch) | Laravel Herd instalado, PHP 8.3+, Composer e instalador do Laravel conferidos | Gleyson | — |
+| 5 | Estudo: primeiro projeto Laravel com o kit React (fora do repositório) | Projeto de estudo rodando, com login e uma tabela de cursos | Gleyson | 4 |
 
 Itens transversais, sem ordem fixa:
 
