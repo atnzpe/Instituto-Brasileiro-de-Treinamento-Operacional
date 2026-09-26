@@ -29,10 +29,10 @@ O site antigo do IBTO (feito na plataforma Brizy) passou por uma auditoria de qu
 | --- | --- |
 | Product Owner / Product Manager / QA | Aline |
 | Stakeholder principal | Eduardo Lopes |
-| Desenvolvimento | time técnico (devs e estagiários) |
-| Scrum Master | a definir |
+| Desenvolvimento | Gleyson Atanazio |
+| Scrum Master | Gleyson Atanazio |
 
-Dúvidas sobre **prioridade, escopo ou aceite de uma entrega** → Aline. Dúvidas sobre **direcionamento do negócio/institucional** → Eduardo.
+Dúvidas sobre **prioridade, escopo ou aceite de uma entrega** → Aline. Dúvidas sobre **direcionamento do negócio/institucional** → Eduardo. Dúvidas sobre **código, fluxo de trabalho e andamento das tarefas** → Gleyson.
 
 ## Status atual
 

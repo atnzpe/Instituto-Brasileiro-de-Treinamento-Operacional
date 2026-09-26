@@ -6,7 +6,7 @@ Instruções para o Claude Code (e para qualquer pessoa) trabalhar neste reposit
 
 Site institucional do IBTO (Instituto Brasileiro de Treinamento Operacional), reconstruído a partir do site antigo em Brizy, publicado em [ib-to.org](https://ib-to.org).
 
-- **Pessoas:** Aline é PO, PM e QA (aceite e teste humano); Eduardo Lopes é o stakeholder principal (decisões de negócio); Gleyson desenvolve e está aprendendo — explique o porquê das coisas e prefira passos pequenos.
+- **Pessoas:** Aline é PO, PM e QA (aceite e teste humano); Eduardo Lopes é o stakeholder principal (decisões de negócio); Gleyson Atanazio é o desenvolvedor e o Scrum Master, e está aprendendo — explique o porquê das coisas e prefira passos pequenos.
 - **Idioma:** tudo em português do Brasil (commits, issues, PRs, documentação e textos do site).
 - **Documentos-chave:** [README.md](./README.md), [ROADMAP.md](./ROADMAP.md) (fonte da ordem das próximas tarefas), [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md) e [QA_REPORT.html](./QA_REPORT.html).
 
