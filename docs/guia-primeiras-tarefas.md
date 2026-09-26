@@ -63,12 +63,15 @@ Este é o mesmo fluxo do README ([Fluxo de trabalho](../README.md#fluxo-de-traba
 2. **Crie a branch** (o nome vem da tarefa): `git checkout -b feature/nome-da-tarefa`.
 3. **Faça a edição** no arquivo indicado.
 4. **Veja funcionando:** rode `bun run dev` e abra `http://localhost:5173`. Para parar, use `Ctrl + C`.
-5. **Teste:** rode `bun run build` e depois `bun run lint`. O build deve terminar sem erro. O lint mostra alguns avisos amarelos antigos (`only-export-components`, um por página); eles são conhecidos e podem ser ignorados. Se aparecer erro vermelho ou aviso novo, chame o Claude.
+5. **Testes automatizados:** rode `bun run build` e depois `bun run lint`. O build deve terminar sem erro. O lint mostra alguns avisos amarelos antigos (`only-export-components`, um por página); eles são conhecidos e podem ser ignorados. Se aparecer erro vermelho ou aviso novo, chame o Claude.
 6. **Salve com commit**, em português, dizendo o quê e por quê: `git add shared/content.ts` e `git commit -m "feat(assunto): o que mudou"`.
-7. **Teste humano:** a Aline (ou você com ela) confere a página no navegador. Se reprovar, volte ao passo 3.
-8. **Só depois de aprovado**, envie: `git push -u origin feature/nome-da-tarefa` (sempre com o nome da branch, nunca só `git push`).
-9. **Abra o Pull Request** pelo link que o GitHub mostra depois do push. Na descrição, escreva o que testou e `Closes #número-da-issue`.
-10. **Depois do merge (limpeza):** `git checkout main`, `git pull origin main` e `git branch -d feature/nome-da-tarefa`.
+7. **Envie a branch:** `git push -u origin feature/nome-da-tarefa` (sempre com o nome da branch, nunca só `git push`). Se quiser, já abra o Pull Request como **rascunho** ("Create draft pull request").
+8. **Documente na issue:** comente o que testou e o resultado (build, lint e o que conferiu na tela).
+9. **Teste humano (local e homologação):** a Aline (ou você com ela) confere na máquina e, quando existir, em `homolog.ib-to.org`. O resultado também vai como comentário na issue. Se reprovar, volte ao passo 3.
+10. **Se aprovado:** marque o PR como **pronto para revisão** ("Ready for review"), com `Closes #número-da-issue` na descrição.
+11. **Code review e merge:** outra pessoa revisa e faz o merge.
+12. **Deploy e conferência:** publique (hoje manual; ver "Publicação" no README) e abra o site publicado para conferir se a mudança está no ar e nada quebrou.
+13. **Limpeza:** `git checkout main`, `git pull origin main` e `git branch -d feature/nome-da-tarefa`.
 
 **Dica de segurança:** `git status` mostra em que ponto você está e não muda nada. Use quando ficar em dúvida.
 
@@ -133,7 +136,7 @@ Regras rápidas:
 
 **Se der errado:** se a página ficar em branco ou o terminal mostrar erro vermelho, quase sempre falta uma vírgula, uma aspa ou uma chave. Volte ao arquivo, compare com o exemplo acima e, se não achar, cole o erro aqui. **Ponto seguro:** dados no arquivo e commit feito.
 
-- [ ] Faça os passos 7 a 10 da Receita.
+- [ ] Faça os passos 7 a 13 da Receita.
 
 ---
 
@@ -179,7 +182,7 @@ Branch: `feature/cursos-dados-atualizados`.
 
 **Resultado esperado:** os dados novos aparecem na grade e no modal, e o botão de WhatsApp abre a conversa com o número certo.
 
-**Ponto seguro:** dados no arquivo e commit feito. Depois, faça os passos 7 a 10 da Receita.
+**Ponto seguro:** dados no arquivo e commit feito. Depois, faça os passos 7 a 13 da Receita.
 
 ---
 

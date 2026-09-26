@@ -162,7 +162,8 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 
 | # | Issue / branch | Entrega | Depende de |
 | --- | --- | --- | --- |
-| 1 | `feature/cursos` (em andamento) | Grade de treinamentos presenciais com modal e aviso da plataforma online | Teste humano |
+| 1 | `feature/cursos` — ✅ teste humano aprovado em 26/09/2026 (modal, teclado, celular e dados); aguardando PR pronta para revisão, code review e merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Code review |
+| 1b | `chore/github-actions-ci` | Integração contínua na aba **Actions**: a cada push e PR, roda `bun install`, `bun run build` e `bun run lint` e mostra ✅/❌ no PR (primeira forma de "testes automatizados" do fluxo) | — |
 | 2 | `feature/homologacao-hostgator` | `homolog.ib-to.org` com o site publicado, `.htaccess` (rotas e 404 de verdade), `contact.php` configurado e HTTPS conferido | Acesso ao cPanel |
 | 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
 | 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
@@ -172,10 +173,11 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
+| 11 | `chore/deploy-automatico` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
 
 ### Primeiras tarefas da equipe
 
-Três entregas pequenas para começar, com passo a passo em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md). A Tarefa 1 informou a decisão da linha 3 acima: no plano compartilhado, Python só na versão 3.6 e sem Node (tabela oficial da HostGator).
+Cinco entregas pequenas para começar, com passo a passo em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md). A Tarefa 1 informou a decisão da linha 3 acima: no plano compartilhado, Python só na versão 3.6 e sem Node (tabela oficial da HostGator).
 
 | Tarefa | Issue / branch | Entrega | Responsável | Depende de |
 | --- | --- | --- | --- | --- |
@@ -187,7 +189,24 @@ Três entregas pequenas para começar, com passo a passo em [docs/guia-primeiras
 
 Itens transversais, sem ordem fixa:
 
-- [ ] Testes automatizados e integração contínua (hoje não existe nenhum teste automatizado no projeto — vale a pena priorizar isso com a Aline)
+- [ ] Testes automatizados de verdade (hoje só existem build e lint; a integração contínua da linha 1b roda esses dois, e testes de interface entram depois — vale priorizar com a Aline)
 - [ ] Instalar e autenticar o `gh` (GitHub CLI) no ambiente de desenvolvimento, para abrir e gerenciar PRs/issues diretamente
 - [ ] Rodar uma nova auditoria de qualidade contra o site já publicado em homologação, para confirmar que os ganhos de performance realmente aparecem fora do ambiente local
+- [ ] **Organizar o trabalho nas abas do GitHub** (ver "Como usar cada aba do GitHub" abaixo)
 - [ ] Avaliar uma seção de "eventos realizados" (histórico com fotos, como prova de experiência), separada da lista de treinamentos abertos
+
+## Como usar cada aba do GitHub
+
+Todas as abas do repositório podem entrar no fluxo de trabalho. Algumas funções dependem do plano do GitHub (o repositório é privado); onde for o caso, está indicado.
+
+| Aba | Para que vamos usar | Passo do fluxo |
+| --- | --- | --- |
+| **Code** | Código, README, ROADMAP e CLAUDE.md; proteger a `main` em Settings → Branches (exigir PR e o ✅ do Actions antes do merge) | Branch, Clean Up |
+| **Issues** | Uma issue por tarefa, com critério de aceite; resultados dos testes e do teste humano comentados nela; modelos de issue (bug, tarefa) em `.github/ISSUE_TEMPLATE` | Issue, Documentar resultados, Teste humano |
+| **Pull requests** | PR aberto como rascunho depois do push e marcado como pronto após o teste humano; `Closes #número` fecha a issue no merge; modelo de PR com checklist | PR pronta, Code Review, Merge |
+| **Actions** | Integração contínua (build e lint a cada push) e, depois, deploy automático por FTP na HostGator | Testes automatizados, Deploy automático |
+| **Projects** | Quadro Kanban (A fazer, Em andamento, Teste humano, Revisão, Feito) com as issues do ROADMAP, para a Aline e o Eduardo acompanharem sem ler código | Próxima Issue/Branch |
+| **Security and quality** | Alertas de dependências vulneráveis (Dependabot) e política de segurança (`SECURITY.md`). A análise automática de código (CodeQL) e a busca de senhas vazadas em repositório privado dependem do plano pago do GitHub | Code Review |
+| **Insights** | Acompanhar atividade: commits, contribuidores, PRs e issues fechadas por período | Retrospectiva |
+| **Agents** | Agentes de IA do GitHub (como o Copilot) trabalhando em issues; depende de assinatura do Copilot. Opcional: o time já usa o Claude Code | Opcional |
+

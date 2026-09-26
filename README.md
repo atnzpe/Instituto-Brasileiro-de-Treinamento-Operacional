@@ -67,10 +67,12 @@ Você não precisa instalar nada nem entender de código para acompanhar o proje
 | Estilo | Tailwind CSS v4 (tokens em `src/index.css`) |
 | Rotas | TanStack Router (baseado em arquivos, `src/routes/`) |
 | Busca de dados | TanStack Query (`src/hooks/useContent.ts`) |
-| API | `Bun.serve()` nativo (`server/index.ts`) |
+| API de desenvolvimento | `Bun.serve()` nativo (`server/index.ts`) — só na máquina de quem desenvolve; a HostGator não roda Bun |
 | Cache | Redis via `ioredis` — opcional, o site funciona sem ele |
-| E-mail | API do Resend (versão Bun) ou PHP + cURL (fallback para hospedagem estática) |
+| E-mail | API do Resend: versão Bun em desenvolvimento e `contact.php` (PHP + cURL) em produção |
 | Lint | oxlint |
+| Hospedagem | HostGator, plano compartilhado P: site estático + PHP 8.3 + MySQL (Percona 5.7) |
+| Backend da futura plataforma de cursos | PHP + **Laravel 13** + MySQL, no mesmo plano (decisão de 26/09/2026; ver ROADMAP) |
 
 ### Estrutura de pastas
 
@@ -93,6 +95,9 @@ public/
 QA_REPORT.html            # auditoria que motivou esta reconstrução
 QA_REPORT_V2.html         # revalidação: o que mudou desde a auditoria original
 ROADMAP.md                # o que foi feito, o que falta e o que vem a seguir
+CLAUDE.md                 # regras do projeto para o Claude Code (fluxo, stack, segurança)
+docs/
+  guia-primeiras-tarefas.md  # passo a passo para quem está chegando no projeto
 ```
 
 ### Como rodar o projeto
@@ -123,10 +128,10 @@ Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo deta
 
 ### Publicação (deploy)
 
-Dois caminhos possíveis, que podem ser combinados:
+O site é publicado na HostGator (decisão do time: toda a estrutura, front-end e backend, fica no plano atual).
 
-1. **Hospedagem estática (ex.: HostGator)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor. Para homologação, use um subdomínio (ex.: `homolog.ib-to.org`, criado no cPanel em Domínios): o plano atual permite subdomínios ilimitados. O que o plano inclui e a proposta de backend estão no [ROADMAP.md](./ROADMAP.md).
-2. **Vercel** — publica a pasta `dist/` como site estático; cada branch/PR já ganha uma URL de teste automática (útil como ambiente de homologação). O endpoint de contato pode virar uma função serverless da própria Vercel, reaproveitando a mesma lógica do `server/index.ts`.
+1. **Como publicar hoje (manual)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor. Para homologação, use um subdomínio (ex.: `homolog.ib-to.org`, criado no cPanel em Domínios): o plano atual permite subdomínios ilimitados. O que o plano inclui e a proposta de backend estão no [ROADMAP.md](./ROADMAP.md).
+2. **Deploy automático (planejado)** — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
 
 ## Como testar (QA)
 
@@ -141,27 +146,31 @@ Para quem for validar entregas (Aline ou qualquer pessoa do time):
 
 ## Fluxo de trabalho
 
-Toda entrega — de uma correção pequena a uma página nova — segue o mesmo caminho:
+Toda entrega — de uma correção pequena a uma página nova — segue o mesmo caminho (versão revisada em 26/09/2026):
 
 ```text
-Issue ➡️ Branch ➡️ Código/Commits ➡️ Testes ➡️ Documentar resultados na PR ➡️ teste humano ➡️ se teste humano ok ➡️ Push ➡️ Pull Request (PR) ➡️ Code Review ➡️ Merge ➡️ Deploy ➡️ Clean Up ➡️ Próxima Branch e Issue de acordo com o RoadMap
+Issue ➡️ Branch ➡️ Código/Commits ➡️ Testes automatizados ➡️ Push da branch
+➡️ Documentar resultados na Issue ➡️ Teste humano (local e homologação) ➡️ se o teste humano der OK ➡️
+PR pronta para revisão ➡️ Code Review ➡️ Merge ➡️ Deploy automático ➡️ Conferir produção ➡️
+Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 ```
 
-| Etapa | O que acontece | Quem |
-| --- | --- | --- |
-| Issue | Descreve o que precisa ser feito e o critério de aceite | Aline (PO) ou qualquer pessoa do time |
-| Branch | Criada a partir da `main` atualizada, com o nome do tipo de mudança | Dev |
-| Código/Commits | Commits pequenos, com mensagem em português dizendo o quê e por quê | Dev |
-| Testes | `bun run build` e `bun run lint` sem erros, mais teste manual do que mudou | Dev |
-| Documentar resultados na PR | O que foi testado e o resultado, na descrição do Pull Request | Dev |
-| Teste humano | Uma pessoa do time usa a funcionalidade rodando (local ou em homologação) e confere o critério de aceite | Aline (QA) |
-| Se OK: Push | Só depois do teste humano aprovado a branch é enviada ao GitHub | Dev |
-| Pull Request | Aberto ligando a issue (`Closes #número`) | Dev |
-| Code Review | Outra pessoa revisa o código | Time técnico |
-| Merge | A branch entra na `main` | Responsável pelo repositório |
-| Deploy | Publicação: primeiro em homologação, depois em produção | Dev |
-| Clean Up | Apagar a branch e atualizar a `main` local | Dev |
-| Próxima Branch e Issue | Escolhidas conforme o [ROADMAP.md](./ROADMAP.md) | Aline e time técnico |
+| Etapa | O que acontece | Quem | Onde no GitHub |
+| --- | --- | --- | --- |
+| Issue | Descreve o que precisa ser feito e o critério de aceite | Aline (PO) ou qualquer pessoa do time | Aba **Issues**, com o card no **Projects** |
+| Branch | Criada a partir da `main` atualizada, com o nome do tipo de mudança | Dev | — |
+| Código/Commits | Commits pequenos, com mensagem em português dizendo o quê e por quê | Dev | — |
+| Testes automatizados | `bun run build` e `bun run lint` sem erros (ainda não há suíte de testes; ver ROADMAP) | Dev | Aba **Actions**, quando a integração contínua existir |
+| Push da branch | A branch vai para o GitHub já testada, para quem vai testar conseguir usá-la | Dev | — |
+| Documentar resultados na Issue | O que foi testado e o resultado, como comentário na issue | Dev | Aba **Issues** |
+| Teste humano (local e homologação) | Alguém do time usa a funcionalidade rodando na máquina e em `homolog.ib-to.org`, e confere o critério de aceite | Aline (QA) | Comentário na issue |
+| Se OK: PR pronta para revisão | O Pull Request (que pode ter sido aberto antes como rascunho) é marcado como pronto, com `Closes #número` | Dev | Aba **Pull requests** |
+| Code Review | Outra pessoa revisa o código | Time técnico | Aba **Pull requests** |
+| Merge | A branch entra na `main` | Responsável pelo repositório | Aba **Pull requests** |
+| Deploy automático | Publicação na HostGator (hoje ainda manual; automatizar está no ROADMAP) | Dev | Aba **Actions** |
+| Conferir produção | Abrir o site publicado e confirmar que a mudança está no ar e nada quebrou | Dev e Aline | — |
+| Clean Up | Apagar a branch e atualizar a `main` local | Dev | — |
+| Próxima Issue/Branch | Escolhida conforme o [ROADMAP.md](./ROADMAP.md) | Aline e time técnico | **Projects** |
 
 Se o teste humano reprovar, a entrega volta para "Código/Commits" e o caminho recomeça dali.
 
@@ -169,7 +178,9 @@ Convenções:
 
 - **Branches**: `feature/nome` (funcionalidade nova), `fix/nome` (correção) e `docs/nome` (só documentação).
 - **Commits**: em português, no formato `tipo(assunto): o que mudou e por quê` — por exemplo `feat(cursos): adiciona catálogo com modal`. Tipos usados: `feat`, `fix`, `docs`, `chore`. Nada de mensagens vagas como "ajustes".
-- **Nunca** enviar direto para a `main`: tudo entra por Pull Request.
+- **Nunca** enviar direto para a `main`: tudo entra por Pull Request. Branch nova sobe com `git push -u origin nome-da-branch`.
+
+O passo a passo em comandos está em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#receita-de-uma-mudança-no-código-usada-nas-tarefas-2-e-3). Instruções para o Claude Code estão em [CLAUDE.md](./CLAUDE.md).
 
 ## Fidelidade de conteúdo
 
