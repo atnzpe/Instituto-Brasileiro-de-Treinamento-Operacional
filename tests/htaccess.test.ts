@@ -30,6 +30,10 @@ describe('public/.htaccess', () => {
     expect(htaccess).toContain('Require all denied')
   })
 
+  test('bloqueia o arquivo de controle do deploy automático', () => {
+    expect(htaccess).toMatch(/<Files "\.ftp-deploy-sync-state\.json">\s*\n\s*Require all denied/)
+  })
+
   test('senha da homologação só em HTTPS e só no homolog.ib-to.org', () => {
     const block = htaccess.match(/<If "([^"]+)">\s*\n\s*AuthMerging And[\s\S]*?<\/If>/)
     expect(block).not.toBeNull()

@@ -132,7 +132,7 @@ Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo deta
 O site é publicado na HostGator (decisão do time: toda a estrutura, front-end e backend, fica no plano atual).
 
 1. **Como publicar hoje (manual)** — `bun run build`, compactar o conteúdo de `dist/` e enviar pelo Gerenciador de Arquivos do cPanel. O `dist/` já leva o `.htaccess` (HTTPS, páginas abrindo direto, 404 de verdade, cabeçalhos de segurança, bloqueio do `config.php` e `noindex` na homologação) e o `contact.php`; a chave da Resend vai num `config.php` criado só no servidor. Não precisa de Bun/Node no servidor. **Passo a passo completo, com teste: [docs/deploy-homologacao.md](./docs/deploy-homologacao.md)** (homologação em `https://homolog.ib-to.org`, protegida por senha).
-2. **Deploy automático (planejado)** — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
+2. **Deploy automático da homologação** (`.github/workflows/deploy.yml`, issue #26; produção ainda manual) — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
 
 ## Como testar (QA)
 
@@ -168,7 +168,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 | Se OK: PR pronta para revisão | O Pull Request (que pode ter sido aberto antes como rascunho) é marcado como pronto, com `Closes #número` | Dev | Aba **Pull requests** |
 | Code Review | Outra pessoa revisa o código | Time técnico | Aba **Pull requests** |
 | Merge | A branch entra na `main` | Responsável pelo repositório | Aba **Pull requests** |
-| Deploy automático | Publicação na HostGator (hoje ainda manual; automatizar está no ROADMAP) | Dev | Aba **Actions** |
+| Deploy automático | Homologação: automática a cada merge na `main` (aba Actions, por FTPS). Produção: ainda manual | Dev | Aba **Actions** |
 | Conferir produção | Abrir o site publicado e confirmar que a mudança está no ar e nada quebrou | Dev e Aline | — |
 | Clean Up | Apagar a branch e atualizar a `main` local | Dev | — |
 | Próxima Issue/Branch | Escolhida conforme o [ROADMAP.md](./ROADMAP.md) | Aline e time técnico | **Projects** |

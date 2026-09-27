@@ -200,7 +200,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
-| 11 | `chore/deploy-automatico` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
+| 11 🔄 #26 | `feature/deploy-automatico-homologacao` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
 | 12 | `feature/validacao-carteirinha` | Página pública de validação da carteirinha (aberta pelo QR code), mostrando só registro, status/validade, categoria, área, nível e nome abreviado; política de privacidade publicada | 4, 5 e decisão 7 |
 
 ### Primeiras tarefas da equipe

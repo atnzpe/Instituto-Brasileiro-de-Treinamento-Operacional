@@ -29,6 +29,12 @@ ErrorDocument 404 /index.html
   Require all denied
 </FilesMatch>
 
+# File list the automatic deploy (.github/workflows/deploy.yml) keeps on the
+# server to upload only what changed. Not for the public.
+<Files ".ftp-deploy-sync-state.json">
+  Require all denied
+</Files>
+
 # Staging password (issue #24). Asked only on homolog.ib-to.org and only over
 # HTTPS: plain HTTP has no password prompt, so the HTTPS redirect above runs
 # first and the password never travels unencrypted. Living here (instead of

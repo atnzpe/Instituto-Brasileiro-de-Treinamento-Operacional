@@ -108,11 +108,44 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 
 ## Atualizar a homologação depois
 
-1. O Claude gera um pacote novo a partir da `main` (ou da branch em teste).
-2. Parte C (enviar e extrair por cima, substituindo os arquivos).
-3. Parte E. A senha continua valendo sozinha (vem no `.htaccess` do pacote); não precisa refazer a Parte D.
+Com o deploy automático configurado (abaixo), não há passo manual: cada merge na `main` publica sozinho. Para testar uma branch antes do merge: GitHub → aba **Actions** → **Deploy homologação** → **Run workflow** → escolha a branch → **Run workflow**. Depois, Parte E.
 
-O deploy automático (issue própria no ROADMAP) vai trocar esse processo manual.
+Sem o deploy automático (plano B): o Claude gera o pacote, você faz a Parte C e depois a Parte E. A senha continua valendo sozinha; não precisa refazer a Parte D.
+
+## Deploy automático (configurar uma vez)
+
+O GitHub Actions gera o site e envia para `homolog.ib-to.org` por **FTPS** (FTP criptografado). A conta de FTP enxerga **só** a pasta da homologação, então nem por erro ela mexe no site atual em `public_html`. A produção não é publicada por aqui.
+
+### 1. Conta de FTP só da homologação (cPanel)
+
+- [ ] cPanel → **Contas FTP** (FTP Accounts) → **Adicionar conta FTP**.
+- [ ] Login: `deploy-homolog` (domínio `ib-to.org`).
+- [ ] Senha: use o **gerador** do cPanel (senha forte). Guarde para o passo 2; não mande por chat, issue ou WhatsApp.
+- [ ] **Diretório: `homolog.ib-to.org`**. Confira antes de salvar: o cPanel às vezes sugere `public_html/deploy-homolog`, e aí o deploy iria para o lugar errado.
+- [ ] Cota: ilimitada → **Criar conta FTP**.
+- [ ] Na lista, na linha da conta nova, clique em **Configurar cliente FTP** e anote o **Servidor FTP** (algo como `ftp.ib-to.org`) e o **usuário completo** (`deploy-homolog@ib-to.org`).
+
+### 2. Guardar o acesso no GitHub (sem aparecer no código)
+
+- [ ] No repositório: **Settings** → **Environments** → **New environment** → nome `homologacao` → **Configure environment**.
+- [ ] Em **Environment secrets** → **Add environment secret**, crie os três:
+
+| Nome | Valor |
+|---|---|
+| `FTP_SERVER` | o Servidor FTP anotado |
+| `FTP_USERNAME` | o usuário completo (`deploy-homolog@ib-to.org`) |
+| `FTP_PASSWORD` | a senha da conta FTP |
+
+Depois de salvo, nem você nem ninguém consegue ler o valor de volta no GitHub, só trocar.
+
+### 3. Primeiro deploy
+
+- [ ] GitHub → **Actions** → **Deploy homologação** → **Run workflow** → branch em teste → **Run workflow**.
+- [ ] Os dois passos ficam verdes. O último confere sozinho que `https://` pede a senha e que `http://` vai para `https://`.
+- [ ] Se o passo "Enviar por FTPS" falhar com erro de **certificado**, mande a mensagem para o Claude: o endereço do servidor FTP precisa ser o que o certificado da HostGator cobre.
+- [ ] Faça a Parte E.
+
+O deploy nunca envia nem apaga o `config.php` do servidor. Ele guarda na pasta um arquivo `.ftp-deploy-sync-state.json` (a lista do que já foi enviado, para mandar só o que mudou), bloqueado para a internet pelo `.htaccess`.
 
 ## Como gerar o pacote (time técnico)
 
