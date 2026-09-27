@@ -509,9 +509,178 @@ export const redeNacional: RedeNacionalContent = {
   representantes: [],
 }
 
-export const siteContent = { nav, home, quemSomos, areasDeAtuacao, contato, redeNacional }
+// In-person trainings shown on /cursos (online courses will live on a separate
+// platform, linked via `onlinePlatform`). Optional fields stay unset when the
+// poster doesn't give them — never fill them with guessed data.
+export type CourseAccess = 'gratuito-filiados' | 'pago-publico' | 'pago-filiados'
+
+export interface CourseAccessModel {
+  id: CourseAccess
+  label: string
+  badge: string
+  description: string
+}
+
+export interface CourseModule {
+  title: string
+  instructor: string
+}
+
+export interface Course {
+  slug: string
+  title: string
+  format?: 'Online' | 'Presencial'
+  summary?: string
+  access?: CourseAccess
+  schedule?: string
+  location?: string
+  instructor?: string
+  workload?: string
+  price?: string
+  modules?: CourseModule[]
+  topics?: string[]
+  includes?: string[]
+  whatsapp?: string[]
+}
+
+export interface CursosContent {
+  heading: string
+  subheading: string
+  accessModels: CourseAccessModel[]
+  cursos: Course[]
+  // Online courses will live on a separate platform; `href` stays unset until
+  // that platform has a public address, and the page shows "Em breve" meanwhile.
+  onlinePlatform: { title: string; description: string; label: string; href?: string }
+  footnote: string
+  cta: { label: string; href: string }
+}
+
+export const cursos: CursosContent = {
+  heading: 'Cursos e Treinamentos',
+  subheading:
+    'Treinamentos, cursos e seminários presenciais do IBTO em defesa pessoal, combate, tiro, sobrevivência e atendimento tático.',
+  accessModels: [
+    {
+      id: 'gratuito-filiados',
+      label: 'Gratuito e privado aos filiados',
+      badge: 'Gratuito · Filiados',
+      description: 'Sem custo, disponível apenas para filiados do IBTO.',
+    },
+    {
+      id: 'pago-publico',
+      label: 'Pago e aberto ao público',
+      badge: 'Pago · Público',
+      description: 'Com investimento, aberto a qualquer pessoa interessada.',
+    },
+    {
+      id: 'pago-filiados',
+      label: 'Pago e restrito aos filiados',
+      badge: 'Pago · Filiados',
+      description: 'Com investimento, disponível apenas para filiados do IBTO.',
+    },
+  ],
+  cursos: [
+    {
+      slug: 'formacao-de-instrutores',
+      title: 'Treinamento para Formação de Instrutores',
+      format: 'Presencial',
+      summary:
+        'Formação de instrutores em três módulos: operador de arma de fogo, combate com faca e combate corpo a corpo.',
+      access: 'pago-filiados',
+      schedule: '10 e 11 de outubro · 08h às 18h',
+      location: 'Recife',
+      price: 'R$ 1.500',
+      modules: [
+        { title: 'Operador de Arma de Fogo', instructor: 'Caetano — Especialista em Tiro' },
+        { title: 'Combate com Faca', instructor: 'Marcelo — Perito em Kali' },
+        { title: 'Combate Corpo a Corpo', instructor: 'Trinca — Especialista em Artes Marciais' },
+      ],
+      includes: ['Certificado', 'Camisa', 'Munições', 'Estande de tiro', 'E muito mais'],
+      whatsapp: ['(81) 99162-3046', '(81) 99809-8742'],
+    },
+    {
+      slug: 'combate-corpo-a-corpo',
+      title: 'Treinamento para Combate Corpo a Corpo',
+      format: 'Presencial',
+      summary: 'Treinamento de combate corpo a corpo conduzido pelo instrutor Trinca.',
+      access: 'pago-publico',
+      schedule: '10 de outubro · 09h às 13h',
+      location: 'Recife',
+      instructor: 'Trinca — Especialista em Artes Marciais',
+      price: 'R$ 250',
+      includes: ['Certificado', 'Camisa do evento', 'E muito mais'],
+      whatsapp: ['(81) 99162-3046', '(81) 99809-8742'],
+    },
+    {
+      slug: 'combate-com-faca',
+      title: 'Treinamento para Combate com Faca',
+      format: 'Presencial',
+      summary: 'Treinamento de combate com faca conduzido pelo instrutor Marcelo.',
+      access: 'pago-publico',
+      schedule: '10 de outubro · 14h às 18h',
+      location: 'Recife',
+      instructor: 'Marcelo — Especialista em Kali',
+      price: 'R$ 250',
+      includes: ['Certificado', 'Camisa do evento', 'E muito mais'],
+      whatsapp: ['(81) 99162-3046', '(81) 99809-8742'],
+    },
+    {
+      slug: 'seminario-bastao-tatico',
+      title: 'Seminário Bastão Tático',
+      format: 'Presencial',
+      summary: 'Domine. Defenda. Proteja. Seminário de bastão tático e proteção pessoal.',
+      access: 'pago-publico',
+      schedule: 'Sem data fixa · turmas sob consulta pelo WhatsApp',
+      location: 'Caxias do Sul - RS (sede da FIGAM)',
+      instructor: 'Mestre Rodrigo dos Santos — Faixa preta em Krav Maga, Kapap e Kenjutsu',
+      price: 'R$ 150',
+      topics: [
+        'Fundamentos do bastão tático',
+        'Defesa pessoal',
+        'Técnicas de controle e imobilização',
+        'Aplicações práticas para segurança e proteção pessoal',
+        'Treinamento técnico e tático',
+      ],
+      includes: ['Bastão tático', 'Certificado de participação'],
+      whatsapp: ['(54) 99662-7066'],
+    },
+    {
+      slug: 'sobrevivencia-urbana-nivel-1',
+      title: 'Curso Sobrevivência Urbana — Nível 1',
+      format: 'Presencial',
+      summary:
+        'Testes de resistência física e mental para avaliar todo o conhecimento adquirido no decorrer das instruções. Focado na realidade urbana hostil.',
+      schedule: 'Data a definir',
+      workload: '50 horas',
+      topics: [
+        'Combate corpo a corpo',
+        'Combate e defesa com facas',
+        'Sobrevivência urbana',
+        'Arma curta e longa',
+        'Preparação para emergências',
+        'Preparação física e mental',
+      ],
+    },
+  ],
+  onlinePlatform: {
+    title: 'Cursos online',
+    description:
+      'Estamos criando uma plataforma exclusiva para os cursos online do IBTO, como Gestão de Risco Operacional, Cybersegurança Urbana, TCCC, Reconhecimento Aéreo e Introdução à Inteligência Operacional.',
+    label: 'Acessar a plataforma de cursos',
+  },
+  footnote: 'Novos treinamentos em breve.',
+  cta: { label: 'Tenho interesse', href: '/contato' },
+}
+
+export const siteContent = { nav, home, quemSomos, areasDeAtuacao, contato, redeNacional, cursos }
 export type SiteContent = typeof siteContent
-export type PageSlug = 'home' | 'quem-somos' | 'areas-de-atuacao' | 'contato' | 'rede-nacional'
+export type PageSlug =
+  | 'home'
+  | 'quem-somos'
+  | 'areas-de-atuacao'
+  | 'contato'
+  | 'rede-nacional'
+  | 'cursos'
 
 export function getPageContent(slug: PageSlug) {
   switch (slug) {
@@ -525,5 +694,7 @@ export function getPageContent(slug: PageSlug) {
       return contato
     case 'rede-nacional':
       return redeNacional
+    case 'cursos':
+      return cursos
   }
 }
