@@ -110,13 +110,12 @@ O deploy automático (issue própria no ROADMAP) vai trocar esse processo manual
 
 ## Como gerar o pacote (time técnico)
 
-Na pasta do projeto, com a branch certa e sem alterações pendentes:
+Na pasta do projeto, com a branch certa e sem alterações pendentes, no PowerShell:
 
 ```powershell
-bun run build
-New-Item -ItemType Directory -Force ..\deploy | Out-Null
-$codigo = git rev-parse --short HEAD
-Compress-Archive -Path dist\* -DestinationPath "..\deploy\ibto-homolog-$codigo.zip" -Force
+.\scripts\package-hostgator.ps1
 ```
 
-O build já usa o `.env.production`, que aponta o formulário de contato para o `contact.php`.
+O script confere que não há alterações sem commit, roda o build (que já usa o `.env.production`, apontando o formulário para o `contact.php`), garante que o `.htaccess` foi junto e que **nenhum `config.php`** (segredo) entrou, e grava `..\deploy\ibto-homolog-<código>.zip`.
+
+Não use o `Compress-Archive` do PowerShell para isso: no Windows PowerShell 5.1 ele grava as pastas com barra invertida, e na HostGator os arquivos de `assets/` viram nomes quebrados em vez de uma pasta.
