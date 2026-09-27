@@ -43,7 +43,12 @@ function validateContactPayload(body: unknown): ContactPayload | null {
   const trimmedName = name.trim()
   const trimmedEmail = email.trim()
   const trimmedMessage = message.trim()
-  if (!trimmedName || trimmedName.length > 200) return null
+  // The name goes into the e-mail subject: no line breaks or control chars.
+  const hasControlChar = [...trimmedName].some((char) => {
+    const code = char.charCodeAt(0)
+    return code < 0x20 || code === 0x7f
+  })
+  if (!trimmedName || trimmedName.length > 200 || hasControlChar) return null
   if (!EMAIL_RE.test(trimmedEmail) || trimmedEmail.length > 320) return null
   if (!trimmedMessage || trimmedMessage.length > 5000) return null
   return { name: trimmedName, email: trimmedEmail, message: trimmedMessage }
@@ -113,7 +118,13 @@ Bun.serve({
     }
 
     if (url.pathname === '/api/contact' && req.method === 'POST') {
-      const payload = validateContactPayload(await req.json().catch(() => null))
+      const body: unknown = await req.json().catch(() => null)
+      // Honeypot filled in: a bot. Pretend it worked, send nothing (same as contact.php).
+      const website = (body as { website?: unknown } | null)?.website
+      if (typeof website === 'string' && website.trim() !== '') {
+        return json({ ok: true })
+      }
+      const payload = validateContactPayload(body)
       if (!payload) {
         return json({ error: 'Dados inválidos. Preencha nome, e-mail e mensagem.' }, { status: 400 })
       }

@@ -43,6 +43,8 @@ O site força HTTPS; sem certificado, o navegador mostra erro.
 - [ ] Confira que os arquivos ficaram **direto na pasta** (não dentro de uma subpasta): `.htaccess`, `index.html`, `assets`, `images`, `contact.php`, `config.example.php`, `robots.txt`, `sitemap.xml`, `llms.txt`, `favicon.ico`.
 - [ ] Apague o `.zip` da pasta.
 
+No primeiro envio do formulário, o `contact.php` cria sozinho a pasta oculta `.ibto-contact-limits` na raiz da conta (fora das pastas públicas). Ela guarda o limite de 5 mensagens por hora de cada visitante, só com um código embaralhado do IP (nunca o IP em si). Não apague essa pasta.
+
 **Não crie o `config.php` agora.** Ele guarda a chave da Resend, que ainda não existe. Sem ele, o formulário de contato mostra uma mensagem de erro — é esperado.
 
 **Ponto seguro:** site enviado.
@@ -79,6 +81,8 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 - [ ] Em `/cursos`: selos de status, modal e botões de pré-inscrição funcionando.
 - [ ] Widget **VLibras** (mãozinha azul na lateral) abre e traduz.
 - [ ] Formulário de contato: ao enviar, aparece uma **mensagem de erro** (esperado, falta a chave da Resend).
+- [ ] Envie o formulário **6 vezes seguidas**: da 6ª em diante aparece "Você enviou muitas mensagens em pouco tempo…" (limite anti-robô funcionando).
+- [ ] A página `/contato` **não mostra** o e-mail do IBTO escrito (é de propósito: ele fica só no servidor).
 
 ### Cabeçalhos (F12 → Rede → clique na primeira linha → Cabeçalhos / Headers → "Cabeçalhos de resposta")
 

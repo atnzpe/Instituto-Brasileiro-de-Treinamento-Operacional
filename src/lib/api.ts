@@ -18,6 +18,8 @@ export interface ContactPayload {
   name: string
   email: string
   message: string
+  /** Honeypot: hidden from people, so it only comes filled in from bots. */
+  website?: string
 }
 
 // Overridable at build time (VITE_CONTACT_ENDPOINT) so a static deploy with
