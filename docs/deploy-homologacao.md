@@ -51,15 +51,18 @@ No primeiro envio do formulário, o `contact.php` cria sozinho a pasta oculta `.
 
 ## Parte D — Proteger com senha
 
-A homologação é só para o time.
+A homologação é só para o time. O `.htaccess` do pacote **já pede a senha** (só em `homolog.ib-to.org` e só depois de passar para HTTPS, para a senha nunca viajar sem criptografia). O cPanel só guarda o usuário e a senha. Esta parte é feita **uma vez**.
 
-- [ ] cPanel → **Directory Privacy** (Privacidade do Diretório).
-- [ ] Entre na pasta **`homolog.ib-to.org`** e clique em **Editar** (ou no nome da pasta).
-- [ ] Marque **"Password protect this directory"**, nome: `Homologação IBTO` → **Salvar**.
-- [ ] Em "Create User", crie o usuário `equipe` com uma **senha forte** (use o gerador do cPanel) → **Salvar**.
+- [ ] cPanel → **Directory Privacy** (Privacidade do Diretório) → entre na pasta **`homolog.ib-to.org`**.
+- [ ] Em "Create User", crie o usuário `equipe` com uma **senha forte** (use o gerador do cPanel) → **Salvar**. Se ele já existe, pule.
+- [ ] **Não marque** "Password protect this directory". Essa opção grava no `.htaccess` uma senha que é pedida antes do HTTPS; se ela estiver marcada (de uma publicação antiga), **desmarque** e salve.
+- [ ] Confira que o arquivo de senhas está onde o `.htaccess` procura: no Gerenciador de Arquivos, na raiz da conta, existe `.htpasswds/homolog.ib-to.org/passwd`. Se o caminho for outro, avise o Claude antes de seguir (o site daria "Internal Server Error").
 - [ ] Passe a senha para a Aline e o Eduardo por um canal privado. Não coloque a senha em issue, commit ou grupo aberto.
 
-> **Atenção a cada nova publicação:** o Directory Privacy grava a proteção dentro do `.htaccess`. Quando um pacote novo for extraído, o `.htaccess` do pacote substitui o antigo e **a senha deixa de ser pedida**. Depois de toda atualização, repita esta Parte D (basta marcar de novo a proteção; o usuário continua existindo) e confira numa janela anônima.
+**Confira** numa janela anônima:
+
+- [ ] `http://homolog.ib-to.org` (sem "s"): vai direto para `https://` **sem** pedir senha antes.
+- [ ] Já em `https://`, o navegador pede usuário e senha; com eles, o site abre.
 
 **Ponto seguro:** homologação protegida.
 
@@ -70,7 +73,7 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 ### Acesso e segurança
 
 - [ ] Numa **janela anônima**, abra `https://homolog.ib-to.org`: o navegador pede usuário e senha; com eles, o site abre.
-- [ ] Abra `http://homolog.ib-to.org` (sem o "s"): o endereço vira `https://` sozinho.
+- [ ] Abra `http://homolog.ib-to.org` (sem o "s"): o endereço vira `https://` sozinho, **antes** de pedir a senha.
 - [ ] Abra `https://homolog.ib-to.org/config.php` e `https://homolog.ib-to.org/config.example.php`: os dois dão **"Forbidden" (403)**.
 
 ### Páginas
@@ -107,8 +110,7 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 
 1. O Claude gera um pacote novo a partir da `main` (ou da branch em teste).
 2. Parte C (enviar e extrair por cima, substituindo os arquivos).
-3. **Parte D de novo** (a proteção por senha se perde a cada `.htaccess` novo).
-4. Parte E.
+3. Parte E. A senha continua valendo sozinha (vem no `.htaccess` do pacote); não precisa refazer a Parte D.
 
 O deploy automático (issue própria no ROADMAP) vai trocar esse processo manual.
 
