@@ -1,6 +1,12 @@
 import { describe, expect, test } from 'bun:test'
-import type { Course } from '../shared/content'
-import { courseStatus, sortByStatus, todayInBrazil } from '../src/lib/courseStatus'
+import { cursos, type Course } from '../shared/content'
+import {
+  courseStatus,
+  hasEnded,
+  isValidEndsAt,
+  sortByStatus,
+  todayInBrazil,
+} from '../src/lib/courseStatus'
 
 const recife: Course = {
   slug: 'recife',
@@ -17,6 +23,33 @@ describe('todayInBrazil', () => {
 
   test('vira o dia à meia-noite de Recife', () => {
     expect(todayInBrazil(new Date('2026-10-12T03:00:00Z'))).toBe('2026-10-12')
+  })
+
+  test('sempre devolve AAAA-MM-DD', () => {
+    expect(todayInBrazil(new Date('2026-01-05T15:00:00Z'))).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+})
+
+describe('isValidEndsAt', () => {
+  test('aceita só datas reais no formato AAAA-MM-DD', () => {
+    expect(isValidEndsAt('2026-10-11')).toBe(true)
+    expect(isValidEndsAt('2026-10-1')).toBe(false)
+    expect(isValidEndsAt('11/10/2026')).toBe(false)
+    expect(isValidEndsAt('2026-02-30')).toBe(false)
+  })
+
+  test('data mal formatada não encerra o curso: vale o status manual', () => {
+    const malFormatado: Course = { slug: 'x', title: 'X', status: 'aberto', endsAt: '2026-10-1' }
+    expect(courseStatus(malFormatado, '2026-10-05')).toBe('aberto')
+    expect(hasEnded(malFormatado, '2026-10-05')).toBe(false)
+  })
+})
+
+describe('catálogo real (shared/content.ts)', () => {
+  test('todo endsAt cadastrado está no formato AAAA-MM-DD', () => {
+    for (const curso of cursos.cursos) {
+      if (curso.endsAt !== undefined) expect(isValidEndsAt(curso.endsAt)).toBe(true)
+    }
   })
 })
 
@@ -35,8 +68,9 @@ describe('courseStatus', () => {
     expect(courseStatus({ slug: 'b', title: 'B' }, '2030-01-01')).toBe('aberto')
   })
 
-  test('status manual "encerrado" vale mesmo antes da data', () => {
+  test('status manual "encerrado" vale mesmo antes da data, sem contar como turma realizada', () => {
     expect(courseStatus({ ...recife, status: 'encerrado' }, '2026-10-01')).toBe('encerrado')
+    expect(hasEnded({ ...recife, status: 'encerrado' }, '2026-10-01')).toBe(false)
   })
 })
 

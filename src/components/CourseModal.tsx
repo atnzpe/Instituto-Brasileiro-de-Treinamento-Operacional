@@ -15,12 +15,15 @@ const whatsappHref = (phone: string, title: string) =>
 interface CourseModalProps {
   course: Course | null
   status: CourseStatus
+  // Whether the class date has passed; a course can also be closed by hand
+  // before its date (full or cancelled class), which needs a different message.
+  ended: boolean
   accessModel: CourseAccessModel | undefined
   cta: CursosContent['cta']
   onClose: () => void
 }
 
-export function CourseModal({ course, status, accessModel, cta, onClose }: CourseModalProps) {
+export function CourseModal({ course, status, ended, accessModel, cta, onClose }: CourseModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const closed = status === 'encerrado'
@@ -153,7 +156,9 @@ export function CourseModal({ course, status, accessModel, cta, onClose }: Cours
 
           {closed ? (
             <p className="mt-8 rounded-xl border border-white/15 bg-white/5 p-4 text-sm text-white/80">
-              Esta turma já aconteceu. Novas datas serão divulgadas aqui.
+              {ended
+                ? 'Esta turma já aconteceu. Novas datas serão divulgadas aqui.'
+                : 'As inscrições para esta turma estão encerradas. Novas datas serão divulgadas aqui.'}
             </p>
           ) : (
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

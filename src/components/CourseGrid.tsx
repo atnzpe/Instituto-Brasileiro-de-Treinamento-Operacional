@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Course, CursosContent } from '../../shared/content'
-import { courseStatus, sortByStatus, todayInBrazil } from '../lib/courseStatus'
+import { courseStatus, hasEnded, sortByStatus, todayInBrazil } from '../lib/courseStatus'
 import { CourseAccessBadge } from './CourseAccessBadge'
 import { CourseModal } from './CourseModal'
 import { CourseStatusBadge } from './CourseStatusBadge'
@@ -93,6 +93,7 @@ export function CourseGrid({ data }: { data: CursosContent }) {
       <CourseModal
         course={selected}
         status={selected ? courseStatus(selected, today) : 'aberto'}
+        ended={selected ? hasEnded(selected, today) : false}
         accessModel={modelFor(selected)}
         cta={data.cta}
         onClose={() => setSelected(null)}
