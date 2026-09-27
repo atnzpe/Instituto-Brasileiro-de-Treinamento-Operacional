@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import type { Course, CursosContent } from '../../shared/content'
+import { courseStatus, sortByStatus, todayInBrazil } from '../lib/courseStatus'
 import { CourseAccessBadge } from './CourseAccessBadge'
 import { CourseModal } from './CourseModal'
+import { CourseStatusBadge } from './CourseStatusBadge'
 
 export function CourseGrid({ data }: { data: CursosContent }) {
   const [selected, setSelected] = useState<Course | null>(null)
+  const today = todayInBrazil()
   const modelFor = (course: Course | null) =>
     data.accessModels.find((model) => model.id === course?.access)
 
@@ -22,8 +25,9 @@ export function CourseGrid({ data }: { data: CursosContent }) {
       </ul>
 
       <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {data.cursos.map((course, index) => {
+        {sortByStatus(data.cursos, today).map((course, index) => {
           const model = modelFor(course)
+          const status = courseStatus(course, today)
           return (
             <li key={course.slug}>
               <button
@@ -35,7 +39,8 @@ export function CourseGrid({ data }: { data: CursosContent }) {
                 }`}
               >
                 <span>
-                  <span className="block font-display text-lg text-white">{course.title}</span>
+                  <CourseStatusBadge status={status} />
+                  <span className="mt-3 block font-display text-lg text-white">{course.title}</span>
                   {[course.format, course.location].some(Boolean) && (
                     <span className="mt-1 block text-sm text-white/70">
                       {[course.format, course.location].filter(Boolean).join(' · ')}
@@ -87,6 +92,7 @@ export function CourseGrid({ data }: { data: CursosContent }) {
 
       <CourseModal
         course={selected}
+        status={selected ? courseStatus(selected, today) : 'aberto'}
         accessModel={modelFor(selected)}
         cta={data.cta}
         onClose={() => setSelected(null)}

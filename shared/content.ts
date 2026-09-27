@@ -521,6 +521,12 @@ export interface CourseAccessModel {
   description: string
 }
 
+// `status` is the manual state; once `endsAt` (last day of the class,
+// YYYY-MM-DD) has passed, the page shows "Encerrado" on its own — see
+// src/lib/courseStatus.ts. A new class of the same course reuses the entry:
+// update the dates, `endsAt`, `status` and `poster`.
+export type CourseStatus = 'aberto' | 'em-breve' | 'encerrado'
+
 export interface CourseModule {
   title: string
   instructor: string
@@ -532,7 +538,10 @@ export interface Course {
   format?: 'Online' | 'Presencial'
   summary?: string
   access?: CourseAccess
+  status?: CourseStatus
   schedule?: string
+  endsAt?: string
+  poster?: { src: string; alt: string }
   location?: string
   instructor?: string
   workload?: string
@@ -587,7 +596,9 @@ export const cursos: CursosContent = {
       summary:
         'Formação de instrutores em três módulos: operador de arma de fogo, combate com faca e combate corpo a corpo.',
       access: 'pago-filiados',
-      schedule: '10 e 11 de outubro · 08h às 18h',
+      status: 'aberto',
+      schedule: '10 e 11 de outubro de 2026 · 08h às 18h',
+      endsAt: '2026-10-11',
       location: 'Recife',
       price: 'R$ 1.500',
       modules: [
@@ -604,7 +615,9 @@ export const cursos: CursosContent = {
       format: 'Presencial',
       summary: 'Treinamento de combate corpo a corpo conduzido pelo instrutor Trinca.',
       access: 'pago-publico',
-      schedule: '10 de outubro · 09h às 13h',
+      status: 'aberto',
+      schedule: '10 de outubro de 2026 · 09h às 13h',
+      endsAt: '2026-10-10',
       location: 'Recife',
       instructor: 'Trinca — Especialista em Artes Marciais',
       price: 'R$ 250',
@@ -617,7 +630,9 @@ export const cursos: CursosContent = {
       format: 'Presencial',
       summary: 'Treinamento de combate com faca conduzido pelo instrutor Marcelo.',
       access: 'pago-publico',
-      schedule: '10 de outubro · 14h às 18h',
+      status: 'aberto',
+      schedule: '10 de outubro de 2026 · 14h às 18h',
+      endsAt: '2026-10-10',
       location: 'Recife',
       instructor: 'Marcelo — Especialista em Kali',
       price: 'R$ 250',
@@ -630,6 +645,7 @@ export const cursos: CursosContent = {
       format: 'Presencial',
       summary: 'Domine. Defenda. Proteja. Seminário de bastão tático e proteção pessoal.',
       access: 'pago-publico',
+      status: 'aberto',
       schedule: 'Sem data fixa · turmas sob consulta pelo WhatsApp',
       location: 'Caxias do Sul - RS (sede da FIGAM)',
       instructor: 'Mestre Rodrigo dos Santos — Faixa preta em Krav Maga, Kapap e Kenjutsu',
@@ -650,6 +666,7 @@ export const cursos: CursosContent = {
       format: 'Presencial',
       summary:
         'Testes de resistência física e mental para avaliar todo o conhecimento adquirido no decorrer das instruções. Focado na realidade urbana hostil.',
+      status: 'em-breve',
       schedule: 'Data a definir',
       workload: '50 horas',
       topics: [

@@ -8,6 +8,7 @@
     "server": "bun run server/index.ts",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "test": "bun test",
     "preview": "vite preview"
   },
   "dependencies": {
