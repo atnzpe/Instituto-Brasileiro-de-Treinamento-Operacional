@@ -1,4 +1,4 @@
-# Builds the site and packs dist/ into a zip ready for cPanel's File Manager.
+﻿# Builds the site and packs dist/ into a zip ready for cPanel's File Manager.
 # Usage (from the project folder): .\scripts\package-hostgator.ps1
 #
 # Not using Compress-Archive: on Windows PowerShell 5.1 it stores paths with
@@ -17,7 +17,7 @@ if (git status --porcelain) {
 # error, which 'Stop' would treat as fatal even when the build succeeds; rely
 # on the exit code instead.
 $ErrorActionPreference = 'Continue'
-bun run build 2>&1 | Out-Host
+bun run build | Out-Host
 $codigoSaida = $LASTEXITCODE
 $ErrorActionPreference = 'Stop'
 if ($codigoSaida -ne 0) { throw 'O build falhou.' }
