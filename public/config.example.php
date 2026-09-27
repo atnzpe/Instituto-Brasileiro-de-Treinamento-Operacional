@@ -6,5 +6,5 @@
  */
 
 define('RESEND_API_KEY', '');
-define('CONTACT_TO_EMAIL', 'eduars.lopes@gmail.com');
+define('CONTACT_TO_EMAIL', 'comando.ibto@gmail.com');
 define('CONTACT_FROM_EMAIL', 'ouvidoria@ib-to.org');

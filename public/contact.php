@@ -73,7 +73,7 @@ if (!defined('RESEND_API_KEY') || RESEND_API_KEY === '') {
     fail(502, 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.');
 }
 
-$to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'eduars.lopes@gmail.com';
+$to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
 $from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'ouvidoria@ib-to.org';
 
 $emailBody = json_encode([

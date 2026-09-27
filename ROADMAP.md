@@ -37,7 +37,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 ## 🚧 Pendente — falta um dado, credencial ou decisão, não código
 
 - [ ] **Chave de API da Resend** — o formulário de contato valida e avisa o erro corretamente, mas só vai enviar e-mail de verdade quando tivermos essa chave
-- [ ] **E-mail definitivo de contato** — hoje está apontando para `eduars.lopes@gmail.com` como solução temporária; trocar para um `contato@ib-to.org` (ou similar) quando existir (o plano da HostGator permite criar caixas de e-mail sem limite)
+- [x] **E-mail definitivo de contato** — o formulário de contato envia para `comando.ibto@gmail.com`, e-mail oficial do IBTO
 - [ ] **Lista real da Rede Nacional** — nome, função, cidade/estado, telefone e foto (se tiver) de cada representante/instrutor/monitor, para popular a página `/rede-nacional`
 - [ ] **Conferir os telefones dos cartazes** — os cartazes do Recife trazem números de WhatsApp diferentes entre si: o de Formação de Instrutores mostra (81) 99162-3046 e (81) 99809-8742; os de Combate Corpo a Corpo e Combate com Faca mostram 8191623046 (10 dígitos, faltando um) e 81990098742 (um dígito diferente no meio). O site usa os números do primeiro cartaz nos três cursos até a confirmação
 - [ ] **Tirar os treinamentos do Recife do ar depois da data** — os três são de 10 e 11 de outubro; depois disso alguém precisa removê-los (ou marcá-los como encerrados) manualmente

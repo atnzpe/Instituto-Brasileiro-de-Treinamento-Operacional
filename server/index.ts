@@ -22,9 +22,8 @@ const corsHeaders = {
 // the institute. Sent through Resend's HTTP API so we don't need an SMTP
 // server — just an API key, no new dependency (plain fetch).
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-// Temporary destination while the institute sets up a dedicated inbox —
-// override with CONTACT_TO_EMAIL once contato@ib-to.org (or similar) exists.
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'eduars.lopes@gmail.com'
+// The institute's official contact inbox; override with CONTACT_TO_EMAIL.
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'comando.ibto@gmail.com'
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'ouvidoria@ib-to.org'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
