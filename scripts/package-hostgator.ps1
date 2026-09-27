@@ -13,8 +13,14 @@ if (git status --porcelain) {
   throw 'Há alterações não salvas (git status). Faça commit antes de gerar o pacote.'
 }
 
-bun run build
-if ($LASTEXITCODE -ne 0) { throw 'O build falhou.' }
+# Windows PowerShell 5.1 turns anything a native tool prints to stderr into an
+# error, which 'Stop' would treat as fatal even when the build succeeds; rely
+# on the exit code instead.
+$ErrorActionPreference = 'Continue'
+bun run build 2>&1 | Out-Host
+$codigoSaida = $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
+if ($codigoSaida -ne 0) { throw 'O build falhou.' }
 
 $dist = Join-Path $projeto 'dist'
 if (Test-Path (Join-Path $dist 'config.php')) {
