@@ -18,6 +18,7 @@ export interface FeatureCard {
   title: string
   description: string
   href?: string
+  image?: { src: string; alt: string }
 }
 
 export interface HomeContent {
@@ -80,16 +81,31 @@ export const home: HomeContent = {
         title: 'Formação Operacional',
         description:
           'Programas estruturados para desenvolvimento de competências técnicas, disciplina, tomada de decisão e preparo para ambientes de alta exigência.',
+        href: '/cursos',
+        image: {
+          src: '/images/training/formacao-operacional.webp',
+          alt: 'Instrutor do IBTO apresenta os princípios operacionais a uma turma em sala de aula.',
+        },
       },
       {
         title: 'Treinamentos Especializados',
         description:
           'Capacitações voltadas para aplicação prática, atualização profissional e desenvolvimento contínuo de habilidades operacionais.',
+        href: '/cursos',
+        image: {
+          src: '/images/training/treinamentos-especializados.webp',
+          alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
+        },
       },
       {
         title: 'Certificação e Credenciamento',
         description:
           'Reconhecimento institucional para participantes, instrutores e profissionais que concluem os programas de formação do IBTO.',
+        href: '/cursos',
+        image: {
+          src: '/images/training/certificacao-e-credenciamento.webp',
+          alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
+        },
       },
     ],
   },
