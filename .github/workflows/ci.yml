@@ -5,6 +5,10 @@ name: CI
 on:
   push:
     branches: ['**']
+  # Also checks each PR merged with the current main, so two PRs that pass
+  # on their own can't break main once both are merged.
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 # Read-only token: this job only checks code, it never writes to the repo.
