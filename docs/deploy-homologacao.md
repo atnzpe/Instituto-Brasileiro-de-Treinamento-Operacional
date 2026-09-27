@@ -65,13 +65,13 @@ A homologação é só para o time.
 
 Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do navegador com **F12**.
 
-**Acesso e segurança**
+### Acesso e segurança
 
 - [ ] Numa **janela anônima**, abra `https://homolog.ib-to.org`: o navegador pede usuário e senha; com eles, o site abre.
 - [ ] Abra `http://homolog.ib-to.org` (sem o "s"): o endereço vira `https://` sozinho.
 - [ ] Abra `https://homolog.ib-to.org/config.php` e `https://homolog.ib-to.org/config.example.php`: os dois dão **"Forbidden" (403)**.
 
-**Páginas**
+### Páginas
 
 - [ ] Abra, digitando no endereço, `/areas-de-atuacao`, `/quem-somos`, `/contato`, `/rede-nacional` e `/cursos`. Em cada uma, aperte **F5**: a página recarrega normalmente, sem erro.
 - [ ] Abra `/services`: vai para `/areas-de-atuacao`.
@@ -80,15 +80,15 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 - [ ] Widget **VLibras** (mãozinha azul na lateral) abre e traduz.
 - [ ] Formulário de contato: ao enviar, aparece uma **mensagem de erro** (esperado, falta a chave da Resend).
 
-**Cabeçalhos** (F12 → Rede → clique na primeira linha → **Cabeçalhos / Headers** → "Cabeçalhos de resposta")
+### Cabeçalhos (F12 → Rede → clique na primeira linha → Cabeçalhos / Headers → "Cabeçalhos de resposta")
 
 - [ ] Aparecem `strict-transport-security`, `x-content-type-options: nosniff`, `x-frame-options: DENY`, `referrer-policy`, `permissions-policy` e **`x-robots-tag: noindex, nofollow`**.
 
-**Console** (F12 → **Console**)
+### Console (F12 → Console)
 
 - [ ] Procure mensagens com **"Report Only"** ou **"Content Security Policy"**. Elas não quebram nada agora, mas mostram o que precisa ser liberado antes de ativar a política de conteúdo. Copie todas e mande para o Claude (ou cole na issue #15).
 
-**Celular**
+### Celular
 
 - [ ] Abra a homologação no celular e percorra as páginas.
 
