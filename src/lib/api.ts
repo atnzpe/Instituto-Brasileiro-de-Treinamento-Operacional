@@ -30,6 +30,8 @@ const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact'
 const CONTACT_TIMEOUT_MS = 20000
 const CONNECTION_ERROR =
   'Não foi possível conectar ao servidor. Verifique sua internet e tente de novo, ou fale conosco pelo WhatsApp.'
+const SEND_ERROR =
+  'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde ou fale conosco pelo WhatsApp.'
 
 export async function submitContact(payload: ContactPayload) {
   let res: Response
@@ -46,6 +48,8 @@ export async function submitContact(payload: ContactPayload) {
     throw new Error(CONNECTION_ERROR)
   }
   const data: { error?: string } = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data.error ?? `Request failed with ${res.status}`)
+  // No JSON error means the answer didn't come from contact.php (e.g. the
+  // hosting firewall): show a message a visitor can act on.
+  if (!res.ok) throw new Error(data.error ?? SEND_ERROR)
   return data
 }
