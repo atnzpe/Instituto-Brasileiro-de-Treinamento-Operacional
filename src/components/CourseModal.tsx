@@ -1,26 +1,32 @@
 import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useId, useRef } from 'react'
-import type { Course, CourseAccessModel, CursosContent } from '../../shared/content'
+import type { Course, CourseAccessModel, CourseStatus, CursosContent } from '../../shared/content'
 import { CourseAccessBadge } from './CourseAccessBadge'
+import { CourseStatusBadge } from './CourseStatusBadge'
 
 const ctaClassName =
   'inline-block rounded-full bg-brand-gold px-8 py-3 text-center text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink'
 
 const whatsappHref = (phone: string, title: string) =>
   `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(
-    `Olá, vi o curso ${title} no site ib-to.org e gostaria de mais informações`,
+    `Olá, vi o curso ${title} no site ib-to.org e gostaria de fazer minha pré-inscrição`,
   )}`
 
 interface CourseModalProps {
   course: Course | null
+  status: CourseStatus
+  // Whether the class date has passed; a course can also be closed by hand
+  // before its date (full or cancelled class), which needs a different message.
+  ended: boolean
   accessModel: CourseAccessModel | undefined
   cta: CursosContent['cta']
   onClose: () => void
 }
 
-export function CourseModal({ course, accessModel, cta, onClose }: CourseModalProps) {
+export function CourseModal({ course, status, ended, accessModel, cta, onClose }: CourseModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
+  const closed = status === 'encerrado'
 
   const facts: [label: string, value: string][] = []
   if (course?.format) facts.push(['Formato', course.format])
@@ -28,7 +34,7 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
   if (course?.schedule) facts.push(['Datas e horário', course.schedule])
   if (course?.instructor) facts.push(['Instrutor', course.instructor])
   if (course?.workload) facts.push(['Carga horária', course.workload])
-  if (course?.price) facts.push(['Investimento', course.price])
+  if (course?.price && !closed) facts.push(['Investimento', course.price])
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -67,7 +73,17 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
             <span aria-hidden="true">×</span>
           </button>
 
-          <div className="pr-8">
+          {course.poster && (
+            <img
+              src={course.poster.src}
+              alt={course.poster.alt}
+              loading="lazy"
+              className="mt-8 mb-6 max-h-80 w-full rounded-xl object-contain"
+            />
+          )}
+
+          <div className="flex flex-wrap gap-2 pr-8">
+            <CourseStatusBadge status={status} />
             {accessModel ? (
               <CourseAccessBadge model={accessModel} />
             ) : (
@@ -75,6 +91,8 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
                 Modalidade a definir
               </span>
             )}
+          </div>
+          <div className="pr-8">
             <h2 id={titleId} className="mt-4 text-2xl text-white">
               {course.title}
             </h2>
@@ -136,25 +154,34 @@ export function CourseModal({ course, accessModel, cta, onClose }: CourseModalPr
             </>
           )}
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            {course.whatsapp && course.whatsapp.length > 0 ? (
-              course.whatsapp.map((phone) => (
-                <a
-                  key={phone}
-                  href={whatsappHref(phone, course.title)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={ctaClassName}
-                >
-                  WhatsApp {phone}
-                </a>
-              ))
-            ) : (
-              <Link to={cta.href} className={ctaClassName}>
-                {cta.label}
-              </Link>
-            )}
-          </div>
+          {closed ? (
+            <p className="mt-8 rounded-xl border border-white/15 bg-white/5 p-4 text-sm text-white/80">
+              {ended
+                ? 'Esta turma já aconteceu. Novas datas serão divulgadas aqui.'
+                : 'As inscrições para esta turma estão encerradas. Novas datas serão divulgadas aqui.'}
+            </p>
+          ) : (
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              {course.whatsapp && course.whatsapp.length > 0 ? (
+                course.whatsapp.map((phone) => (
+                  <a
+                    key={phone}
+                    href={whatsappHref(phone, course.title)}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Pré-inscrição pelo WhatsApp no número ${phone} (abre em nova aba)`}
+                    className={ctaClassName}
+                  >
+                    Pré-inscrição · {phone}
+                  </a>
+                ))
+              ) : (
+                <Link to={cta.href} className={ctaClassName}>
+                  {cta.label}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       )}
     </dialog>
