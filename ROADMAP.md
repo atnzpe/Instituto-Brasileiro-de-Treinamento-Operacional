@@ -147,6 +147,29 @@ Duas opções:
 
 Sugestão: começar a homologação com o fluxo manual e integrar o gateway em seguida, quando o provedor for escolhido.
 
+### Filiados, carteirinha e LGPD
+
+**Regra do projeto (26/09/2026):** o IBTO quer **exibir seus filiados**, mas sempre seguindo a LGPD (Lei Geral de Proteção de Dados) e as leis de privacidade internacionais, como a GDPR europeia. A maioria dos filiados é **operador de segurança** (policiais, militares, vigilantes), e expor nome completo, cidade, foto ou documento pode colocar a pessoa em risco.
+
+A carteirinha de filiado já existe e traz: nome completo, nascimento, CPF, UF, município, número de registro (ex.: `BR2026XXXXPE`), validade, categoria, área de atuação, nível, equipe/academia, foto, data de emissão, QR code e código de barras.
+
+| Dado | Onde pode aparecer |
+| --- | --- |
+| CPF, data de nascimento, endereço, telefone pessoal, foto do documento | **Nunca em público nem no repositório.** Só no banco de dados da plataforma, com acesso restrito e registro de quem acessou |
+| Número de registro, validade (ativo ou vencido), categoria, área e nível | Página pública de **validação da carteirinha** (aberta pelo QR code), para confirmar que a pessoa é filiada |
+| Nome | Na validação e em listas, abreviado por padrão (ex.: "Gleyson A."); nome completo só com consentimento |
+| Foto, cidade e contato | Só com **consentimento explícito**, pedido campo a campo e revogável a qualquer momento; o padrão é não mostrar |
+
+Princípios para qualquer tela que use dados de filiados:
+
+- **Minimização:** publicar só o necessário para a finalidade (ex.: confirmar se a carteirinha é válida).
+- **Consentimento registrado:** o filiado escolhe o que aparece e pode mudar ou retirar a qualquer momento; há opção de ficar oculto.
+- **Finalidade clara e aviso de privacidade** publicado no site (política de privacidade e como pedir correção ou exclusão de dados).
+- **Segurança:** dados só na plataforma (Laravel + MySQL), com senha forte, controle de permissão, criptografia dos campos sensíveis e registro de acesso; nunca em `shared/content.ts`, commits, issues ou logs.
+- **Encarregado de dados (DPO):** a LGPD pede que a instituição indique quem responde por dados pessoais; é uma decisão do Eduardo.
+
+Pontos a conferir na carteirinha atual: o CPF impresso aparece **sem o zero inicial** (10 dígitos em vez de 11), e a equipe aparece como "Instrutor Trinca" enquanto o cadastro enviado diz "Mestre Trinca". Vale padronizar antes de gerar novas carteirinhas.
+
 ### Decisões que dependem de vocês
 
 1. ~~Backend da plataforma~~ — decidido: PHP + MySQL no plano atual (26/09/2026). Forma de organizar o PHP: **recomendado Laravel 13** (exige PHP 8.3+; segurança por padrão, padrão de mercado; comparação em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#laravel-ou-php-simples)), aguardando confirmação
@@ -155,6 +178,7 @@ Sugestão: começar a homologação com o fluxo manual e integrar o gateway em s
 4. Definir "filiado": quem é, como entra, se paga anuidade e como isso libera os cursos restritos
 5. Endereço final da plataforma (sugestão: `cursos.ib-to.org`)
 6. Quem administra a plataforma e com quais papéis
+7. Filiados e LGPD: o que pode ser público sobre cada filiado (ver "Filiados, carteirinha e LGPD" abaixo)
 
 ## 🔭 Próximos passos
 
@@ -162,8 +186,11 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 
 | # | Issue / branch | Entrega | Depende de |
 | --- | --- | --- | --- |
-| 1 | `feature/cursos` — ✅ teste humano aprovado em 26/09/2026 (modal, teclado, celular e dados); aguardando PR pronta para revisão, code review e merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Code review |
+| 1 | `feature/cursos` — ✅ teste humano aprovado e code review feito em 26/09/2026 (PR #6, fecha a issue #5); aguardando merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Merge |
 | 1b | `chore/github-actions-ci` | Integração contínua na aba **Actions**: a cada push e PR, roda `bun install`, `bun run build` e `bun run lint` e mostra ✅/❌ no PR (primeira forma de "testes automatizados" do fluxo) | — |
+| 1c | `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), **prazo 11/10/2026** | Treinamento com data passada some de `/cursos` ou aparece como "Encerrado", sem preço nem WhatsApp | Decisão do Eduardo (esconder ou "Encerrado") |
+| 1d | `feature/safe-area` — issue [#10](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
+| 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
 | 2 | `feature/homologacao-hostgator` | `homolog.ib-to.org` com o site publicado, `.htaccess` (rotas e 404 de verdade), `contact.php` configurado e HTTPS conferido | Acesso ao cPanel |
 | 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
 | 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
@@ -174,6 +201,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
 | 11 | `chore/deploy-automatico` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
+| 12 | `feature/validacao-carteirinha` | Página pública de validação da carteirinha (aberta pelo QR code), mostrando só registro, status/validade, categoria, área, nível e nome abreviado; política de privacidade publicada | 4, 5 e decisão 7 |
 
 ### Primeiras tarefas da equipe
 

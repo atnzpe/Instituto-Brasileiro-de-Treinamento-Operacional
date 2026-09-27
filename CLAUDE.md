@@ -61,4 +61,4 @@ Publicação: gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run buil
 - **Acessibilidade:** um `<h1>` por página, texto alternativo em imagens, navegação por teclado, contraste WCAG AA; o widget VLibras fica só no `index.html`.
 - **Mobile first** com Tailwind, no tema escuro do site (fundo preto e bronze/dourado, inclusive no menu do topo).
 - **Conteúdo real:** nunca inventar dados (datas, preços, telefones, pessoas). Quando faltar, deixar vazio ou "a definir" e registrar a pendência no ROADMAP.
-- Nome, telefone e foto de pessoas só com autorização delas.
+- **LGPD e privacidade (filiados):** o IBTO exibe seus filiados, mas a maioria é operador de segurança. CPF, data de nascimento, endereço, telefone pessoal e documentos **nunca** vão para o site público, o repositório, commits, issues ou logs — só para o banco da plataforma, com acesso restrito. Em público, só o mínimo necessário (registro, validade, categoria, área, nível, nome abreviado); nome completo, foto, cidade e contato só com consentimento explícito, campo a campo e revogável. Detalhes em "Filiados, carteirinha e LGPD" no ROADMAP.
