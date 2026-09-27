@@ -19,7 +19,9 @@ concurrency:
 jobs:
   checks:
     name: Lint, testes e build
-    runs-on: ubuntu-latest
+    # Pinned instead of ubuntu-latest (which moves to Ubuntu 26 on
+    # 2026-10-19) so the runner only changes when we decide to update it.
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       # Actions pinned to a full commit SHA (not just a tag) so a moved or
