@@ -53,12 +53,12 @@ bun run lint     # oxlint
 bun run test     # testes automatizados
 ```
 
-Publicação: gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build` e enviar só o conteúdo de `dist/` (a pasta `public/` é copiada para dentro dele pelo Vite).
+Publicação: `bun run build` (o `.env.production` já aponta o formulário para `/contact.php`) e enviar só o conteúdo de `dist/`; a pasta `public/`, com o `.htaccess`, é copiada para dentro dele pelo Vite. Passo a passo em [docs/deploy-homologacao.md](./docs/deploy-homologacao.md).
 
 ## Padrão de qualidade de toda página
 
 - **Segurança em primeiro lugar:** nunca versionar segredos (`.env`, `public/config.php`); validar entrada no servidor; em PHP, consultas com parâmetros e saída escapada.
-- **SEO e LLM:** cada rota tem `head()` com título, descrição e Open Graph; páginas novas entram em `public/sitemap.xml` e `public/llms.txt`.
+- **SEO e LLM:** cada rota tem `head()` com título, descrição e Open Graph; páginas novas entram em `public/sitemap.xml`, `public/llms.txt` e na regra de rotas do `public/.htaccess` (o teste `tests/htaccess.test.ts` falha se faltar).
 - **Acessibilidade:** um `<h1>` por página, texto alternativo em imagens, navegação por teclado, contraste WCAG AA; o widget VLibras fica só no `index.html`.
 - **Mobile first** com Tailwind, no tema escuro do site (fundo preto e bronze/dourado, inclusive no menu do topo).
 - **Conteúdo real:** nunca inventar dados (datas, preços, telefones, pessoas). Quando faltar, deixar vazio ou "a definir" e registrar a pendência no ROADMAP.

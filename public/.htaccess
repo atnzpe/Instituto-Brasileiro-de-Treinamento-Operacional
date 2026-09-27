@@ -1,0 +1,61 @@
+# IBTO site (React single-page app) on HostGator's Apache.
+# Copied into dist/ by Vite. Guide: docs/deploy-homologacao.md.
+
+Options -Indexes
+DirectoryIndex index.html
+
+# Unknown addresses get a real 404 status while still showing the app's own
+# "not found" page (served from index.html).
+ErrorDocument 404 /index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # HTTPS only.
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # Legacy URL from the old site.
+  RewriteRule ^services/?$ /areas-de-atuacao [R=301,L]
+
+  # Site pages only exist in the browser: serve index.html with status 200.
+  # Every page in src/routes must be listed here — tests/htaccess.test.ts
+  # fails the build otherwise.
+  RewriteRule ^(areas-de-atuacao|quem-somos|contato|rede-nacional|cursos)/?$ /index.html [L]
+</IfModule>
+
+# Secrets for contact.php: readable by PHP on disk, never over HTTP.
+<FilesMatch "^config(\.example)?\.php$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "DENY"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+
+  # Report-only for now: logs violations in the browser console without
+  # blocking anything, so the VLibras widget's real needs can be checked
+  # before this is enforced.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://vlibras.gov.br https://*.vlibras.gov.br; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vlibras.gov.br https://*.vlibras.gov.br; font-src 'self' data: https://fonts.gstatic.com https://vlibras.gov.br https://*.vlibras.gov.br; img-src 'self' data: blob: https:; connect-src 'self' https://vlibras.gov.br https://*.vlibras.gov.br; frame-src https://vlibras.gov.br https://*.vlibras.gov.br; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+  # Staging must never be indexed by search engines.
+  <If "%{HTTP_HOST} == 'homolog.ib-to.org'">
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </If>
+
+  # Build files have a content hash in their name, so they can be cached
+  # forever; HTML must always be revalidated to pick up new deploys.
+  <If "%{REQUEST_URI} =~ m#^/assets/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json application/xml image/svg+xml
+</IfModule>

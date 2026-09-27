@@ -125,13 +125,13 @@ Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo deta
 
 - `REDIS_URL` — opcional, só usada pela API.
 - `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — necessárias para o formulário de contato enviar e-mail de verdade (as versões em Bun e em PHP usam as mesmas três).
-- `VITE_CONTACT_ENDPOINT` — só necessária numa publicação 100% estática sem a API em Bun (aponta o formulário para `/contact.php`); deixe em branco no ambiente local.
+- `VITE_CONTACT_ENDPOINT` — endereço do formulário de contato. Deixe em branco no ambiente local; o build de produção já recebe `/contact.php` pelo arquivo `.env.production` (sem segredos).
 
 ### Publicação (deploy)
 
 O site é publicado na HostGator (decisão do time: toda a estrutura, front-end e backend, fica no plano atual).
 
-1. **Como publicar hoje (manual)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor. Para homologação, use um subdomínio (ex.: `homolog.ib-to.org`, criado no cPanel em Domínios): o plano atual permite subdomínios ilimitados. O que o plano inclui e a proposta de backend estão no [ROADMAP.md](./ROADMAP.md).
+1. **Como publicar hoje (manual)** — `bun run build`, compactar o conteúdo de `dist/` e enviar pelo Gerenciador de Arquivos do cPanel. O `dist/` já leva o `.htaccess` (HTTPS, páginas abrindo direto, 404 de verdade, cabeçalhos de segurança, bloqueio do `config.php` e `noindex` na homologação) e o `contact.php`; a chave da Resend vai num `config.php` criado só no servidor. Não precisa de Bun/Node no servidor. **Passo a passo completo, com teste: [docs/deploy-homologacao.md](./docs/deploy-homologacao.md)** (homologação em `https://homolog.ib-to.org`, protegida por senha).
 2. **Deploy automático (planejado)** — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
 
 ## Como testar (QA)
