@@ -22,7 +22,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 - Toda mudança começa numa issue e numa branch nova a partir da `main` atualizada: `feature/…`, `fix/…` ou `docs/…`.
 - **Nunca** fazer commit ou push direto na `main`. Branch nova sobe com `git push -u origin <branch>`.
 - Commits em português, no formato `tipo(assunto): o que mudou e por quê` (`feat`, `fix`, `docs`, `chore`). Nada de "ajustes".
-- "Testes automatizados" hoje são `bun run build` e `bun run lint` (os avisos `only-export-components` das rotas são conhecidos). Ainda não há suíte de testes nem deploy automático; não diga que existem.
+- "Testes automatizados" são `bun run lint`, `bun run test` (testes em `tests/`, com o executor do Bun) e `bun run build`; a CI em `.github/workflows/ci.yml` roda os três a cada push. O lint deve sair sem nenhum aviso (a regra `only-export-components` fica desligada só em `src/routes/`, porque o padrão do TanStack Router exporta `Route` e o componente juntos); qualquer aviso novo deve ser tratado. Lógica nova com regra de negócio (datas, status, cálculos) ganha teste. Ainda não há deploy automático; não diga que existe.
 - O teste humano é da Aline ou do Gleyson. Nunca marque como feito antes de eles confirmarem.
 - Não reescreva histórico já enviado (nada de `--force`, `--amend` em commit publicado ou `reset --hard` sem pedir).
 - Sem `gh` instalado nesta máquina: para issues e PRs, gere o texto ou um link pré-preenchido para o time colar no GitHub.
@@ -50,6 +50,7 @@ bun run dev      # http://localhost:5173
 bun run server   # API local em http://localhost:3001 (opcional)
 bun run build    # typecheck + build de produção em dist/
 bun run lint     # oxlint
+bun run test     # testes automatizados
 ```
 
 Publicação: gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build` e enviar só o conteúdo de `dist/` (a pasta `public/` é copiada para dentro dele pelo Vite).

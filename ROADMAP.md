@@ -187,8 +187,8 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | # | Issue / branch | Entrega | Depende de |
 | --- | --- | --- | --- |
 | 1 | `feature/cursos` — ✅ teste humano aprovado e code review feito em 26/09/2026 (PR #6, fecha a issue #5); aguardando merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Merge |
-| 1b | `chore/github-actions-ci` | Integração contínua na aba **Actions**: a cada push e PR, roda `bun install`, `bun run build` e `bun run lint` e mostra ✅/❌ no PR (primeira forma de "testes automatizados" do fluxo) | — |
-| 1c | `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), **prazo 11/10/2026** | Treinamento com data passada some de `/cursos` ou aparece como "Encerrado", sem preço nem WhatsApp | Decisão do Eduardo (esconder ou "Encerrado") |
+| 1b | `chore/github-actions-ci` — issue [#13](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/13) (em andamento) | Integração contínua na aba **Actions**: a cada push, roda `bun install`, `bun run lint`, `bun run test` e `bun run build` e mostra ✅/❌ na branch e no PR; `.gitattributes` padroniza o fim de linha | — |
+| 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado", sem preço nem botão, sozinho depois da data; botões de "Pré-inscrição"; primeiro teste automatizado | — |
 | 1d | `feature/safe-area` — issue [#10](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
 | 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
 | 2 | `feature/homologacao-hostgator` | `homolog.ib-to.org` com o site publicado, `.htaccess` (rotas e 404 de verdade), `contact.php` configurado e HTTPS conferido | Acesso ao cPanel |
@@ -217,7 +217,7 @@ Cinco entregas pequenas para começar, com passo a passo em [docs/guia-primeiras
 
 Itens transversais, sem ordem fixa:
 
-- [ ] Testes automatizados de verdade (hoje só existem build e lint; a integração contínua da linha 1b roda esses dois, e testes de interface entram depois — vale priorizar com a Aline)
+- [ ] Ampliar os testes automatizados: já existem testes de lógica (`bun run test`, desde o PR #12) rodando na CI; faltam testes de interface (telas, teclado, modal) — vale priorizar com a Aline
 - [ ] Instalar e autenticar o `gh` (GitHub CLI) no ambiente de desenvolvimento, para abrir e gerenciar PRs/issues diretamente
 - [ ] Rodar uma nova auditoria de qualidade contra o site já publicado em homologação, para confirmar que os ganhos de performance realmente aparecem fora do ambiente local
 - [ ] **Organizar o trabalho nas abas do GitHub** (ver "Como usar cada aba do GitHub" abaixo)
@@ -232,7 +232,7 @@ Todas as abas do repositório podem entrar no fluxo de trabalho. Algumas funçõ
 | **Code** | Código, README, ROADMAP e CLAUDE.md; proteger a `main` em Settings → Branches (exigir PR e o ✅ do Actions antes do merge) | Branch, Clean Up |
 | **Issues** | Uma issue por tarefa, com critério de aceite; resultados dos testes e do teste humano comentados nela; modelos de issue (bug, tarefa) em `.github/ISSUE_TEMPLATE` | Issue, Documentar resultados, Teste humano |
 | **Pull requests** | PR aberto como rascunho depois do push e marcado como pronto após o teste humano; `Closes #número` fecha a issue no merge; modelo de PR com checklist | PR pronta, Code Review, Merge |
-| **Actions** | Integração contínua (build e lint a cada push) e, depois, deploy automático por FTP na HostGator | Testes automatizados, Deploy automático |
+| **Actions** | Integração contínua (lint, testes e build a cada push) e, depois, deploy automático por FTP na HostGator | Testes automatizados, Deploy automático |
 | **Projects** | Quadro Kanban (A fazer, Em andamento, Teste humano, Revisão, Feito) com as issues do ROADMAP, para a Aline e o Eduardo acompanharem sem ler código | Próxima Issue/Branch |
 | **Security and quality** | Alertas de dependências vulneráveis (Dependabot) e política de segurança (`SECURITY.md`). A análise automática de código (CodeQL) e a busca de senhas vazadas em repositório privado dependem do plano pago do GitHub | Code Review |
 | **Insights** | Acompanhar atividade: commits, contribuidores, PRs e issues fechadas por período | Retrospectiva |

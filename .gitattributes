@@ -1,0 +1,15 @@
+# Every text file uses LF, on every machine. Without this, Windows checkouts
+# (core.autocrlf=true) kept flagging generated files such as
+# src/routeTree.gen.ts as modified after each branch switch.
+* text=auto eol=lf
+
+# Binary assets: never touch their bytes.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.gif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

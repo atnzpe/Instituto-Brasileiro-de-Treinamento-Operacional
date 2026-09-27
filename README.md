@@ -115,6 +115,7 @@ Outros comandos:
 ```bash
 bun run build     # gera a versão de produção em dist/
 bun run lint      # checagem de estilo de código (oxlint)
+bun run test      # testes automatizados (bun test)
 bun run preview   # visualiza a versão de produção localmente
 ```
 
@@ -160,7 +161,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 | Issue | Descreve o que precisa ser feito e o critério de aceite | Aline (PO) ou qualquer pessoa do time | Aba **Issues**, com o card no **Projects** |
 | Branch | Criada a partir da `main` atualizada, com o nome do tipo de mudança | Dev | — |
 | Código/Commits | Commits pequenos, com mensagem em português dizendo o quê e por quê | Dev | — |
-| Testes automatizados | `bun run build` e `bun run lint` sem erros (ainda não há suíte de testes; ver ROADMAP) | Dev | Aba **Actions**, quando a integração contínua existir |
+| Testes automatizados | `bun run lint`, `bun run test` e `bun run build` sem erros, na máquina e na CI (roda sozinha a cada push) | Dev e CI | Aba **Actions** (✅/❌ na branch e no PR) |
 | Push da branch | A branch vai para o GitHub já testada, para quem vai testar conseguir usá-la | Dev | — |
 | Documentar resultados na Issue | O que foi testado e o resultado, como comentário na issue | Dev | Aba **Issues** |
 | Teste humano (local e homologação) | Alguém do time usa a funcionalidade rodando na máquina e em `homolog.ib-to.org`, e confere o critério de aceite | Aline (QA) | Comentário na issue |
