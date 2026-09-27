@@ -63,7 +63,7 @@ Este é o mesmo fluxo do README ([Fluxo de trabalho](../README.md#fluxo-de-traba
 2. **Crie a branch** (o nome vem da tarefa): `git checkout -b feature/nome-da-tarefa`.
 3. **Faça a edição** no arquivo indicado.
 4. **Veja funcionando:** rode `bun run dev` e abra `http://localhost:5173`. Para parar, use `Ctrl + C`.
-5. **Testes automatizados:** rode `bun run build` e depois `bun run lint`. O build deve terminar sem erro. O lint mostra alguns avisos amarelos antigos (`only-export-components`, um por página); eles são conhecidos e podem ser ignorados. Se aparecer erro vermelho ou aviso novo, chame o Claude.
+5. **Testes automatizados:** rode `bun run lint`, `bun run test` e `bun run build`. Os testes e o build devem terminar sem erro (a CI roda os mesmos três no GitHub depois do push). O lint mostra alguns avisos amarelos antigos (`only-export-components`, um por página); eles são conhecidos e podem ser ignorados. Se aparecer erro vermelho ou aviso novo, chame o Claude.
 6. **Salve com commit**, em português, dizendo o quê e por quê: `git add shared/content.ts` e `git commit -m "feat(assunto): o que mudou"`.
 7. **Envie a branch:** `git push -u origin feature/nome-da-tarefa` (sempre com o nome da branch, nunca só `git push`). Se quiser, já abra o Pull Request como **rascunho** ("Create draft pull request").
 8. **Documente na issue:** comente o que testou e o resultado (build, lint e o que conferiu na tela).
