@@ -27,12 +27,24 @@ export interface ContactPayload {
 // instead of the dev-only /api/contact proxied to server/index.ts.
 const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact'
 
+const CONTACT_TIMEOUT_MS = 20000
+const CONNECTION_ERROR =
+  'Não foi possível conectar ao servidor. Verifique sua internet e tente de novo, ou fale conosco pelo WhatsApp.'
+
 export async function submitContact(payload: ContactPayload) {
-  const res = await fetch(CONTACT_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  })
+  let res: Response
+  try {
+    res = await fetch(CONTACT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(CONTACT_TIMEOUT_MS),
+    })
+  } catch {
+    // Offline, timed out or blocked on the way: the browser only says
+    // "Failed to fetch", which means nothing to a visitor.
+    throw new Error(CONNECTION_ERROR)
+  }
   const data: { error?: string } = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(data.error ?? `Request failed with ${res.status}`)
   return data
