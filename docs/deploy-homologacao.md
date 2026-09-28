@@ -55,7 +55,7 @@ A homologação é só para o time. O `.htaccess` do pacote **já pede a senha**
 
 - [ ] cPanel → **Directory Privacy** (Privacidade do Diretório) → entre na pasta **`homolog.ib-to.org`**.
 - [ ] Em "Create User", crie o usuário `equipe` com uma **senha forte** (use o gerador do cPanel) → **Salvar**. Se ele já existe, pule.
-- [ ] **Não marque** "Password protect this directory". Essa opção grava no `.htaccess` uma senha que é pedida antes do HTTPS; se ela estiver marcada (de uma publicação antiga), **desmarque** e salve.
+- [ ] **Não clique em Salvar** em "Password protect this directory", nem para marcar nem para desmarcar. Ao salvar ali, o cPanel **apaga as linhas de senha do nosso `.htaccess`** e cola o bloco dele no final, que pede a senha antes do HTTPS. Se isso acontecer, extraia o pacote de novo por cima (Parte C) ou rode o deploy automático: o `.htaccess` volta ao certo.
 - [ ] Confira que o arquivo de senhas está onde o `.htaccess` procura: no Gerenciador de Arquivos, na raiz da conta, existe `.htpasswds/homolog.ib-to.org/passwd`. Se o caminho for outro, avise o Claude antes de seguir (o site daria "Internal Server Error").
 - [ ] Passe a senha para a Aline e o Eduardo por um canal privado. Não coloque a senha em issue, commit ou grupo aberto.
 
