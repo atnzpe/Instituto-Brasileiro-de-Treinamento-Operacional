@@ -81,7 +81,7 @@ export function ContactForm() {
       </div>
 
       {/* Anti-bot trap: off screen, out of the tab order and hidden from screen
-          readers, so only bots fill it in (contact.php then sends nothing). */}
+          readers, so only bots fill it in (mensagem.php then sends nothing). */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label>
           Não preencha este campo

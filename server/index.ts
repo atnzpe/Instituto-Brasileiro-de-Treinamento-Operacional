@@ -119,7 +119,7 @@ Bun.serve({
 
     if (url.pathname === '/api/contact' && req.method === 'POST') {
       const body: unknown = await req.json().catch(() => null)
-      // Honeypot filled in: a bot. Pretend it worked, send nothing (same as contact.php).
+      // Honeypot filled in: a bot. Pretend it worked, send nothing (same as mensagem.php).
       const website = (body as { website?: unknown } | null)?.website
       if (typeof website === 'string' && website.trim() !== '') {
         return json({ ok: true })

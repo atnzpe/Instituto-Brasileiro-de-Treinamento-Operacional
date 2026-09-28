@@ -26,7 +26,7 @@ $dist = Join-Path $projeto 'dist'
 if (Test-Path (Join-Path $dist 'config.php')) {
   throw 'dist/config.php existe: segredos não podem ir no pacote.'
 }
-foreach ($obrigatorio in @('.htaccess', 'index.html', 'contact.php')) {
+foreach ($obrigatorio in @('.htaccess', 'index.html', 'mensagem.php')) {
   if (-not (Test-Path (Join-Path $dist $obrigatorio))) { throw "Falta $obrigatorio no dist/." }
 }
 

@@ -23,7 +23,7 @@ export interface ContactPayload {
 }
 
 // Overridable at build time (VITE_CONTACT_ENDPOINT) so a static deploy with
-// no Bun API (e.g. HostGator shared hosting) can point this at contact.php
+// no Bun API (e.g. HostGator shared hosting) can point this at mensagem.php
 // instead of the dev-only /api/contact proxied to server/index.ts.
 const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact'
 
@@ -48,7 +48,7 @@ export async function submitContact(payload: ContactPayload) {
     throw new Error(CONNECTION_ERROR)
   }
   const data: { error?: string } = await res.json().catch(() => ({}))
-  // No JSON error means the answer didn't come from contact.php (e.g. the
+  // No JSON error means the answer didn't come from mensagem.php (e.g. the
   // hosting firewall): show a message a visitor can act on.
   if (!res.ok) throw new Error(data.error ?? SEND_ERROR)
   return data

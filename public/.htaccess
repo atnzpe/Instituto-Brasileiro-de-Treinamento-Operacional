@@ -24,7 +24,7 @@ ErrorDocument 404 /index.html
   RewriteRule ^(areas-de-atuacao|quem-somos|contato|rede-nacional|cursos)/?$ /index.html [L]
 </IfModule>
 
-# Secrets for contact.php: readable by PHP on disk, never over HTTP.
+# Secrets for mensagem.php: readable by PHP on disk, never over HTTP.
 <FilesMatch "^config(\.example)?\.php$">
   Require all denied
 </FilesMatch>

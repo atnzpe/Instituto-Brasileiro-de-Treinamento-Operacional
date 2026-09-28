@@ -46,8 +46,8 @@ jobs:
       - name: Lint
         run: bun run lint
 
-      # The runner image ships PHP; tests/contactPhp.test.ts uses it to run
-      # public/contact.php (HostGator runs PHP 8.3).
+      # The runner image ships PHP; tests/mensagemPhp.test.ts uses it to run
+      # public/mensagem.php (HostGator runs PHP 8.3).
       - name: Checar a sintaxe do PHP
         run: |
           php --version

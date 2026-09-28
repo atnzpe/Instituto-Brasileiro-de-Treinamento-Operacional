@@ -40,10 +40,11 @@ O site força HTTPS; sem certificado, o navegador mostra erro.
 - [ ] Abra a pasta **`homolog.ib-to.org`** (na raiz da conta, ao lado de `public_html`).
 - [ ] **Carregar** → escolha o arquivo `ibto-homolog-<código>.zip` → espere a barra chegar a 100% → volte para a pasta.
 - [ ] Clique com o botão direito no `.zip` → **Extract** → confirme a pasta `/home1/edua1187/homolog.ib-to.org` → **Extract Files**.
-- [ ] Confira que os arquivos ficaram **direto na pasta** (não dentro de uma subpasta): `.htaccess`, `index.html`, `assets`, `images`, `contact.php`, `config.example.php`, `robots.txt`, `sitemap.xml`, `llms.txt`, `favicon.ico`.
+- [ ] Confira que os arquivos ficaram **direto na pasta** (não dentro de uma subpasta): `.htaccess`, `index.html`, `assets`, `images`, `mensagem.php`, `config.example.php`, `robots.txt`, `sitemap.xml`, `llms.txt`, `favicon.ico`.
 - [ ] Apague o `.zip` da pasta.
+- [ ] Se existir um `contact.php` (nome antigo do formulário), apague. O formulário agora é o `mensagem.php`: a proteção anti-robô da HostGator barra envios para `contact.php` com erro 409.
 
-No primeiro envio do formulário, o `contact.php` cria sozinho a pasta oculta `.ibto-contact-limits` na raiz da conta (fora das pastas públicas). Ela guarda o limite de 5 mensagens por hora de cada visitante, só com um código embaralhado do IP (nunca o IP em si). Não apague essa pasta.
+No primeiro envio do formulário, o `mensagem.php` cria sozinho a pasta oculta `.ibto-contact-limits` na raiz da conta (fora das pastas públicas). Ela guarda o limite de 5 mensagens por hora de cada visitante, só com um código embaralhado do IP (nunca o IP em si). Não apague essa pasta.
 
 **Não crie o `config.php` agora.** Ele guarda a chave da Resend, que ainda não existe. Sem ele, o formulário de contato mostra uma mensagem de erro — é esperado.
 
@@ -155,6 +156,6 @@ Na pasta do projeto, com a branch certa e sem alterações pendentes, no PowerSh
 .\scripts\package-hostgator.ps1
 ```
 
-O script confere que não há alterações sem commit, roda o build (que já usa o `.env.production`, apontando o formulário para o `contact.php`), garante que o `.htaccess` foi junto e que **nenhum `config.php`** (segredo) entrou, e grava `..\deploy\ibto-homolog-<código>.zip`.
+O script confere que não há alterações sem commit, roda o build (que já usa o `.env.production`, apontando o formulário para o `mensagem.php`), garante que o `.htaccess` foi junto e que **nenhum `config.php`** (segredo) entrou, e grava `..\deploy\ibto-homolog-<código>.zip`.
 
 Não use o `Compress-Archive` do PowerShell para isso: no Windows PowerShell 5.1 ele grava as pastas com barra invertida, e na HostGator os arquivos de `assets/` viram nomes quebrados em vez de uma pasta.

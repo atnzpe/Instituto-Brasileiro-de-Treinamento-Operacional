@@ -34,7 +34,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 | Site | React 19 + TypeScript + Vite + Bun, Tailwind CSS v4, TanStack Router e Query |
 | Conteúdo | `shared/content.ts` (fonte única dos textos, usada pelo site e pela API) |
 | API de desenvolvimento | `server/index.ts` com `Bun.serve()` — **só local**; a HostGator não roda Bun |
-| Formulário de contato em produção | `public/contact.php` (PHP + cURL para a API da Resend) |
+| Formulário de contato em produção | `public/mensagem.php` (PHP + cURL para a API da Resend) |
 | Hospedagem | HostGator, plano compartilhado P: arquivos estáticos + PHP 8.3 + MySQL (Percona Server 5.7.44) |
 | Plataforma de cursos online (futura, projeto à parte) | Front em React + Vite; backend em **PHP + Laravel 13 + MySQL** no mesmo plano |
 
@@ -53,7 +53,7 @@ bun run lint     # oxlint
 bun run test     # testes automatizados
 ```
 
-Publicação: `bun run build` (o `.env.production` já aponta o formulário para `/contact.php`) e enviar só o conteúdo de `dist/`; a pasta `public/`, com o `.htaccess`, é copiada para dentro dele pelo Vite. Passo a passo em [docs/deploy-homologacao.md](./docs/deploy-homologacao.md).
+Publicação: `bun run build` (o `.env.production` já aponta o formulário para `/mensagem.php`) e enviar só o conteúdo de `dist/`; a pasta `public/`, com o `.htaccess`, é copiada para dentro dele pelo Vite. Passo a passo em [docs/deploy-homologacao.md](./docs/deploy-homologacao.md).
 
 ## Padrão de qualidade de toda página
 

@@ -52,7 +52,7 @@ jobs:
       - name: Conferir o pacote (sem segredos, com o .htaccess)
         run: |
           test ! -e dist/config.php || { echo "dist/config.php não pode ser publicado"; exit 1; }
-          for f in .htaccess index.html contact.php; do
+          for f in .htaccess index.html mensagem.php; do
             test -f "dist/$f" || { echo "Falta dist/$f"; exit 1; }
           done
 

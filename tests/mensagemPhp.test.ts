@@ -3,7 +3,7 @@ import { copyFileSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSyn
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-// Runs public/contact.php on PHP's built-in server and checks the abuse
+// Runs public/mensagem.php on PHP's built-in server and checks the abuse
 // protections from issue #19. The CI runner (ubuntu-24.04) ships PHP; locally
 // the XAMPP binary works too. Without PHP the tests are skipped, except in CI.
 const php =
@@ -16,7 +16,7 @@ const root = join(import.meta.dir, '..')
 const workDir = mkdtempSync(join(tmpdir(), 'ibto-contact-'))
 const limitsDir = join(workDir, 'limits')
 const port = 18000 + Math.floor(Math.random() * 1000)
-const url = `http://127.0.0.1:${port}/contact.php`
+const url = `http://127.0.0.1:${port}/mensagem.php`
 let server: ReturnType<typeof Bun.spawn> | undefined
 
 const valid = { name: 'Maria Teste', email: 'maria@example.com', message: 'Olá, quero saber dos cursos.' }
@@ -29,9 +29,9 @@ function post(body: unknown, headers: Record<string, string> = {}) {
   })
 }
 
-describe.skipIf(skip)('public/contact.php', () => {
+describe.skipIf(skip)('public/mensagem.php', () => {
   beforeAll(async () => {
-    copyFileSync(join(root, 'public', 'contact.php'), join(workDir, 'contact.php'))
+    copyFileSync(join(root, 'public', 'mensagem.php'), join(workDir, 'mensagem.php'))
     // Empty API key: valid messages stop at "can't send" (502) instead of
     // reaching Resend, which is enough to tell they passed every check.
     writeFileSync(

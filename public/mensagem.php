@@ -8,6 +8,10 @@
  * Requires config.php next to this file (copy config.example.php and fill
  * in real values — config.php is gitignored, never commit real API keys).
  *
+ * Don't rename it to contact.php: HostGator's bot protection answers POSTs to
+ * that common spam target with a 409 JavaScript challenge that fetch() can't
+ * pass, so the form never reaches this script.
+ *
  * Abuse protection (issue #19), checked before anything is sent:
  * - same-site only: no CORS header, and a browser request whose Origin is
  *   another site is refused;
