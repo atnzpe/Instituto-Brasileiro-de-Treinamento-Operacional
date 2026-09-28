@@ -6,9 +6,10 @@ Instruções para o Claude Code (e para qualquer pessoa) trabalhar neste reposit
 
 Site institucional do IBTO (Instituto Brasileiro de Treinamento Operacional), reconstruído a partir do site antigo em Brizy, publicado em [ib-to.org](https://ib-to.org).
 
-- **Pessoas:** Aline é PO, PM e QA (aceite e teste humano); Eduardo Lopes é o stakeholder principal (decisões de negócio); Gleyson Atanazio é o desenvolvedor e o Scrum Master, e está aprendendo — explique o porquê das coisas e prefira passos pequenos.
+- **Pessoas:** Aline é PO, PM e QA (aceite e teste humano); Eduardo Lopes é o stakeholder principal (decisões de negócio); Gleyson Atanazio (`atnzpe`) lidera o projeto, é o dono do repositório no GitHub, o desenvolvedor e o Scrum Master, e está aprendendo — explique o porquê das coisas e prefira passos pequenos.
 - **Idioma:** tudo em português do Brasil (commits, issues, PRs, documentação e textos do site).
 - **Documentos-chave:** [README.md](./README.md), [ROADMAP.md](./ROADMAP.md) (fonte da ordem das próximas tarefas), [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md) e [QA_REPORT.html](./QA_REPORT.html).
+- **Repositório e quadro:** [atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional) (transferido da conta da Aline em 28/09/2026) e o [GitHub Project](https://github.com/users/atnzpe/projects/5/views/1) com as issues em ordem.
 
 ## Fluxo de trabalho (obrigatório)
 
