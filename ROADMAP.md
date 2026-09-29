@@ -232,6 +232,7 @@ Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste 
 | [#46](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/46) | Validação pública da carteirinha (QR code) | #37 |
 | [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47) | LGPD: política de privacidade, consentimento, registro de acesso, DPO | #36 |
 | [#48](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/48) | Link da plataforma na página `/cursos` do site | #35 |
+| [#52](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/52) | Página `/cursos` do site lista sozinha os cursos online **abertos ao público** vindos da plataforma (restritos e em revisão ficam de fora; se a plataforma cair, volta o aviso) | #38 e #48 |
 
 ### Primeiras tarefas da equipe
 
