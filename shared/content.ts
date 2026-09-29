@@ -141,7 +141,17 @@ export interface TeamMember {
   sections: { title: string; items: string[] }[]
 }
 
+/**
+ * Top banner of an inner page, from the original site (issue #20). `src` has
+ * no extension: the files are `${src}-800.webp` and `${src}-1600.webp`.
+ */
+export interface PageBannerImage {
+  src: string
+  alt: string
+}
+
 export interface QuemSomosContent {
+  banner: PageBannerImage
   intro: { heading: string; paragraphs: string[] }
   oQueFazemos: { heading: string; paragraphs: string[] }
   missaoVisaoValores: {
@@ -153,6 +163,10 @@ export interface QuemSomosContent {
 }
 
 export const quemSomos: QuemSomosContent = {
+  banner: {
+    src: '/images/banners/quem-somos',
+    alt: 'Emblema do IBTO entre operadores equipados e uma bandeira do Brasil no alto de uma montanha, com o título "Quem somos: propósito, valores, missão".',
+  },
   intro: {
     heading: 'Quem somos',
     paragraphs: [
@@ -444,12 +458,17 @@ export interface ServiceTile {
 }
 
 export interface AreasDeAtuacaoContent {
+  banner: PageBannerImage
   heading: string
   subheading: string
   services: ServiceTile[]
 }
 
 export const areasDeAtuacao: AreasDeAtuacaoContent = {
+  banner: {
+    src: '/images/banners/areas-de-atuacao',
+    alt: 'Emblema do IBTO ao centro de seis cenas: defesa pessoal, tiro e armamento, sobrevivência, atendimento pré-hospitalar, segurança e proteção, e desenvolvimento profissional.',
+  },
   heading: 'Áreas de Atuação',
   subheading: 'Matérias credenciadas no Instituto Brasileiro de Treinamento Operacional',
   services: [
@@ -472,11 +491,16 @@ export const areasDeAtuacao: AreasDeAtuacaoContent = {
 }
 
 export interface ContatoContent {
+  banner: PageBannerImage
   heading: string
   links: { label: string; href: string; icon: string }[]
 }
 
 export const contato: ContatoContent = {
+  banner: {
+    src: '/images/banners/contato',
+    alt: 'Emblema do IBTO sobre um mapa-múndi, com equipamentos de comunicação e os ícones de telefone, e-mail e localização.',
+  },
   heading: 'Contato',
   links: [
     {
