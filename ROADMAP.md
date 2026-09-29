@@ -171,7 +171,8 @@ Princípios para qualquer tela que use dados de filiados:
 Pontos a conferir na carteirinha atual: o CPF impresso aparece **sem o zero inicial** (10 dígitos em vez de 11), e a equipe aparece como "Instrutor Trinca" enquanto o cadastro enviado diz "Mestre Trinca". Vale padronizar antes de gerar novas carteirinhas.
 
 ### Decisões que dependem de vocês
-nAcompanhamento na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34). Já respondido pelo Eduardo (28/09/2026): existe um único IBTO, com **equipes filiadas**; anuidade 2027 de **R$ 90,00**; qualquer filiado pode lançar cursos na sua área, **com revisão** do IBTO.
+
+Acompanhamento na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34). Já respondido pelo Eduardo (28/09/2026): existe um único IBTO, com **equipes filiadas**; anuidade 2027 de **R$ 90,00**; qualquer filiado pode lançar cursos na sua área, **com revisão** do IBTO.
 
 1. ~~Backend da plataforma~~ — decidido: PHP + MySQL no plano atual (26/09/2026). Forma de organizar o PHP: **recomendado Laravel 13** (exige PHP 8.3+; segurança por padrão, padrão de mercado; comparação em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#laravel-ou-php-simples)), aguardando confirmação
 2. Vídeo das aulas: serviço externo incorporado ou outra solução
