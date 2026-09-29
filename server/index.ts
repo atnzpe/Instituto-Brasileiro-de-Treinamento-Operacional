@@ -19,9 +19,9 @@ const corsHeaders = {
 }
 
 // QA_REPORT.html BUG-009: contact page had no form / no way to actually reach
-// the institute. Sent through Resend's HTTP API so we don't need an SMTP
-// server — just an API key, no new dependency (plain fetch).
-const RESEND_API_KEY = process.env.RESEND_API_KEY
+// the institute. In production public/mensagem.php sends it with PHP mail()
+// on HostGator (issue #28); this dev-only API has no mail server, so it just
+// prints the e-mail it would send in this terminal.
 // The institute's official contact inbox; override with CONTACT_TO_EMAIL.
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'comando.ibto@gmail.com'
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'ouvidoria@ib-to.org'
@@ -54,41 +54,18 @@ function validateContactPayload(body: unknown): ContactPayload | null {
   return { name: trimmedName, email: trimmedEmail, message: trimmedMessage }
 }
 
-/** Error carrying the same code mensagem.php returns (e.g. CHAVE_RESEND_AUSENTE). */
-class ContactError extends Error {
-  readonly status: number
-  readonly codigo: string
-
-  constructor(status: number, codigo: string, detail: string) {
-    super(detail)
-    this.status = status
-    this.codigo = codigo
-  }
-}
-
-async function sendContactEmail(payload: ContactPayload) {
-  if (!RESEND_API_KEY) {
-    throw new ContactError(503, 'CHAVE_RESEND_AUSENTE', 'RESEND_API_KEY not configured')
-  }
-
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: `IBTO — Ouvidoria <${CONTACT_FROM_EMAIL}>`,
-      to: [CONTACT_TO_EMAIL],
-      reply_to: payload.email,
-      subject: `Nova mensagem de contato — ${payload.name}`,
-      text: `Nome: ${payload.name}\nE-mail: ${payload.email}\n\n${payload.message}`,
-    }),
-  })
-
-  if (!res.ok) {
-    throw new ContactError(502, `RESEND_RECUSOU_${res.status}`, `Resend HTTP ${res.status}: ${await res.text()}`)
-  }
+function logContactEmail(payload: ContactPayload) {
+  console.log(
+    [
+      '/api/contact — e-mail que seria enviado (desenvolvimento, nada sai desta máquina):',
+      `  De: IBTO — Ouvidoria <${CONTACT_FROM_EMAIL}>`,
+      `  Para: ${CONTACT_TO_EMAIL}`,
+      `  Responder para: ${payload.email}`,
+      `  Assunto: Nova mensagem de contato — ${payload.name}`,
+      '',
+      payload.message,
+    ].join('\n'),
+  )
 }
 
 // QA_REPORT.html BUG-010: no security headers on responses.
@@ -143,20 +120,8 @@ Bun.serve({
           { status: 400 },
         )
       }
-      try {
-        await sendContactEmail(payload)
-        return json({ ok: true })
-      } catch (err) {
-        // Same contract as mensagem.php: a code for the tester, the detail
-        // only in this terminal.
-        const status = err instanceof ContactError ? err.status : 504
-        const codigo = err instanceof ContactError ? err.codigo : 'RESEND_INACESSIVEL'
-        console.error(`/api/contact [${codigo}]`, err instanceof Error ? err.message : err)
-        return json(
-          { error: 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.', codigo },
-          { status },
-        )
-      }
+      logContactEmail(payload)
+      return json({ ok: true })
     }
 
     return json({ error: 'Not found' }, { status: 404 })

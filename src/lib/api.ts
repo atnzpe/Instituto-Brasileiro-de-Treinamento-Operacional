@@ -33,7 +33,7 @@ const CONNECTION_ERROR =
 const SEND_ERROR =
   'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde ou fale conosco pelo WhatsApp.'
 
-/** Appends the error code (e.g. CHAVE_RESEND_AUSENTE) shown to whoever tests. */
+/** Appends the error code (e.g. EMAIL_NAO_ENVIADO) shown to whoever tests. */
 export function withCode(message: string, code: string) {
   return `${message} (código: ${code})`
 }

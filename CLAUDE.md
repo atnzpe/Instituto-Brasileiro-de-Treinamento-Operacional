@@ -35,7 +35,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 | Site | React 19 + TypeScript + Vite + Bun, Tailwind CSS v4, TanStack Router e Query |
 | Conteúdo | `shared/content.ts` (fonte única dos textos, usada pelo site e pela API) |
 | API de desenvolvimento | `server/index.ts` com `Bun.serve()` — **só local**; a HostGator não roda Bun |
-| Formulário de contato em produção | `public/mensagem.php` (PHP + cURL para a API da Resend) |
+| Formulário de contato em produção | `public/mensagem.php` (PHP `mail()` pelo servidor de e-mail da HostGator, como no site da CBSA) |
 | Hospedagem | HostGator, plano compartilhado P: arquivos estáticos + PHP 8.3 + MySQL (Percona Server 5.7.44) |
 | Plataforma de cursos online (futura, projeto à parte) | Front em React + Vite; backend em **PHP + Laravel 13 + MySQL** no mesmo plano |
 

@@ -1,12 +1,11 @@
 <?php
 /**
- * Static-deploy fallback for POST /api/contact (server/index.ts's Bun/Resend
- * version) — used when the site is hosted as plain static files with no Bun
- * runtime available, e.g. HostGator shared hosting. Same validation and the
- * same Resend HTTP API, just called from PHP via cURL instead of fetch().
+ * Contact form handler for the static deploy on HostGator shared hosting
+ * (no Bun there; server/index.ts only mimics it in local development).
+ * Sends with PHP mail() through the hosting's own mail server (issue #28).
  *
- * Requires config.php next to this file (copy config.example.php and fill
- * in real values — config.php is gitignored, never commit real API keys).
+ * config.php next to this file is optional: it only overrides addresses or
+ * the counters folder (copy config.example.php; it is gitignored).
  *
  * Don't rename it to contact.php: HostGator's bot protection answers POSTs to
  * that common spam target with a 409 JavaScript challenge that fetch() can't
@@ -33,10 +32,10 @@ const RATE_LIMIT_MAX = 5;
 const GENERIC_ERROR = 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.';
 
 /**
- * Error answer with a stable code (e.g. CHAVE_RESEND_AUSENTE) so whoever tests
+ * Error answer with a stable code (e.g. EMAIL_NAO_ENVIADO) so whoever tests
  * sees exactly what went wrong. $detail is technical and may name servers or
  * statuses: it goes only to the server error log (cPanel → Erros), never to
- * the visitor, and must never contain the API key.
+ * the visitor.
  */
 function fail($status, $code, $message, $detail = null)
 {
@@ -115,7 +114,7 @@ function rate_limit_salt($dir)
 /**
  * Checks the sender's hourly limit and, with $record, counts one more sent
  * message. Only messages that really went out are recorded, so failed
- * attempts (invalid data, missing key, provider refusal) never lock anyone
+ * attempts (invalid data, mail server refusal) never lock anyone
  * out. Returns false when the limit is already reached. Fails open (allows)
  * if the folder can't be written, so a hosting hiccup never blocks visitors.
  */
@@ -194,45 +193,59 @@ if ($payload === null) {
     fail(400, 'DADOS_INVALIDOS', 'Dados inválidos. Preencha nome, e-mail e mensagem.');
 }
 
-if (!defined('RESEND_API_KEY') || RESEND_API_KEY === '') {
-    fail(503, 'CHAVE_RESEND_AUSENTE', GENERIC_ERROR, 'config.php ausente ou sem RESEND_API_KEY');
-}
-
 $to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
 $from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'ouvidoria@ib-to.org';
 
-$emailBody = json_encode([
-    'from' => "IBTO — Ouvidoria <$from>",
-    'to' => [$to],
-    'reply_to' => $payload['email'],
-    'subject' => 'Nova mensagem de contato — ' . $payload['name'],
-    'text' => "Nome: {$payload['name']}\nE-mail: {$payload['email']}\n\n{$payload['message']}",
-]);
-
-// Overridable only so the tests can point it at a local fake.
-$ch = curl_init(defined('RESEND_API_URL') ? RESEND_API_URL : 'https://api.resend.com/emails');
-curl_setopt_array($ch, [
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => $emailBody,
-    CURLOPT_HTTPHEADER => [
-        'Authorization: Bearer ' . RESEND_API_KEY,
-        'Content-Type: application/json',
-    ],
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 10,
-]);
-$response = curl_exec($ch);
-$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlError = curl_error($ch);
-curl_close($ch);
-
-if ($curlError) {
-    fail(504, 'RESEND_INACESSIVEL', GENERIC_ERROR, "cURL: $curlError");
+/** Header values never carry a line break, so nobody can add headers (Bcc…). */
+function header_value($value)
+{
+    return str_replace(["\r", "\n"], '', (string) $value);
 }
-if ($status < 200 || $status >= 300) {
-    // Resend explains the refusal in the body (e.g. unverified sender domain).
-    $reason = is_string($response) ? substr($response, 0, 500) : '';
-    fail(502, 'RESEND_RECUSOU_' . $status, GENERIC_ERROR, "Resend HTTP $status: $reason");
+
+/** UTF-8 text (accents, "—") in a header, encoded the way mail readers expect. */
+function encoded_header($text)
+{
+    return mb_encode_mimeheader(header_value($text), 'UTF-8', 'B');
+}
+
+$subject = encoded_header('Nova mensagem de contato — ' . $payload['name']);
+// Plain text, no htmlspecialchars (it would show "&amp;" in the e-mail).
+// Base64 keeps accents and long lines intact on the way.
+$text = "Nome: {$payload['name']}\nE-mail: {$payload['email']}\n\n{$payload['message']}\n";
+$message = chunk_split(base64_encode(str_replace(["\r\n", "\n"], "\r\n", $text)), 76, "\r\n");
+// Sender on our own domain (SPF/DKIM), answers go to the visitor. No
+// X-Mailer: it would reveal the PHP version.
+$headers = [
+    'From' => encoded_header('IBTO — Ouvidoria') . ' <' . header_value($from) . '>',
+    'Reply-To' => header_value($payload['email']),
+    'MIME-Version' => '1.0',
+    'Content-Type' => 'text/plain; charset=UTF-8',
+    'Content-Transfer-Encoding' => 'base64',
+];
+
+/**
+ * Sends through the hosting's own mail server (PHP mail(), like the CBSA
+ * site): no external service, no API key. Tests define MAIL_CAPTURE_FILE in
+ * config.php so the e-mail is written to that file instead of sent.
+ */
+function send_mail($to, $subject, $message, $headers, $from)
+{
+    if (defined('MAIL_CAPTURE_FILE')) {
+        $mail = compact('to', 'subject', 'message', 'headers', 'from');
+        return @file_put_contents(MAIL_CAPTURE_FILE, json_encode($mail) . "\n", FILE_APPEND | LOCK_EX) !== false;
+    }
+    // -f puts our domain in the envelope sender too, which helps SPF.
+    $params = filter_var($from, FILTER_VALIDATE_EMAIL) ? '-f' . $from : '';
+    try {
+        return mail($to, $subject, $message, $headers, $params);
+    } catch (Throwable $e) {
+        error_log('mensagem.php mail(): ' . $e->getMessage());
+        return false;
+    }
+}
+
+if (!send_mail($to, $subject, $message, $headers, $from)) {
+    fail(502, 'EMAIL_NAO_ENVIADO', GENERIC_ERROR, 'mail() retornou false: o servidor de e-mail da hospedagem não aceitou a mensagem');
 }
 
 within_rate_limit(true);

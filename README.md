@@ -69,7 +69,7 @@ Você não precisa instalar nada nem entender de código para acompanhar o proje
 | Busca de dados | TanStack Query (`src/hooks/useContent.ts`) |
 | API de desenvolvimento | `Bun.serve()` nativo (`server/index.ts`) — só na máquina de quem desenvolve; a HostGator não roda Bun |
 | Cache | Redis via `ioredis` — opcional, o site funciona sem ele |
-| E-mail | API do Resend: versão Bun em desenvolvimento e `mensagem.php` (PHP + cURL) em produção |
+| E-mail | `mensagem.php` com o `mail()` do PHP da HostGator em produção; em desenvolvimento a API em Bun só mostra o e-mail no terminal |
 | Lint | oxlint |
 | Hospedagem | HostGator, plano compartilhado P: site estático + PHP 8.3 + MySQL (Percona 5.7) |
 | Backend da futura plataforma de cursos | PHP + **Laravel 13** + MySQL, no mesmo plano (decisão de 26/09/2026; ver ROADMAP) |
@@ -124,14 +124,14 @@ bun run preview   # visualiza a versão de produção localmente
 Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo detalha cada uma):
 
 - `REDIS_URL` — opcional, só usada pela API.
-- `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — necessárias para o formulário de contato enviar e-mail de verdade (as versões em Bun e em PHP usam as mesmas três).
+- `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — destino e remetente do formulário de contato (opcionais; o padrão já é `comando.ibto@gmail.com` e `ouvidoria@ib-to.org`). No ambiente local o formulário não envia nada: a API só mostra no terminal o e-mail que seria enviado.
 - `VITE_CONTACT_ENDPOINT` — endereço do formulário de contato. Deixe em branco no ambiente local; o build de produção já recebe `/mensagem.php` pelo arquivo `.env.production` (sem segredos).
 
 ### Publicação (deploy)
 
 O site é publicado na HostGator (decisão do time: toda a estrutura, front-end e backend, fica no plano atual).
 
-1. **Como publicar hoje (manual)** — `bun run build`, compactar o conteúdo de `dist/` e enviar pelo Gerenciador de Arquivos do cPanel. O `dist/` já leva o `.htaccess` (HTTPS, páginas abrindo direto, 404 de verdade, cabeçalhos de segurança, bloqueio do `config.php` e `noindex` na homologação) e o `mensagem.php`; a chave da Resend vai num `config.php` criado só no servidor. Não precisa de Bun/Node no servidor. **Passo a passo completo, com teste: [docs/deploy-homologacao.md](./docs/deploy-homologacao.md)** (homologação em `https://homolog.ib-to.org`, protegida por senha).
+1. **Como publicar hoje (manual)** — `bun run build`, compactar o conteúdo de `dist/` e enviar pelo Gerenciador de Arquivos do cPanel. O `dist/` já leva o `.htaccess` (HTTPS, páginas abrindo direto, 404 de verdade, cabeçalhos de segurança, bloqueio do `config.php` e `noindex` na homologação) e o `mensagem.php`, que envia o formulário pelo `mail()` do PHP da própria HostGator (sem serviço externo nem chave). Não precisa de Bun/Node no servidor. **Passo a passo completo, com teste: [docs/deploy-homologacao.md](./docs/deploy-homologacao.md)** (homologação em `https://homolog.ib-to.org`, protegida por senha).
 2. **Deploy automático da homologação** (`.github/workflows/deploy.yml`, issue #26; produção ainda manual) — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
 
 ## Como testar (QA)
@@ -142,7 +142,7 @@ Para quem for validar entregas (Aline ou qualquer pessoa do time):
 2. Confira as quatro páginas principais: Início, Áreas de Atuação, Quem Somos e Contato — mais as novas páginas Rede Nacional e Cursos (em Cursos, clique em um curso para abrir o modal de detalhes e feche com o X, com Esc ou clicando fora).
 3. Teste em celular (ou reduza a janela do navegador) — o site foi construído mobile-first.
 4. Teste o menu só com o teclado (Tab) — todos os links devem ser alcançáveis.
-5. Teste o formulário de Contato — sem a `RESEND_API_KEY` configurada, ele deve mostrar uma mensagem de erro visível, nunca fingir que enviou.
+5. Teste o formulário de Contato — na homologação, a mensagem deve chegar em `comando.ibto@gmail.com` (caixa de entrada, não spam), e "Responder" deve ir para quem escreveu; se o envio falhar, aparece uma mensagem de erro com código, nunca um falso "enviado".
 6. Compare com os achados do `QA_REPORT.html` e marque no `ROADMAP.md` o que já foi validado.
 
 ## Fluxo de trabalho
