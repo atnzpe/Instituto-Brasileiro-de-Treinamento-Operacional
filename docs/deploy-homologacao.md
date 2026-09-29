@@ -93,6 +93,15 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 - [ ] Envie o formulário **6 vezes seguidas**: da 6ª em diante aparece "Você enviou muitas mensagens em pouco tempo…" (limite anti-robô funcionando).
 - [ ] A página `/contato` **não mostra** o e-mail do IBTO escrito (é de propósito: ele fica só no servidor).
 
+### Sem internet e app instalável (PWA)
+
+- [ ] Abra o site uma vez e navegue por Início, Áreas de Atuação, Quem Somos, Cursos e Contato.
+- [ ] F12 → **Aplicativo (Application)** → **Service workers**: aparece `sw.js` como **ativado**. Em **Manifesto**: nome "IBTO", ícone do emblema, sem erros.
+- [ ] Ainda no F12, aba **Rede**, marque **Offline** (ou ponha o celular em modo avião) e aperte **F5**: o site abre e as páginas já visitadas navegam normalmente. O VLibras some (é esperado: vem do gov.br).
+- [ ] Offline, envie o formulário de contato: aparece "Você está sem internet, e sua mensagem não foi enviada…" (`código: SEM_INTERNET`), e nada é guardado para envio depois.
+- [ ] Chrome no computador: ícone de **Instalar** na barra de endereço. Android: menu ⋮ → **Instalar app**. iPhone (Safari): Compartilhar → **Adicionar à Tela de Início**. O app abre com o emblema do IBTO e sem a barra do navegador, com o topo fora do entalhe.
+- [ ] Depois de um novo deploy, feche e abra o site: a versão nova aparece sozinha.
+
 ### Cabeçalhos (F12 → Rede → clique na primeira linha → Cabeçalhos / Headers → "Cabeçalhos de resposta")
 
 - [ ] Aparecem `strict-transport-security`, `x-content-type-options: nosniff`, `x-frame-options: DENY`, `referrer-policy`, `permissions-policy` e **`x-robots-tag: noindex, nofollow`**.
