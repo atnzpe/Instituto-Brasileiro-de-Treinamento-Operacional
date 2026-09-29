@@ -69,7 +69,7 @@ Você não precisa instalar nada nem entender de código para acompanhar o proje
 | Busca de dados | TanStack Query (`src/hooks/useContent.ts`) |
 | API de desenvolvimento | `Bun.serve()` nativo (`server/index.ts`) — só na máquina de quem desenvolve; a HostGator não roda Bun |
 | Cache | Redis via `ioredis` — opcional, o site funciona sem ele |
-| E-mail | API do Resend: versão Bun em desenvolvimento e `contact.php` (PHP + cURL) em produção |
+| E-mail | API do Resend: versão Bun em desenvolvimento e `mensagem.php` (PHP + cURL) em produção |
 | Lint | oxlint |
 | Hospedagem | HostGator, plano compartilhado P: site estático + PHP 8.3 + MySQL (Percona 5.7) |
 | Backend da futura plataforma de cursos | PHP + **Laravel 13** + MySQL, no mesmo plano (decisão de 26/09/2026; ver ROADMAP) |
@@ -90,7 +90,7 @@ server/
   redisClient.ts          # configuração da conexão com o Redis
 public/
   images/                 # imagens reais do site (logo, hero, fotos da equipe, emblemas)
-  contact.php             # alternativa em PHP ao formulário de contato (hospedagem sem Bun)
+  mensagem.php             # alternativa em PHP ao formulário de contato (hospedagem sem Bun)
   llms.txt, robots.txt, sitemap.xml, favicon.ico
 QA_REPORT.html            # auditoria que motivou esta reconstrução
 QA_REPORT_V2.html         # revalidação: o que mudou desde a auditoria original
@@ -125,14 +125,14 @@ Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo deta
 
 - `REDIS_URL` — opcional, só usada pela API.
 - `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — necessárias para o formulário de contato enviar e-mail de verdade (as versões em Bun e em PHP usam as mesmas três).
-- `VITE_CONTACT_ENDPOINT` — só necessária numa publicação 100% estática sem a API em Bun (aponta o formulário para `/contact.php`); deixe em branco no ambiente local.
+- `VITE_CONTACT_ENDPOINT` — endereço do formulário de contato. Deixe em branco no ambiente local; o build de produção já recebe `/mensagem.php` pelo arquivo `.env.production` (sem segredos).
 
 ### Publicação (deploy)
 
 O site é publicado na HostGator (decisão do time: toda a estrutura, front-end e backend, fica no plano atual).
 
-1. **Como publicar hoje (manual)** — gerar o build com `VITE_CONTACT_ENDPOINT=/contact.php bun run build`, enviar a pasta `dist/` (já inclui `contact.php`) para o servidor, copiar `config.example.php` para `config.php` e preencher a chave real do Resend. Não precisa de Bun/Node no servidor. Para homologação, use um subdomínio (ex.: `homolog.ib-to.org`, criado no cPanel em Domínios): o plano atual permite subdomínios ilimitados. O que o plano inclui e a proposta de backend estão no [ROADMAP.md](./ROADMAP.md).
-2. **Deploy automático (planejado)** — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
+1. **Como publicar hoje (manual)** — `bun run build`, compactar o conteúdo de `dist/` e enviar pelo Gerenciador de Arquivos do cPanel. O `dist/` já leva o `.htaccess` (HTTPS, páginas abrindo direto, 404 de verdade, cabeçalhos de segurança, bloqueio do `config.php` e `noindex` na homologação) e o `mensagem.php`; a chave da Resend vai num `config.php` criado só no servidor. Não precisa de Bun/Node no servidor. **Passo a passo completo, com teste: [docs/deploy-homologacao.md](./docs/deploy-homologacao.md)** (homologação em `https://homolog.ib-to.org`, protegida por senha).
+2. **Deploy automático da homologação** (`.github/workflows/deploy.yml`, issue #26; produção ainda manual) — um fluxo na aba **Actions** do GitHub gera o build e envia o `dist/` por FTP para a HostGator a cada merge na `main`, com as senhas guardadas nos segredos do repositório. Está no ROADMAP, depois da homologação.
 
 ## Como testar (QA)
 
@@ -168,7 +168,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 | Se OK: PR pronta para revisão | O Pull Request (que pode ter sido aberto antes como rascunho) é marcado como pronto, com `Closes #número` | Dev | Aba **Pull requests** |
 | Code Review | Outra pessoa revisa o código | Time técnico | Aba **Pull requests** |
 | Merge | A branch entra na `main` | Responsável pelo repositório | Aba **Pull requests** |
-| Deploy automático | Publicação na HostGator (hoje ainda manual; automatizar está no ROADMAP) | Dev | Aba **Actions** |
+| Deploy automático | Homologação: automática a cada merge na `main` (aba Actions, por FTPS). Produção: ainda manual | Dev | Aba **Actions** |
 | Conferir produção | Abrir o site publicado e confirmar que a mudança está no ar e nada quebrou | Dev e Aline | — |
 | Clean Up | Apagar a branch e atualizar a `main` local | Dev | — |
 | Próxima Issue/Branch | Escolhida conforme o [ROADMAP.md](./ROADMAP.md) | Aline e time técnico | **Projects** |

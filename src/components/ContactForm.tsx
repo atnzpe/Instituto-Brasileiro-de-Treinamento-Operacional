@@ -9,6 +9,7 @@ export function ContactForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  const [website, setWebsite] = useState('')
   const nameId = useId()
   const emailId = useId()
   const messageId = useId()
@@ -24,7 +25,7 @@ export function ContactForm() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    mutation.mutate({ name, email, message })
+    mutation.mutate({ name, email, message, website })
   }
 
   return (
@@ -77,6 +78,22 @@ export function ContactForm() {
           onChange={(event) => setMessage(event.target.value)}
           className={inputClassName}
         />
+      </div>
+
+      {/* Anti-bot trap: off screen, out of the tab order and hidden from screen
+          readers, so only bots fill it in (mensagem.php then sends nothing). */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label>
+          Não preencha este campo
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+          />
+        </label>
       </div>
 
       <button
