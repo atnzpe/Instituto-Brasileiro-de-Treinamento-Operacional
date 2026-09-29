@@ -36,7 +36,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 
 ## 🚧 Pendente — falta um dado, credencial ou decisão, não código
 
-- [ ] **Chave de API da Resend** — o formulário de contato valida e avisa o erro corretamente, mas só vai enviar e-mail de verdade quando tivermos essa chave
+- [ ] **Caixa de e-mail do domínio para o formulário** — a Resend foi descartada (issue #28): o formulário vai enviar pelo `mail()` da HostGator, e para isso precisa existir no cPanel um endereço remetente do domínio (ex.: `contato-site@ib-to.org`)
 - [x] **E-mail definitivo de contato** — o formulário de contato envia para `comando.ibto@gmail.com`, e-mail oficial do IBTO
 - [ ] **Lista real da Rede Nacional** — nome, função, cidade/estado, telefone e foto (se tiver) de cada representante/instrutor/monitor, para popular a página `/rede-nacional`
 - [ ] **Conferir os telefones dos cartazes** — os cartazes do Recife trazem números de WhatsApp diferentes entre si: o de Formação de Instrutores mostra (81) 99162-3046 e (81) 99809-8742; os de Combate Corpo a Corpo e Combate com Faca mostram 8191623046 (10 dígitos, faltando um) e 81990098742 (um dígito diferente no meio). O site usa os números do primeiro cartaz nos três cursos até a confirmação
@@ -191,7 +191,8 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado", sem preço nem botão, sozinho depois da data; botões de "Pré-inscrição"; primeiro teste automatizado | — |
 | 1d | `feature/safe-area` — issue [#10](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
 | 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
-| 2 | `feature/homologacao-hostgator` — issue [#15](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/15) (em andamento) | Primeiro deploy: `homolog.ib-to.org` protegido por senha, com `.htaccess` (HTTPS, rotas, 404 de verdade, segurança, `noindex`), guia `docs/deploy-homologacao.md` e pacote `.zip`; `config.php` só quando houver a chave da Resend | Acesso ao cPanel |
+| 2 | ✅ `feature/homologacao-hostgator` — issues [#15](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/15), [#19](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/19) e [#24](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/24), mesclada em 28/09/2026 (PR #16) | Primeiro deploy: `homolog.ib-to.org` protegido por senha (pedida só depois do HTTPS), com `.htaccess` (HTTPS, HSTS, rotas, 404 de verdade, segurança, `noindex`), guia `docs/deploy-homologacao.md` e pacote `.zip`; formulário de contato protegido (origem, anti-robô, limite de envios e códigos de erro explícitos) | — |
+| 2b | 🔜 `feature/contato-mail-hostgator` — issue [#28](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/28) | Formulário de contato envia pelo `mail()` do PHP da HostGator (mesma lógica do site da CBSA), sem Resend e sem chave de API: remetente do próprio domínio, `Reply-To` com o e-mail de quem escreveu e quebras de linha removidas dos cabeçalhos | 2 e caixa de e-mail do domínio no cPanel |
 | 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
 | 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
 | 5 | `feature/plataforma-filiados` | Cadastro e login; modalidades e acesso restrito | Decisão 4 |
@@ -200,7 +201,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
-| 11 🔄 #26 | `feature/deploy-automatico-homologacao` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
+| 11 ✅ #26 | `feature/deploy-automatico-homologacao`, mesclada em 28/09/2026 (PR #16) | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
 | 12 | `feature/validacao-carteirinha` | Página pública de validação da carteirinha (aberta pelo QR code), mostrando só registro, status/validade, categoria, área, nível e nome abreviado; política de privacidade publicada | 4, 5 e decisão 7 |
 
 ### Primeiras tarefas da equipe
@@ -218,7 +219,7 @@ Cinco entregas pequenas para começar, com passo a passo em [docs/guia-primeiras
 Itens transversais, sem ordem fixa:
 
 - [ ] Ampliar os testes automatizados: já existem testes de lógica (`bun run test`, desde o PR #12) rodando na CI; faltam testes de interface (telas, teclado, modal) — vale priorizar com a Aline
-- [ ] Instalar e autenticar o `gh` (GitHub CLI) no ambiente de desenvolvimento, para abrir e gerenciar PRs/issues diretamente
+- [x] Instalar e autenticar o `gh` (GitHub CLI) no ambiente de desenvolvimento, para abrir e gerenciar PRs/issues diretamente
 - [ ] Rodar uma nova auditoria de qualidade contra o site já publicado em homologação, para confirmar que os ganhos de performance realmente aparecem fora do ambiente local
 - [ ] **Organizar o trabalho nas abas do GitHub** (ver "Como usar cada aba do GitHub" abaixo)
 - [ ] Avaliar uma seção de "eventos realizados" (histórico com fotos, como prova de experiência), separada da lista de treinamentos abertos
