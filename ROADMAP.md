@@ -185,6 +185,7 @@ Registradas na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Tre
 | Quem cria cursos | Filiado **com permissão** (instrutor), só na área em que é capacitado; o curso **só vai ao ar depois de aprovado pela diretoria** |
 | Papéis | Permissões configuráveis: **diretoria** (aprova cursos e percentuais), **secretaria/tesouraria** (confirma pagamentos PIX), **setor administrativo** configurado para isso (cadastra filiados e equipes), **instrutor** e **aluno** (se cadastra sozinho) |
 | Cadastro de filiado | **Só o IBTO cadastra**; a pessoa recebe um convite por e-mail para criar a própria senha |
+| Idiomas | **Português (padrão), inglês e espanhol em todas as telas**, escolhidos pelo usuário; vale também para o site (Gleyson, 29/09) |
 
 Ainda em aberto: o que pode ser público sobre cada filiado segue a regra de "Filiados, carteirinha e LGPD" abaixo; o encarregado de dados (DPO) é decisão do Eduardo (issue [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47)).
 
@@ -210,6 +211,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 3 | [#11](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/11) Cadastro das equipes filiadas | Etapa 1: lista pública das equipes em `/rede-nacional`, só com dados autorizados. Etapa 2: [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37), na plataforma | Planilha do Eduardo |
 | 4 | [#4](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/4) Revalidação de QA | Veredito da Aline sobre o site na homologação | Aline |
 | 5 | `feature/ouvidoria` (sem issue ainda) | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | — |
+| 6 | [#54](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/54) `feature/site-tres-idiomas` | Todas as páginas em **português, inglês e espanhol**, com seletor no menu do topo (regra do Gleyson, 29/09/2026) | Revisão das traduções do conteúdo institucional pelo Eduardo |
 
 ### Plataforma de cursos online — épico [#33](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/33)
 
@@ -219,7 +221,8 @@ Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste 
 | --- | --- | --- |
 | ✅ [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34) | **Definições:** Laravel 13, vídeo, pagamento, quem recebe (e divisão com o instrutor), endereço, papéis, quem cadastra filiados — fechadas em 29/09/2026 (ver "Decisões da plataforma") | — |
 | [#35](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/35) | Base: Laravel 13 + React/Vite + MySQL em `cursos-homolog.ib-to.org`, publicação sem SSH (Cron Job), CI | #34 |
-| [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login e papéis: aluno, filiado, instrutor e administrador | #35 |
+| [#53](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/53) | **Três idiomas** em todas as telas (pt-BR padrão, inglês e espanhol), com seletor e escolha lembrada; vem antes do login para as telas já nascerem traduzidas | #35 |
+| [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login e papéis: aluno, filiado, instrutor e administrador | #53 |
 | [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37) | Filiados, equipes filiadas e anuidade (R$ 90 em 2027), dados sensíveis criptografados | #36 |
 | [#38](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/38) | Landing page chamativa e catálogo (gratuito restrito, pago aberto, pago restrito) | #35 |
 | [#39](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/39) | Cursos, módulos, aulas (vídeo incorporado) e apostilas na área restrita | #36 e #38 |

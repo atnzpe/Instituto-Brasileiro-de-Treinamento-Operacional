@@ -7,7 +7,7 @@ Instruções para o Claude Code (e para qualquer pessoa) trabalhar neste reposit
 Site institucional do IBTO (Instituto Brasileiro de Treinamento Operacional), reconstruído a partir do site antigo em Brizy, publicado em [ib-to.org](https://ib-to.org).
 
 - **Pessoas:** Aline é PO, PM e QA (aceite e teste humano); Eduardo Lopes é o stakeholder principal (decisões de negócio); Gleyson Atanazio (`atnzpe`) lidera o projeto, é o dono do repositório no GitHub, o desenvolvedor e o Scrum Master, e está aprendendo — explique o porquê das coisas e prefira passos pequenos.
-- **Idioma:** tudo em português do Brasil (commits, issues, PRs, documentação e textos do site).
+- **Idioma:** commits, issues, PRs e documentação em português do Brasil. Os textos do site têm o português como padrão, com inglês e espanhol também (ver "Três idiomas" abaixo).
 - **Documentos-chave:** [README.md](./README.md), [ROADMAP.md](./ROADMAP.md) (fonte da ordem das próximas tarefas), [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md) e [QA_REPORT.html](./QA_REPORT.html).
 - **Repositório e quadro:** [atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional) (transferido da conta da Aline em 28/09/2026) e o [GitHub Project](https://github.com/users/atnzpe/projects/5/views/1) com as issues em ordem.
 
@@ -61,6 +61,7 @@ Publicação: `bun run build` (o `.env.production` já aponta o formulário para
 - **Segurança em primeiro lugar:** nunca versionar segredos (`.env`, `public/config.php`); validar entrada no servidor; em PHP, consultas com parâmetros e saída escapada.
 - **SEO e LLM:** cada rota tem `head()` com título, descrição e Open Graph; páginas novas entram em `public/sitemap.xml`, `public/llms.txt` e na regra de rotas do `public/.htaccess` (o teste `tests/htaccess.test.ts` falha se faltar).
 - **Acessibilidade:** um `<h1>` por página, texto alternativo em imagens, navegação por teclado, contraste WCAG AA; o widget VLibras fica só no `index.html`.
+- **Três idiomas (Gleyson, 29/09/2026):** toda tela do site e da plataforma tem a opção de **português (padrão), inglês e espanhol**, escolhida pelo usuário; nada de texto fixo nos componentes. Tradução de conteúdo institucional sem revisão do Eduardo fica como pendência no ROADMAP (implantação no site: #54).
 - **Mobile first** com Tailwind, no tema escuro do site (fundo preto e bronze/dourado, inclusive no menu do topo).
 - **Safe Area** (entalhe, ilha dinâmica, barra de gestos): o `index.html` usa `viewport-fit=cover`; blocos que encostam nas laterais usam `px-safe-N` (não `px-N`), o que encosta no topo ou no rodapé usa `pt-safe` / `pb-safe-N`, e modais usam `dialog-safe` (utilitários em `src/index.css`; o teste `tests/safeArea.test.ts` confere).
 - **Conteúdo real:** nunca inventar dados (datas, preços, telefones, pessoas). Quando faltar, deixar vazio ou "a definir" e registrar a pendência no ROADMAP.
