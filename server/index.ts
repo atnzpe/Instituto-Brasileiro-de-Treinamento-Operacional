@@ -22,9 +22,8 @@ const corsHeaders = {
 // the institute. Sent through Resend's HTTP API so we don't need an SMTP
 // server — just an API key, no new dependency (plain fetch).
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-// Temporary destination while the institute sets up a dedicated inbox —
-// override with CONTACT_TO_EMAIL once contato@ib-to.org (or similar) exists.
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'eduars.lopes@gmail.com'
+// The institute's official contact inbox; override with CONTACT_TO_EMAIL.
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'comando.ibto@gmail.com'
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'ouvidoria@ib-to.org'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -44,15 +43,32 @@ function validateContactPayload(body: unknown): ContactPayload | null {
   const trimmedName = name.trim()
   const trimmedEmail = email.trim()
   const trimmedMessage = message.trim()
-  if (!trimmedName || trimmedName.length > 200) return null
+  // The name goes into the e-mail subject: no line breaks or control chars.
+  const hasControlChar = [...trimmedName].some((char) => {
+    const code = char.charCodeAt(0)
+    return code < 0x20 || code === 0x7f
+  })
+  if (!trimmedName || trimmedName.length > 200 || hasControlChar) return null
   if (!EMAIL_RE.test(trimmedEmail) || trimmedEmail.length > 320) return null
   if (!trimmedMessage || trimmedMessage.length > 5000) return null
   return { name: trimmedName, email: trimmedEmail, message: trimmedMessage }
 }
 
+/** Error carrying the same code mensagem.php returns (e.g. CHAVE_RESEND_AUSENTE). */
+class ContactError extends Error {
+  readonly status: number
+  readonly codigo: string
+
+  constructor(status: number, codigo: string, detail: string) {
+    super(detail)
+    this.status = status
+    this.codigo = codigo
+  }
+}
+
 async function sendContactEmail(payload: ContactPayload) {
   if (!RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY not configured')
+    throw new ContactError(503, 'CHAVE_RESEND_AUSENTE', 'RESEND_API_KEY not configured')
   }
 
   const res = await fetch('https://api.resend.com/emails', {
@@ -71,7 +87,7 @@ async function sendContactEmail(payload: ContactPayload) {
   })
 
   if (!res.ok) {
-    throw new Error(`Resend API error: ${res.status}`)
+    throw new ContactError(502, `RESEND_RECUSOU_${res.status}`, `Resend HTTP ${res.status}: ${await res.text()}`)
   }
 }
 
@@ -114,17 +130,31 @@ Bun.serve({
     }
 
     if (url.pathname === '/api/contact' && req.method === 'POST') {
-      const payload = validateContactPayload(await req.json().catch(() => null))
+      const body: unknown = await req.json().catch(() => null)
+      // Honeypot filled in: a bot. Pretend it worked, send nothing (same as mensagem.php).
+      const website = (body as { website?: unknown } | null)?.website
+      if (typeof website === 'string' && website.trim() !== '') {
+        return json({ ok: true })
+      }
+      const payload = validateContactPayload(body)
       if (!payload) {
-        return json({ error: 'Dados inválidos. Preencha nome, e-mail e mensagem.' }, { status: 400 })
+        return json(
+          { error: 'Dados inválidos. Preencha nome, e-mail e mensagem.', codigo: 'DADOS_INVALIDOS' },
+          { status: 400 },
+        )
       }
       try {
         await sendContactEmail(payload)
         return json({ ok: true })
-      } catch {
+      } catch (err) {
+        // Same contract as mensagem.php: a code for the tester, the detail
+        // only in this terminal.
+        const status = err instanceof ContactError ? err.status : 504
+        const codigo = err instanceof ContactError ? err.codigo : 'RESEND_INACESSIVEL'
+        console.error(`/api/contact [${codigo}]`, err instanceof Error ? err.message : err)
         return json(
-          { error: 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.' },
-          { status: 502 },
+          { error: 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.', codigo },
+          { status },
         )
       }
     }

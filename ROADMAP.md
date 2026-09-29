@@ -37,7 +37,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 ## 🚧 Pendente — falta um dado, credencial ou decisão, não código
 
 - [ ] **Chave de API da Resend** — o formulário de contato valida e avisa o erro corretamente, mas só vai enviar e-mail de verdade quando tivermos essa chave
-- [ ] **E-mail definitivo de contato** — hoje está apontando para `eduars.lopes@gmail.com` como solução temporária; trocar para um `contato@ib-to.org` (ou similar) quando existir (o plano da HostGator permite criar caixas de e-mail sem limite)
+- [x] **E-mail definitivo de contato** — o formulário de contato envia para `comando.ibto@gmail.com`, e-mail oficial do IBTO
 - [ ] **Lista real da Rede Nacional** — nome, função, cidade/estado, telefone e foto (se tiver) de cada representante/instrutor/monitor, para popular a página `/rede-nacional`
 - [ ] **Conferir os telefones dos cartazes** — os cartazes do Recife trazem números de WhatsApp diferentes entre si: o de Formação de Instrutores mostra (81) 99162-3046 e (81) 99809-8742; os de Combate Corpo a Corpo e Combate com Faca mostram 8191623046 (10 dígitos, faltando um) e 81990098742 (um dígito diferente no meio). O site usa os números do primeiro cartaz nos três cursos até a confirmação
 - [ ] **Tirar os treinamentos do Recife do ar depois da data** — os três são de 10 e 11 de outubro; depois disso alguém precisa removê-los (ou marcá-los como encerrados) manualmente
@@ -69,7 +69,7 @@ Lido do backup do cPanel de 13/09/2026 (plano `P_100`); vale confirmar no painel
 | Disco e tráfego | cerca de 100 GB, sem limite declarado de tráfego | Sobra para o site e as imagens; não serve para hospedar vídeo das aulas (ver abaixo) |
 | Domínios adicionais | 0 | Só `ib-to.org` e seus subdomínios |
 | Aplicações Node/Python (Passenger) | até 4 no cadastro da conta | Pela tabela oficial da HostGator, no plano compartilhado só existe Python 3.6 (Django até 3.2) e **não existe Node.js**; o teste de 26/09 nem chegou a rodar o Python (ver Pendente) |
-| PHP | 8.2, 8.3, 8.4 e 8.5 (tabela oficial) | Versões atuais e com suporte; o `contact.php` já funciona e o backend pode ser em PHP |
+| PHP | 8.2, 8.3, 8.4 e 8.5 (tabela oficial) | Versões atuais e com suporte; o `mensagem.php` já funciona e o backend pode ser em PHP |
 | MySQL | **Percona Server 5.7.44** no nosso servidor (conferido no phpMyAdmin em 26/09/2026) | Compatível com o Laravel 13 (aceita MySQL 5.7+). Atenção: o MySQL 5.7 saiu do suporte oficial em outubro de 2023; o banco só é acessível de dentro do servidor, o que reduz o risco. Vale perguntar à HostGator se a conta pode ir para um servidor com MySQL 8.0 |
 | PHP padrão da conta | **8.3** (`ea-php83`), conferido no MultiPHP Manager em 26/09/2026 | Já atende o mínimo do Laravel 13 |
 | SSH / Terminal | não suportado no compartilhado (tabela oficial) | Não dá para instalar pacotes no servidor; tudo o que o backend usar precisa ser enviado pronto |
@@ -99,7 +99,7 @@ Levantadas na documentação oficial (`docs.cpanel.net/cpanel`) em 26/09/2026. V
 ### Como publicar o site em homologação
 
 - Endereço: `homolog.ib-to.org`, criado no cPanel (Domínios).
-- Sobe-se apenas o conteúdo de `dist/` (resultado de `bun run build`). A pasta `public/` não é enviada: o Vite copia o conteúdo dela para dentro de `dist/`, e é assim que `contact.php`, `robots.txt`, `sitemap.xml` e as imagens chegam ao servidor. O Bun só é necessário na máquina de quem gera o build, não na HostGator.
+- Sobe-se apenas o conteúdo de `dist/` (resultado de `bun run build`). A pasta `public/` não é enviada: o Vite copia o conteúdo dela para dentro de `dist/`, e é assim que `mensagem.php`, `robots.txt`, `sitemap.xml` e as imagens chegam ao servidor. O Bun só é necessário na máquina de quem gera o build, não na HostGator.
 - Como enviar o `dist/`, do mais simples ao mais automático:
   1. **Gerenciador de Arquivos**: compactar o `dist/` em `.zip`, carregar e extrair na pasta do subdomínio. Bom para a primeira publicação.
   2. **FTP**: um programa como o FileZilla envia a pasta inteira; dá para criar uma conta FTP só para isso em "FTP Accounts".
@@ -116,7 +116,7 @@ Levantadas na documentação oficial (`docs.cpanel.net/cpanel`) em 26/09/2026. V
 
 | Opção | Como funciona | Custo | Vantagem | Ponto de atenção |
 | --- | --- | --- | --- | --- |
-| **A. PHP + MySQL no plano atual (recomendada)** | API e painel em PHP 8.2+, dados no MySQL, tudo na hospedagem que já é paga | Nenhum extra | Versões atuais e com suporte; roda hoje (o `contact.php` já prova); cron e MySQL inclusos | Mais uma linguagem para o time aprender (PHP também é considerado amigável para iniciantes). Sem SSH, as bibliotecas do backend são instaladas na nossa máquina e enviadas prontas |
+| **A. PHP + MySQL no plano atual (recomendada)** | API e painel em PHP 8.2+, dados no MySQL, tudo na hospedagem que já é paga | Nenhum extra | Versões atuais e com suporte; roda hoje (o `mensagem.php` já prova); cron e MySQL inclusos | Mais uma linguagem para o time aprender (PHP também é considerado amigável para iniciantes). Sem SSH, as bibliotecas do backend são instaladas na nossa máquina e enviadas prontas |
 | B. Python moderno + MySQL em VPS | Contratar VPS na HostGator: Python e Django atuais, SSH e Node disponíveis | Mensalidade maior (consultar a HostGator) | Linguagem preferida do time; Django traz painel admin, login e controle de usuários prontos | Custo, e o VPS exige cuidar do servidor (atualizações e segurança) |
 | Não recomendada | Python 3.6 / Django 3.2 no plano atual | Nenhum extra | — | Ambos sem atualizações de segurança há anos; inaceitável para uma plataforma com login, dados de filiados e pagamento. Além disso, o teste nem chegou a rodar |
 
@@ -187,11 +187,11 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | # | Issue / branch | Entrega | Depende de |
 | --- | --- | --- | --- |
 | 1 | `feature/cursos` — ✅ teste humano aprovado e code review feito em 26/09/2026 (PR #6, fecha a issue #5); aguardando merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Merge |
-| 1b | `chore/github-actions-ci` — issue [#13](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/13) (em andamento) | Integração contínua na aba **Actions**: a cada push, roda `bun install`, `bun run lint`, `bun run test` e `bun run build` e mostra ✅/❌ na branch e no PR; `.gitattributes` padroniza o fim de linha | — |
-| 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado", sem preço nem botão, sozinho depois da data; botões de "Pré-inscrição"; primeiro teste automatizado | — |
-| 1d | `feature/safe-area` — issue [#10](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
-| 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/Al1nex/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
-| 2 | `feature/homologacao-hostgator` | `homolog.ib-to.org` com o site publicado, `.htaccess` (rotas e 404 de verdade), `contact.php` configurado e HTTPS conferido | Acesso ao cPanel |
+| 1b | ✅ `chore/github-actions-ci` — issue [#13](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/13), mesclada em 27/09/2026 (PR #14) | Integração contínua na aba **Actions**: a cada push, roda `bun install`, `bun run lint`, `bun run test` e `bun run build` e mostra ✅/❌ na branch e no PR; `.gitattributes` padroniza o fim de linha | — |
+| 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado", sem preço nem botão, sozinho depois da data; botões de "Pré-inscrição"; primeiro teste automatizado | — |
+| 1d | `feature/safe-area` — issue [#10](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
+| 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
+| 2 | `feature/homologacao-hostgator` — issue [#15](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/15) (em andamento) | Primeiro deploy: `homolog.ib-to.org` protegido por senha, com `.htaccess` (HTTPS, rotas, 404 de verdade, segurança, `noindex`), guia `docs/deploy-homologacao.md` e pacote `.zip`; `config.php` só quando houver a chave da Resend | Acesso ao cPanel |
 | 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
 | 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
 | 5 | `feature/plataforma-filiados` | Cadastro e login; modalidades e acesso restrito | Decisão 4 |
@@ -200,7 +200,7 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 | 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
 | 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
 | 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
-| 11 | `chore/deploy-automatico` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
+| 11 🔄 #26 | `feature/deploy-automatico-homologacao` | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
 | 12 | `feature/validacao-carteirinha` | Página pública de validação da carteirinha (aberta pelo QR code), mostrando só registro, status/validade, categoria, área, nível e nome abreviado; política de privacidade publicada | 4, 5 e decisão 7 |
 
 ### Primeiras tarefas da equipe
