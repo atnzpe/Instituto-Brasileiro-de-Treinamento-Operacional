@@ -32,7 +32,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 describe.skipIf(skip)('public/mensagem.php', () => {
   beforeAll(async () => {
     copyFileSync(join(root, 'public', 'mensagem.php'), join(workDir, 'mensagem.php'))
-    // Empty API key: valid messages stop at "can't send" (502) instead of
+    // Empty API key: valid messages stop at "no key" (503) instead of
     // reaching Resend, which is enough to tell they passed every check.
     writeFileSync(
       join(workDir, 'config.php'),
@@ -72,7 +72,8 @@ describe.skipIf(skip)('public/mensagem.php', () => {
 
   test('aceita envio vindo do próprio site', async () => {
     const res = await post(valid, { Origin: `http://127.0.0.1:${port}` })
-    expect(res.status).toBe(502) // passou por tudo; só falta a chave da Resend
+    expect(res.status).toBe(503) // passou por tudo; só falta a chave da Resend
+    expect(await res.json()).toMatchObject({ codigo: 'CHAVE_RESEND_AUSENTE' })
   })
 
   test('só aceita JSON', async () => {
@@ -96,11 +97,12 @@ describe.skipIf(skip)('public/mensagem.php', () => {
 
   test('limita a 5 envios por hora e não guarda o IP em texto', async () => {
     for (let i = 0; i < 5; i++) {
-      expect((await post(valid)).status).toBe(502)
+      expect((await post(valid)).status).toBe(503)
     }
     const blocked = await post(valid)
     expect(blocked.status).toBe(429)
-    const { error } = (await blocked.json()) as { error: string }
+    const { error, codigo } = (await blocked.json()) as { error: string; codigo: string }
+    expect(codigo).toBe('LIMITE_DE_ENVIOS')
     expect(error).toContain('muitas mensagens')
 
     for (const file of readdirSync(limitsDir)) {

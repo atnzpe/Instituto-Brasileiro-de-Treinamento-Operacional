@@ -32,10 +32,19 @@ const RATE_LIMIT_WINDOW_SECONDS = 3600;
 const RATE_LIMIT_MAX = 5;
 const GENERIC_ERROR = 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.';
 
-function fail($status, $message)
+/**
+ * Error answer with a stable code (e.g. CHAVE_RESEND_AUSENTE) so whoever tests
+ * sees exactly what went wrong. $detail is technical and may name servers or
+ * statuses: it goes only to the server error log (cPanel → Erros), never to
+ * the visitor, and must never contain the API key.
+ */
+function fail($status, $code, $message, $detail = null)
 {
+    if ($detail !== null) {
+        error_log("mensagem.php [$code] $detail");
+    }
     http_response_code($status);
-    echo json_encode(['error' => $message]);
+    echo json_encode(['error' => $message, 'codigo' => $code]);
     exit;
 }
 
@@ -47,7 +56,7 @@ function succeed()
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Allow: POST');
-    fail(405, 'Método não permitido.');
+    fail(405, 'METODO_NAO_PERMITIDO', 'Método não permitido.');
 }
 
 // Browsers always send Origin on cross-site POSTs; a different host means
@@ -57,7 +66,7 @@ if ($origin !== '') {
     $originHost = parse_url($origin, PHP_URL_HOST);
     $ownHost = strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? '')[0]);
     if (!is_string($originHost) || strtolower($originHost) !== $ownHost) {
-        fail(403, 'Envio não permitido.');
+        fail(403, 'ORIGEM_NAO_PERMITIDA', 'Envio não permitido.');
     }
 }
 
@@ -65,12 +74,12 @@ if ($origin !== '') {
 // this script never approves.
 $contentType = strtolower($_SERVER['CONTENT_TYPE'] ?? '');
 if (strpos($contentType, 'application/json') !== 0) {
-    fail(415, 'Formato de envio inválido.');
+    fail(415, 'FORMATO_INVALIDO', 'Formato de envio inválido.');
 }
 
 $raw = file_get_contents('php://input', false, null, 0, MAX_BODY_BYTES + 1);
 if ($raw === false || strlen($raw) > MAX_BODY_BYTES) {
-    fail(413, 'Mensagem grande demais.');
+    fail(413, 'MENSAGEM_GRANDE_DEMAIS', 'Mensagem grande demais.');
 }
 
 $configFile = __DIR__ . '/config.php';
@@ -152,7 +161,7 @@ function within_rate_limit()
 }
 
 if (!within_rate_limit()) {
-    fail(429, 'Você enviou muitas mensagens em pouco tempo. Tente novamente daqui a uma hora ou fale conosco pelo WhatsApp.');
+    fail(429, 'LIMITE_DE_ENVIOS', 'Você enviou muitas mensagens em pouco tempo. Tente novamente daqui a uma hora ou fale conosco pelo WhatsApp.');
 }
 
 function validate_contact($body)
@@ -180,11 +189,11 @@ function validate_contact($body)
 
 $payload = validate_contact($body);
 if ($payload === null) {
-    fail(400, 'Dados inválidos. Preencha nome, e-mail e mensagem.');
+    fail(400, 'DADOS_INVALIDOS', 'Dados inválidos. Preencha nome, e-mail e mensagem.');
 }
 
 if (!defined('RESEND_API_KEY') || RESEND_API_KEY === '') {
-    fail(502, GENERIC_ERROR);
+    fail(503, 'CHAVE_RESEND_AUSENTE', GENERIC_ERROR, 'config.php ausente ou sem RESEND_API_KEY');
 }
 
 $to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
@@ -209,13 +218,18 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
 ]);
-curl_exec($ch);
+$response = curl_exec($ch);
 $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-if ($curlError || $status < 200 || $status >= 300) {
-    fail(502, GENERIC_ERROR);
+if ($curlError) {
+    fail(504, 'RESEND_INACESSIVEL', GENERIC_ERROR, "cURL: $curlError");
+}
+if ($status < 200 || $status >= 300) {
+    // Resend explains the refusal in the body (e.g. unverified sender domain).
+    $reason = is_string($response) ? substr($response, 0, 500) : '';
+    fail(502, 'RESEND_RECUSOU_' . $status, GENERIC_ERROR, "Resend HTTP $status: $reason");
 }
 
 succeed();

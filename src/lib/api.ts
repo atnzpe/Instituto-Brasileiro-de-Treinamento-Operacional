@@ -33,6 +33,11 @@ const CONNECTION_ERROR =
 const SEND_ERROR =
   'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde ou fale conosco pelo WhatsApp.'
 
+/** Appends the error code (e.g. CHAVE_RESEND_AUSENTE) shown to whoever tests. */
+export function withCode(message: string, code: string) {
+  return `${message} (código: ${code})`
+}
+
 export async function submitContact(payload: ContactPayload) {
   let res: Response
   try {
@@ -45,11 +50,12 @@ export async function submitContact(payload: ContactPayload) {
   } catch {
     // Offline, timed out or blocked on the way: the browser only says
     // "Failed to fetch", which means nothing to a visitor.
-    throw new Error(CONNECTION_ERROR)
+    throw new Error(withCode(CONNECTION_ERROR, 'SEM_CONEXAO'))
   }
-  const data: { error?: string } = await res.json().catch(() => ({}))
+  const data: { error?: string; codigo?: string } = await res.json().catch(() => ({}))
   // No JSON error means the answer didn't come from mensagem.php (e.g. the
-  // hosting firewall): show a message a visitor can act on.
-  if (!res.ok) throw new Error(data.error ?? SEND_ERROR)
+  // hosting firewall): show a message a visitor can act on. The code tells
+  // whoever tests exactly which check failed.
+  if (!res.ok) throw new Error(withCode(data.error ?? SEND_ERROR, data.codigo ?? `HTTP_${res.status}`))
   return data
 }

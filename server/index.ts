@@ -54,9 +54,21 @@ function validateContactPayload(body: unknown): ContactPayload | null {
   return { name: trimmedName, email: trimmedEmail, message: trimmedMessage }
 }
 
+/** Error carrying the same code mensagem.php returns (e.g. CHAVE_RESEND_AUSENTE). */
+class ContactError extends Error {
+  readonly status: number
+  readonly codigo: string
+
+  constructor(status: number, codigo: string, detail: string) {
+    super(detail)
+    this.status = status
+    this.codigo = codigo
+  }
+}
+
 async function sendContactEmail(payload: ContactPayload) {
   if (!RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY not configured')
+    throw new ContactError(503, 'CHAVE_RESEND_AUSENTE', 'RESEND_API_KEY not configured')
   }
 
   const res = await fetch('https://api.resend.com/emails', {
@@ -75,7 +87,7 @@ async function sendContactEmail(payload: ContactPayload) {
   })
 
   if (!res.ok) {
-    throw new Error(`Resend API error: ${res.status}`)
+    throw new ContactError(502, `RESEND_RECUSOU_${res.status}`, `Resend HTTP ${res.status}: ${await res.text()}`)
   }
 }
 
@@ -126,15 +138,23 @@ Bun.serve({
       }
       const payload = validateContactPayload(body)
       if (!payload) {
-        return json({ error: 'Dados inválidos. Preencha nome, e-mail e mensagem.' }, { status: 400 })
+        return json(
+          { error: 'Dados inválidos. Preencha nome, e-mail e mensagem.', codigo: 'DADOS_INVALIDOS' },
+          { status: 400 },
+        )
       }
       try {
         await sendContactEmail(payload)
         return json({ ok: true })
-      } catch {
+      } catch (err) {
+        // Same contract as mensagem.php: a code for the tester, the detail
+        // only in this terminal.
+        const status = err instanceof ContactError ? err.status : 504
+        const codigo = err instanceof ContactError ? err.codigo : 'RESEND_INACESSIVEL'
+        console.error(`/api/contact [${codigo}]`, err instanceof Error ? err.message : err)
         return json(
-          { error: 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.' },
-          { status: 502 },
+          { error: 'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde.', codigo },
+          { status },
         )
       }
     }
