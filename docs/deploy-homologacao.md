@@ -141,7 +141,7 @@ Depois de salvo, nem você nem ninguém consegue ler o valor de volta no GitHub,
 
 ### 3. Primeiro deploy
 
-- [ ] Enquanto o `deploy.yml` não estiver na `main`, o GitHub não mostra o botão **Run workflow**. Nesse período, o push na branch `feature/homologacao-hostgator` já dispara o deploy sozinho. Depois do merge: GitHub → **Actions** → **Deploy homologação** → **Run workflow** → branch em teste → **Run workflow**.
+- [ ] GitHub → **Actions** → **Deploy homologação** → **Run workflow** → branch em teste → **Run workflow**. O botão só aparece quando o `deploy.yml` já está na `main`; o primeiro deploy (#15) usou, por isso, um gatilho temporário de push na própria branch.
 - [ ] Os dois passos ficam verdes. O último confere sozinho que `https://` pede a senha e que `http://` vai para `https://`.
 - [ ] Se o passo "Enviar por FTPS" falhar com erro de **certificado**, mande a mensagem para o Claude: o endereço do servidor FTP precisa ser o que o certificado da HostGator cobre.
 - [ ] Faça a Parte E.

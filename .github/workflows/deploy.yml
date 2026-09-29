@@ -8,13 +8,9 @@ name: Deploy homologação
 
 on:
   # Every merge into main publishes staging.
-  # The staging branch (issue #15) also deploys on push: GitHub only offers
-  # "Run workflow" once this file is on main, and it is not there yet.
-  # Remove it when the branch is merged.
   push:
-    branches: [main, feature/homologacao-hostgator]
-  # Actions → "Deploy homologação" → Run workflow → pick the branch to test
-  # (the button appears only after this file reaches main).
+    branches: [main]
+  # Actions → "Deploy homologação" → Run workflow → pick the branch to test.
   workflow_dispatch:
 
 permissions:
