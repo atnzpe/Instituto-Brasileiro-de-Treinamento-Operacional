@@ -6,6 +6,12 @@
     <link rel="icon" type="image/webp" href="/images/logo.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0a0a" />
+    <!-- Installed app (PWA, issue #9): the manifest link is injected by
+         vite-plugin-pwa; these cover iPhone, which ignores part of it. -->
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="IBTO" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <!-- Per-page title/description/OG are set by each route's `head()`
          (see src/routes/*.tsx) via TanStack Router's <HeadContent/>, so they
          reflect the actual page instead of one generic string everywhere. -->
@@ -37,7 +43,9 @@
     </div>
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
-      new window.VLibras.Widget('https://vlibras.gov.br/app')
+      // Offline (PWA) the script above doesn't load: skip the widget
+      // instead of throwing, the site works without it.
+      if (window.VLibras) new window.VLibras.Widget('https://vlibras.gov.br/app')
     </script>
 
     <script type="module" src="/src/main.tsx"></script>

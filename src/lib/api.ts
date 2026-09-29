@@ -30,6 +30,8 @@ const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact'
 const CONTACT_TIMEOUT_MS = 20000
 const CONNECTION_ERROR =
   'Não foi possível conectar ao servidor. Verifique sua internet e tente de novo, ou fale conosco pelo WhatsApp.'
+const OFFLINE_ERROR =
+  'Você está sem internet, e sua mensagem não foi enviada. Confira a conexão e tente de novo, ou fale conosco pelo WhatsApp.'
 const SEND_ERROR =
   'Não foi possível enviar sua mensagem agora. Tente novamente mais tarde ou fale conosco pelo WhatsApp.'
 
@@ -39,6 +41,12 @@ export function withCode(message: string, code: string) {
 }
 
 export async function submitContact(payload: ContactPayload) {
+  // Offline (e.g. the installed app with no signal): say so right away and
+  // send nothing. Messages are never queued to go out later behind the
+  // visitor's back (issue #9).
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    throw new Error(withCode(OFFLINE_ERROR, 'SEM_INTERNET'))
+  }
   // AbortController + setTimeout instead of AbortSignal.timeout(), which
   // Safari only has from version 16: there it threw before the request left.
   const controller = new AbortController()

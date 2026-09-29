@@ -25,6 +25,11 @@ describe('public/.htaccess', () => {
     expect(rewrittenPages.sort()).toEqual(pages.sort())
   })
 
+  test('service worker e manifesto do PWA nunca ficam presos no cache', () => {
+    expect(htaccess).toContain('<FilesMatch "^(sw\\.js|registerSW\\.js|workbox-[\\w-]+\\.js|manifest\\.webmanifest)$">')
+    expect(htaccess).toContain('AddType application/manifest+json .webmanifest')
+  })
+
   test('bloqueia o acesso ao config.php pela internet', () => {
     expect(htaccess).toContain('<FilesMatch "^config(\\.example)?\\.php$">')
     expect(htaccess).toContain('Require all denied')
