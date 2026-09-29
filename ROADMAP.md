@@ -110,7 +110,7 @@ Levantadas na documentação oficial (`docs.cpanel.net/cpanel`) em 26/09/2026. V
 
 ### Plataforma de cursos online: onde e com quê
 
-- **Endereço:** um subdomínio próprio (sugestão `cursos.ib-to.org`, com `cursos-homolog.ib-to.org` para testes).
+- **Endereço:** ✅ `cursos.ib-to.org`, com `cursos-homolog.ib-to.org` para testes (Eduardo, 29/09/2026).
 - **Projeto separado**, com repositório próprio, para o layout e a evolução independentes do site institucional.
 - **Backend**: ✅ **decidido em 26/09/2026 — opção A (PHP + MySQL no plano atual).** A preferência inicial do time era Python, mas a tabela oficial da HostGator mudou o quadro. As opções avaliadas, para registro:
 
@@ -124,7 +124,7 @@ Node.js fica descartado no plano atual (não suportado).
 
 Em qualquer caso, o layout da plataforma continua em React + Vite, publicado como arquivos estáticos; só a API muda de linguagem.
 
-- **Vídeo das aulas:** não é recomendável hospedar arquivos de vídeo numa hospedagem compartilhada (gastam muito tráfego e processamento). O caminho comum é incorporar vídeos de um serviço próprio para isso (por exemplo YouTube não listado ou Vimeo); é uma decisão de Eduardo.
+- **Vídeo das aulas:** não é recomendável hospedar arquivos de vídeo numa hospedagem compartilhada (gastam muito tráfego e processamento). ✅ Decidido (Eduardo, 29/09/2026): **link do YouTube, Vimeo ou Google Drive**, incorporado na aula (detalhes em "Decisões da plataforma").
 - **Painel administrativo e controle de filiados:** a serem construídos dentro da plataforma (cursos, aulas, inscritos, filiados).
 
 Regras de negócio que vale usar como referência (lógica pensada no DojoManager, sem reaproveitar código nem infraestrutura):
@@ -145,7 +145,7 @@ Duas opções:
 - **Fluxo manual**: PIX e comprovante por WhatsApp, com o gestor confirmando no painel. Custo zero e rápido, mas dá trabalho a cada inscrição.
 - **Gateway** com PIX e cartão, que avisa o sistema sozinho quando o pagamento cai (a HostGator consegue receber esse aviso pela internet). Candidatos a comparar: Asaas, Mercado Pago, Stripe e Pagar.me/Efí. Critérios: taxa por transação, PIX, cartão parcelado, recorrência (para a anuidade dos filiados) e ambiente de testes.
 
-Sugestão: começar a homologação com o fluxo manual e integrar o gateway em seguida, quando o provedor for escolhido.
+✅ Decidido (Eduardo, 29/09/2026): **começar com o fluxo manual**, com a **secretaria/tesouraria** confirmando no painel, e integrar o gateway em seguida, quando o provedor for escolhido. Como o valor pode ser dividido com o instrutor, o **split de pagamento** (o gateway repassa a parte do instrutor sozinho) entra nos critérios de escolha.
 
 ### Filiados, carteirinha e LGPD
 
@@ -170,17 +170,23 @@ Princípios para qualquer tela que use dados de filiados:
 
 Pontos a conferir na carteirinha atual: o CPF impresso aparece **sem o zero inicial** (10 dígitos em vez de 11), e a equipe aparece como "Instrutor Trinca" enquanto o cadastro enviado diz "Mestre Trinca". Vale padronizar antes de gerar novas carteirinhas.
 
-### Decisões que dependem de vocês
+### Decisões da plataforma (fechadas em 29/09/2026)
 
-Acompanhamento na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34). Já respondido pelo Eduardo (28/09/2026): existe um único IBTO, com **equipes filiadas**; anuidade 2027 de **R$ 90,00**; qualquer filiado pode lançar cursos na sua área, **com revisão** do IBTO.
+Registradas na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34), com o Eduardo (28 e 29/09/2026) e o Gleyson.
 
-1. ~~Backend da plataforma~~ — decidido: PHP + MySQL no plano atual (26/09/2026). Forma de organizar o PHP: **recomendado Laravel 13** (exige PHP 8.3+; segurança por padrão, padrão de mercado; comparação em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#laravel-ou-php-simples)), aguardando confirmação
-2. Vídeo das aulas: serviço externo incorporado ou outra solução
-3. Pagamento: fluxo manual agora ou já escolher o gateway
-4. Definir "filiado": quem é, como entra, se paga anuidade e como isso libera os cursos restritos
-5. Endereço final da plataforma (sugestão: `cursos.ib-to.org`)
-6. Quem administra a plataforma e com quais papéis
-7. Filiados e LGPD: o que pode ser público sobre cada filiado (ver "Filiados, carteirinha e LGPD" abaixo)
+| Tema | Decisão |
+| --- | --- |
+| Backend | PHP 8.3 + **Laravel 13** + MySQL no plano atual da HostGator (Gleyson, 29/09) |
+| Vídeo das aulas | **Link do YouTube, Vimeo ou Google Drive**, incorporado na aula; nada hospedado no nosso servidor. Recomendado: Vimeo com restrição de domínio para cursos pagos (o link do YouTube não listado pode ser repassado); Google Drive só como alternativa (limite de visualizações) |
+| Pagamento | **PIX manual primeiro** (comprovante + confirmação no painel), **gateway automático depois** (provedor a escolher; o split de pagamento conta a favor) |
+| Divisão do valor | O instrutor informa o **percentual** ao criar o curso; o percentual passa pela **aprovação da diretoria**; cada pagamento gera um conta a pagar (instrutor) e um conta a receber (IBTO); o percentual fica congelado em cada matrícula |
+| Endereço | `cursos.ib-to.org` (testes em `cursos-homolog.ib-to.org`) |
+| Estrutura do IBTO | **Um único IBTO**, sem unidades, com **equipes filiadas**; anuidade 2027 de **R$ 90,00** |
+| Quem cria cursos | Filiado **com permissão** (instrutor), só na área em que é capacitado; o curso **só vai ao ar depois de aprovado pela diretoria** |
+| Papéis | Permissões configuráveis: **diretoria** (aprova cursos e percentuais), **secretaria/tesouraria** (confirma pagamentos PIX), **setor administrativo** configurado para isso (cadastra filiados e equipes), **instrutor** e **aluno** (se cadastra sozinho) |
+| Cadastro de filiado | **Só o IBTO cadastra**; a pessoa recebe um convite por e-mail para criar a própria senha |
+
+Ainda em aberto: o que pode ser público sobre cada filiado segue a regra de "Filiados, carteirinha e LGPD" abaixo; o encarregado de dados (DPO) é decisão do Eduardo (issue [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47)).
 
 ## 🔭 Próximos passos
 
@@ -211,7 +217,7 @@ Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste 
 
 | Issue | Entrega | Depende de |
 | --- | --- | --- |
-| [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34) | **Definições do Eduardo:** Laravel 13, vídeo, pagamento, quem recebe (e divisão com o instrutor), endereço, papéis, quem cadastra filiados | Eduardo |
+| ✅ [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34) | **Definições:** Laravel 13, vídeo, pagamento, quem recebe (e divisão com o instrutor), endereço, papéis, quem cadastra filiados — fechadas em 29/09/2026 (ver "Decisões da plataforma") | — |
 | [#35](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/35) | Base: Laravel 13 + React/Vite + MySQL em `cursos-homolog.ib-to.org`, publicação sem SSH (Cron Job), CI | #34 |
 | [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login e papéis: aluno, filiado, instrutor e administrador | #35 |
 | [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37) | Filiados, equipes filiadas e anuidade (R$ 90 em 2027), dados sensíveis criptografados | #36 |
