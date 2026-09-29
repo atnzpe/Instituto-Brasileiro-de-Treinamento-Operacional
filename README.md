@@ -124,7 +124,7 @@ bun run preview   # visualiza a versão de produção localmente
 Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo detalha cada uma):
 
 - `REDIS_URL` — opcional, só usada pela API.
-- `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — destino e remetente do formulário de contato (opcionais; o padrão já é `comando.ibto@gmail.com` e `ouvidoria@ib-to.org`). No ambiente local o formulário não envia nada: a API só mostra no terminal o e-mail que seria enviado.
+- `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — destino e remetente do formulário de contato (opcionais; o padrão já é `comando.ibto@gmail.com` e `comando.ibto@ib-to.org`). No ambiente local o formulário não envia nada: a API só mostra no terminal o e-mail que seria enviado.
 - `VITE_CONTACT_ENDPOINT` — endereço do formulário de contato. Deixe em branco no ambiente local; o build de produção já recebe `/mensagem.php` pelo arquivo `.env.production` (sem segredos).
 
 ### Publicação (deploy)

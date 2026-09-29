@@ -194,7 +194,7 @@ if ($payload === null) {
 }
 
 $to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
-$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'ouvidoria@ib-to.org';
+$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'comando.ibto@ib-to.org';
 
 /** Header values never carry a line break, so nobody can add headers (Bcc…). */
 function header_value($value)

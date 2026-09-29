@@ -143,9 +143,9 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     expect((await post({ ...valid, name: 'João Conceição', message })).status).toBe(200)
     const [mail] = sentMails()
     expect(mail.to).toBe('comando.ibto@gmail.com')
-    expect(mail.from).toBe('ouvidoria@ib-to.org')
+    expect(mail.from).toBe('comando.ibto@ib-to.org')
     expect(mail.headers['Reply-To']).toBe(valid.email)
-    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <ouvidoria@ib-to.org>')
+    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando.ibto@ib-to.org>')
     expect(Object.keys(mail.headers)).not.toContain('X-Mailer')
     expect(decodeHeader(mail.subject)).toBe('Nova mensagem de contato — João Conceição')
     // Plain text: "&" stays "&" (no htmlspecialchars), lines end in CRLF.

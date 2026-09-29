@@ -24,7 +24,7 @@ const corsHeaders = {
 // prints the e-mail it would send in this terminal.
 // The institute's official contact inbox; override with CONTACT_TO_EMAIL.
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? 'comando.ibto@gmail.com'
-const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'ouvidoria@ib-to.org'
+const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? 'comando.ibto@ib-to.org'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
