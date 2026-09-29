@@ -26,7 +26,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 - "Testes automatizados" são `bun run lint`, `bun run test` (testes em `tests/`, com o executor do Bun) e `bun run build`; a CI em `.github/workflows/ci.yml` roda os três a cada push. O lint deve sair sem nenhum aviso (a regra `only-export-components` fica desligada só em `src/routes/`, porque o padrão do TanStack Router exporta `Route` e o componente juntos); qualquer aviso novo deve ser tratado. Lógica nova com regra de negócio (datas, status, cálculos) ganha teste. O deploy automático (`.github/workflows/deploy.yml`, FTPS) publica só a homologação; a produção ainda é manual.
 - O teste humano é da Aline ou do Gleyson. Nunca marque como feito antes de eles confirmarem.
 - Não reescreva histórico já enviado (nada de `--force`, `--amend` em commit publicado ou `reset --hard` sem pedir).
-- O `gh` (GitHub CLI) está instalado e autenticado como `atnzpe`: use-o para conferir PRs, CI e issues. Merge e criação de issues/PRs só com o OK do Gleyson.
+- Sem `gh` instalado nesta máquina: para issues e PRs, gere o texto ou um link pré-preenchido para o time colar no GitHub.
 
 ## Stack
 
