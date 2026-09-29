@@ -30,6 +30,13 @@ describe('public/.htaccess', () => {
     expect(htaccess).toContain('Require all denied')
   })
 
+  test('HSTS usa %{HTTPS}, não env=HTTPS (a HostGator não define a variável)', () => {
+    expect(htaccess).toMatch(
+      /<If "%\{HTTPS\} == 'on'">\s*\n\s*Header always set Strict-Transport-Security "max-age=\d+"\s*\n\s*<\/If>/,
+    )
+    expect(htaccess).not.toContain('env=HTTPS')
+  })
+
   test('bloqueia o arquivo de controle do deploy automático', () => {
     expect(htaccess).toMatch(/<Files "\.ftp-deploy-sync-state\.json">\s*\n\s*Require all denied/)
   })

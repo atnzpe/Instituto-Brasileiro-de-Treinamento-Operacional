@@ -55,7 +55,11 @@ ErrorDocument 404 /index.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "DENY"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
-  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+  # %{HTTPS} works on HostGator; the HTTPS env var ("env=HTTPS") is not set
+  # there, so the header never went out (homologação #15).
+  <If "%{HTTPS} == 'on'">
+    Header always set Strict-Transport-Security "max-age=31536000"
+  </If>
 
   # Report-only for now: logs violations in the browser console without
   # blocking anything, so the VLibras widget's real needs can be checked
