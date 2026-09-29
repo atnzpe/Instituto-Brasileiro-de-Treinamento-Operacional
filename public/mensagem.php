@@ -113,11 +113,13 @@ function rate_limit_salt($dir)
 }
 
 /**
- * Counts this request against the sender's hourly limit. Returns false when
- * the limit is already reached. Fails open (allows) if the folder can't be
- * written, so a hosting hiccup never blocks real visitors.
+ * Checks the sender's hourly limit and, with $record, counts one more sent
+ * message. Only messages that really went out are recorded, so failed
+ * attempts (invalid data, missing key, provider refusal) never lock anyone
+ * out. Returns false when the limit is already reached. Fails open (allows)
+ * if the folder can't be written, so a hosting hiccup never blocks visitors.
  */
-function within_rate_limit()
+function within_rate_limit($record)
 {
     $dir = defined('RATE_LIMIT_DIR') ? RATE_LIMIT_DIR : dirname(__DIR__) . '/.ibto-contact-limits';
     if (!is_dir($dir) && !@mkdir($dir, 0700, true)) {
@@ -139,7 +141,7 @@ function within_rate_limit()
     }));
 
     $allowed = count($times) < RATE_LIMIT_MAX;
-    if ($allowed) {
+    if ($allowed && $record) {
         $times[] = $now;
     }
     ftruncate($handle, 0);
@@ -160,7 +162,7 @@ function within_rate_limit()
     return $allowed;
 }
 
-if (!within_rate_limit()) {
+if (!within_rate_limit(false)) {
     fail(429, 'LIMITE_DE_ENVIOS', 'Você enviou muitas mensagens em pouco tempo. Tente novamente daqui a uma hora ou fale conosco pelo WhatsApp.');
 }
 
@@ -207,7 +209,8 @@ $emailBody = json_encode([
     'text' => "Nome: {$payload['name']}\nE-mail: {$payload['email']}\n\n{$payload['message']}",
 ]);
 
-$ch = curl_init('https://api.resend.com/emails');
+// Overridable only so the tests can point it at a local fake.
+$ch = curl_init(defined('RESEND_API_URL') ? RESEND_API_URL : 'https://api.resend.com/emails');
 curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => $emailBody,
@@ -231,5 +234,7 @@ if ($status < 200 || $status >= 300) {
     $reason = is_string($response) ? substr($response, 0, 500) : '';
     fail(502, 'RESEND_RECUSOU_' . $status, GENERIC_ERROR, "Resend HTTP $status: $reason");
 }
+
+within_rate_limit(true);
 
 succeed();

@@ -19,6 +19,33 @@ const port = 18000 + Math.floor(Math.random() * 1000)
 const url = `http://127.0.0.1:${port}/mensagem.php`
 let server: ReturnType<typeof Bun.spawn> | undefined
 
+// Stand-in for the Resend API: answers with fakeStatus and counts the calls,
+// so a "sent" message never leaves this machine.
+let fakeStatus = 200
+let fakeCalls = 0
+const fakeResend = Bun.serve({
+  port: 0,
+  fetch() {
+    fakeCalls++
+    const body = fakeStatus === 200 ? '{"id":"test"}' : '{"message":"domain not verified"}'
+    return new Response(body, { status: fakeStatus })
+  },
+})
+
+// mensagem.php reads config.php on every request, so tests can swap it.
+function writeConfig(apiKey: string) {
+  writeFileSync(
+    join(workDir, 'config.php'),
+    [
+      '<?php',
+      `define('RESEND_API_KEY', '${apiKey}');`,
+      `define('RESEND_API_URL', '${fakeResend.url}emails');`,
+      `define('RATE_LIMIT_DIR', ${JSON.stringify(limitsDir)});`,
+      '',
+    ].join('\n'),
+  )
+}
+
 const valid = { name: 'Maria Teste', email: 'maria@example.com', message: 'Olá, quero saber dos cursos.' }
 
 function post(body: unknown, headers: Record<string, string> = {}) {
@@ -32,12 +59,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 describe.skipIf(skip)('public/mensagem.php', () => {
   beforeAll(async () => {
     copyFileSync(join(root, 'public', 'mensagem.php'), join(workDir, 'mensagem.php'))
-    // Empty API key: valid messages stop at "no key" (503) instead of
-    // reaching Resend, which is enough to tell they passed every check.
-    writeFileSync(
-      join(workDir, 'config.php'),
-      `<?php\ndefine('RESEND_API_KEY', '');\ndefine('RATE_LIMIT_DIR', ${JSON.stringify(limitsDir)});\n`,
-    )
+    writeConfig('test-key')
     server = Bun.spawn([php!, '-S', `127.0.0.1:${port}`, '-t', workDir], {
       stdout: 'ignore',
       stderr: 'ignore',
@@ -55,10 +77,16 @@ describe.skipIf(skip)('public/mensagem.php', () => {
 
   afterAll(() => {
     server?.kill()
+    fakeResend.stop(true)
     rmSync(workDir, { recursive: true, force: true })
   })
 
-  beforeEach(() => rmSync(limitsDir, { recursive: true, force: true }))
+  beforeEach(() => {
+    rmSync(limitsDir, { recursive: true, force: true })
+    writeConfig('test-key')
+    fakeStatus = 200
+    fakeCalls = 0
+  })
 
   test('só aceita POST', async () => {
     expect((await fetch(url)).status).toBe(405)
@@ -72,8 +100,8 @@ describe.skipIf(skip)('public/mensagem.php', () => {
 
   test('aceita envio vindo do próprio site', async () => {
     const res = await post(valid, { Origin: `http://127.0.0.1:${port}` })
-    expect(res.status).toBe(503) // passou por tudo; só falta a chave da Resend
-    expect(await res.json()).toMatchObject({ codigo: 'CHAVE_RESEND_AUSENTE' })
+    expect(res.status).toBe(200)
+    expect(fakeCalls).toBe(1)
   })
 
   test('só aceita JSON', async () => {
@@ -89,21 +117,46 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     const res = await post({ ...valid, website: 'https://spam.example' })
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
+    expect(fakeCalls).toBe(0)
   })
 
   test('recusa nome com quebra de linha', async () => {
     expect((await post({ ...valid, name: 'Maria\nBcc: x@example.com' })).status).toBe(400)
   })
 
+  test('sem a chave da Resend responde 503 CHAVE_RESEND_AUSENTE', async () => {
+    writeConfig('')
+    const res = await post(valid)
+    expect(res.status).toBe(503)
+    expect(await res.json()).toMatchObject({ codigo: 'CHAVE_RESEND_AUSENTE' })
+  })
+
+  test('Resend recusou: 502 com o status dela no código', async () => {
+    fakeStatus = 403
+    const res = await post(valid)
+    expect(res.status).toBe(502)
+    expect(await res.json()).toMatchObject({ codigo: 'RESEND_RECUSOU_403' })
+  })
+
+  test('envios que falharam não gastam o limite (revisão da PR #16)', async () => {
+    writeConfig('')
+    for (let i = 0; i < 6; i++) {
+      expect((await post(valid)).status).toBe(503)
+    }
+    writeConfig('test-key')
+    expect((await post(valid)).status).toBe(200)
+  })
+
   test('limita a 5 envios por hora e não guarda o IP em texto', async () => {
     for (let i = 0; i < 5; i++) {
-      expect((await post(valid)).status).toBe(503)
+      expect((await post(valid)).status).toBe(200)
     }
     const blocked = await post(valid)
     expect(blocked.status).toBe(429)
     const { error, codigo } = (await blocked.json()) as { error: string; codigo: string }
     expect(codigo).toBe('LIMITE_DE_ENVIOS')
     expect(error).toContain('muitas mensagens')
+    expect(fakeCalls).toBe(5)
 
     for (const file of readdirSync(limitsDir)) {
       expect(file).not.toContain('127.0.0.1')

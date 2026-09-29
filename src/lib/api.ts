@@ -39,19 +39,25 @@ export function withCode(message: string, code: string) {
 }
 
 export async function submitContact(payload: ContactPayload) {
+  // AbortController + setTimeout instead of AbortSignal.timeout(), which
+  // Safari only has from version 16: there it threw before the request left.
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), CONTACT_TIMEOUT_MS)
   let res: Response
   try {
     res = await fetch(CONTACT_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(CONTACT_TIMEOUT_MS),
+      signal: controller.signal,
     })
   } catch {
+    clearTimeout(timer)
     // Offline, timed out or blocked on the way: the browser only says
     // "Failed to fetch", which means nothing to a visitor.
     throw new Error(withCode(CONNECTION_ERROR, 'SEM_CONEXAO'))
   }
+  clearTimeout(timer)
   const data: { error?: string; codigo?: string } = await res.json().catch(() => ({}))
   // No JSON error means the answer didn't come from mensagem.php (e.g. the
   // hosting firewall): show a message a visitor can act on. The code tells
