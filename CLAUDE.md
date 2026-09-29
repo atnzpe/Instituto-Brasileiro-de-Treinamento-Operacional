@@ -26,7 +26,7 @@ Clean Up ➡️ Próxima Issue/Branch seguindo o ROADMAP
 - "Testes automatizados" são `bun run lint`, `bun run test` (testes em `tests/`, com o executor do Bun) e `bun run build`; a CI em `.github/workflows/ci.yml` roda os três a cada push. O lint deve sair sem nenhum aviso (a regra `only-export-components` fica desligada só em `src/routes/`, porque o padrão do TanStack Router exporta `Route` e o componente juntos); qualquer aviso novo deve ser tratado. Lógica nova com regra de negócio (datas, status, cálculos) ganha teste. O deploy automático (`.github/workflows/deploy.yml`, FTPS) publica só a homologação; a produção ainda é manual.
 - O teste humano é da Aline ou do Gleyson. Nunca marque como feito antes de eles confirmarem.
 - Não reescreva histórico já enviado (nada de `--force`, `--amend` em commit publicado ou `reset --hard` sem pedir).
-- Issues, PRs e comentários: com o `gh` (no Windows, `"/c/Program Files/GitHub CLI/gh.exe"` pelo Bash; no PowerShell as aspas do `--jq` quebram).
+- Issues, PRs e comentários: com o `gh` (no Windows, `"/c/Program Files/GitHub CLI/gh.exe"` pelo Bash; no PowerShell as aspas do `--jq` quebram). Merge e criação de issues/PRs só com o OK do Gleyson.
 
 ## Stack
 
@@ -72,7 +72,7 @@ Cada mensagem faz o Claude reler a conversa inteira; conversas longas são o mai
 **Para quem pede (Gleyson, Aline):**
 
 - **Uma conversa por issue.** Terminou a issue (ou parou no teste humano), use `/clear`. Para retomar: "Vamos continuar a issue #N". O estado fica na issue, no ROADMAP e aqui, não na conversa.
-- Conversa longa sem ter terminado: `/compact` com o foco, por exemplo `/compact foco na homologação da #15`. `/context` mostra o que está ocupando espaço.
+- Conversa longa sem ter terminado: `/compact` com o foco, por exemplo `/compact foco no formulário da #28`. `/context` mostra o que está ocupando espaço.
 - **Seja específico:** cite a issue, o arquivo ou a página (`src/components/ContactForm.tsx`, `/cursos`), e junte vários pedidos numa mensagem só.
 - **Erros: cole o texto** (só as primeiras linhas do Console, sem a pilha inteira). Print só quando o problema for visual, e recortado na parte que importa.
 - **Tarefas grandes** (página nova, sistema das instituições): comece no Plan mode (Shift+Tab), aprove o plano e só então peça a execução.
