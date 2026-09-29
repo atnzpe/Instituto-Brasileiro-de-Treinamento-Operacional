@@ -3,7 +3,7 @@ import type { HomeContent } from '../../shared/content'
 
 export function AreasTeaser({ teaser }: { teaser: HomeContent['areasTeaser'] }) {
   return (
-    <section className="px-4 py-20 text-center sm:px-6">
+    <section className="px-safe-4 py-20 text-center sm:px-safe-6">
       <div className="mx-auto max-w-3xl">
         <h2 className="text-3xl text-white sm:text-4xl">{teaser.heading}</h2>
         <div className="mt-6 space-y-4">

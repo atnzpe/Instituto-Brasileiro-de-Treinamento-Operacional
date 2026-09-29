@@ -10,7 +10,7 @@ export function Hero({ hero }: { hero: HomeContent['hero'] }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
 
-      <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
+      <div className="relative mx-auto max-w-4xl px-safe-4 py-24 text-center sm:px-safe-6">
         <p className="font-accent text-lg italic tracking-wide text-brand-gold-light sm:text-xl">
           {hero.eyebrow}
         </p>

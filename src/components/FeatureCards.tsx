@@ -4,7 +4,7 @@ import { ArrowRightIcon } from './Icon'
 
 export function FeatureCards({ features }: { features: FeatureCard[] }) {
   return (
-    <section className="mx-auto -mt-20 max-w-6xl px-4 sm:px-6">
+    <section className="mx-auto -mt-20 max-w-6xl px-safe-4 sm:px-safe-6">
       <div className="relative z-10 grid gap-6 sm:grid-cols-3">
         {features.map((feature) => {
           const cardClassName =

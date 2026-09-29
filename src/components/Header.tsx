@@ -7,8 +7,8 @@ export function Header() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 pt-safe backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-safe-4 py-3 sm:px-safe-6">
         <Link to="/" className="shrink-0" onClick={() => setOpen(false)}>
           <img src="/images/logo.webp" alt="IBTO" className="h-12 w-auto" />
         </Link>
@@ -44,7 +44,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-white/10 bg-ink px-4 pb-4 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-white/10 bg-ink px-safe-4 pb-4 md:hidden">
           {nav.map((link) => (
             <Link
               key={link.href}
