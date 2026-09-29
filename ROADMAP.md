@@ -36,7 +36,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 
 ## 🚧 Pendente — falta um dado, credencial ou decisão, não código
 
-- [ ] **Caixa de e-mail do domínio para o formulário** — a Resend foi descartada (issue #28): o formulário vai enviar pelo `mail()` da HostGator, e para isso precisa existir no cPanel um endereço remetente do domínio (ex.: `contato-site@ib-to.org`)
+- [ ] **Conferir a entrega do formulário na homologação** — o formulário envia de `comando.ibto@gmail.com` para ele mesmo (decisão do Gleyson, 28/09/2026). Como a HostGator não assina pelo `gmail.com`, a mensagem pode cair no spam; se cair, o plano B é uma caixa do domínio como remetente (ver `docs/deploy-homologacao.md`)
 - [x] **E-mail definitivo de contato** — o formulário de contato envia para `comando.ibto@gmail.com`, e-mail oficial do IBTO
 - [ ] **Lista real da Rede Nacional** — nome, função, cidade/estado, telefone e foto (se tiver) de cada representante/instrutor/monitor, para popular a página `/rede-nacional`
 - [ ] **Conferir os telefones dos cartazes** — os cartazes do Recife trazem números de WhatsApp diferentes entre si: o de Formação de Instrutores mostra (81) 99162-3046 e (81) 99809-8742; os de Combate Corpo a Corpo e Combate com Faca mostram 8191623046 (10 dígitos, faltando um) e 81990098742 (um dígito diferente no meio). O site usa os números do primeiro cartaz nos três cursos até a confirmação
@@ -172,6 +172,8 @@ Pontos a conferir na carteirinha atual: o CPF impresso aparece **sem o zero inic
 
 ### Decisões que dependem de vocês
 
+Acompanhamento na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34). Já respondido pelo Eduardo (28/09/2026): existe um único IBTO, com **equipes filiadas**; anuidade 2027 de **R$ 90,00**; qualquer filiado pode lançar cursos na sua área, **com revisão** do IBTO.
+
 1. ~~Backend da plataforma~~ — decidido: PHP + MySQL no plano atual (26/09/2026). Forma de organizar o PHP: **recomendado Laravel 13** (exige PHP 8.3+; segurança por padrão, padrão de mercado; comparação em [docs/guia-primeiras-tarefas.md](./docs/guia-primeiras-tarefas.md#laravel-ou-php-simples)), aguardando confirmação
 2. Vídeo das aulas: serviço externo incorporado ou outra solução
 3. Pagamento: fluxo manual agora ou já escolher o gateway
@@ -182,27 +184,48 @@ Pontos a conferir na carteirinha atual: o CPF impresso aparece **sem o zero inic
 
 ## 🔭 Próximos passos
 
-Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de trabalho do README.
+Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de trabalho do README. Concluídas ficam com ✅.
+
+### Site institucional (ib-to.org)
 
 | # | Issue / branch | Entrega | Depende de |
 | --- | --- | --- | --- |
-| 1 | `feature/cursos` — ✅ teste humano aprovado e code review feito em 26/09/2026 (PR #6, fecha a issue #5); aguardando merge | Grade de treinamentos presenciais com modal e aviso da plataforma online | Merge |
-| 1b | ✅ `chore/github-actions-ci` — issue [#13](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/13), mesclada em 27/09/2026 (PR #14) | Integração contínua na aba **Actions**: a cada push, roda `bun install`, `bun run lint`, `bun run test` e `bun run build` e mostra ✅/❌ na branch e no PR; `.gitattributes` padroniza o fim de linha | — |
-| 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado", sem preço nem botão, sozinho depois da data; botões de "Pré-inscrição"; primeiro teste automatizado | — |
-| 1d | `feature/safe-area` — issue [#10](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10) | Safe Area em todas as páginas: `viewport-fit=cover` e espaçamentos `env(safe-area-inset-*)` no header, rodapé, menu mobile, modal, conteúdo e VLibras, com utilitários reutilizáveis | — |
-| 1e | `feature/offline-first-pwa` — issue [#9](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9) | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline | 1d e 2 (service worker exige HTTPS) |
-| 2 | ✅ `feature/homologacao-hostgator` — issues [#15](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/15), [#19](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/19) e [#24](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/24), mesclada em 28/09/2026 (PR #16) | Primeiro deploy: `homolog.ib-to.org` protegido por senha (pedida só depois do HTTPS), com `.htaccess` (HTTPS, HSTS, rotas, 404 de verdade, segurança, `noindex`), guia `docs/deploy-homologacao.md` e pacote `.zip`; formulário de contato protegido (origem, anti-robô, limite de envios e códigos de erro explícitos) | — |
-| 2b | 🔜 `feature/contato-mail-hostgator` — issue [#28](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/28) | Formulário de contato envia pelo `mail()` do PHP da HostGator (mesma lógica do site da CBSA), sem Resend e sem chave de API: remetente do próprio domínio, `Reply-To` com o e-mail de quem escreveu e quebras de linha removidas dos cabeçalhos | 2 e caixa de e-mail do domínio no cPanel |
-| 3 | `docs/plataforma-cursos-definicao` | Confirmar o Laravel 13 como estrutura do backend PHP (recomendado; publicação sem SSH descrita no guia), o vídeo, o gateway e o repositório da plataforma | Decisões 2 e 3 |
-| 4 | `feature/plataforma-base` | Projeto novo em subdomínio de testes: layout tecnológico, catálogo de cursos e banco MySQL | 3 |
-| 5 | `feature/plataforma-filiados` | Cadastro e login; modalidades e acesso restrito | Decisão 4 |
-| 6 | `feature/plataforma-admin` | Painel: cursos, aulas, inscritos (CSV) e filiados | 4 e 5 |
-| 7 | `feature/plataforma-matricula-pagamento` | Matrícula com pagamento (manual e depois gateway) | Decisão 3 |
-| 8 | `feature/ouvidoria` | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | 2 |
-| 9 | `feature/certificados` | Emissão de certificado ao concluir o curso | 6 |
-| 10 | `feature/link-plataforma-no-site` | Preencher o endereço da plataforma para o botão aparecer na página de Cursos | 4 |
-| 11 ✅ #26 | `feature/deploy-automatico-homologacao`, mesclada em 28/09/2026 (PR #16) | Deploy automático pela aba **Actions**: a cada merge na `main`, gerar o build e enviar o `dist/` por FTP para a HostGator (primeiro para homologação), com usuário e senha FTP guardados nos segredos do repositório | 1b e 2 |
-| 12 | `feature/validacao-carteirinha` | Página pública de validação da carteirinha (aberta pelo QR code), mostrando só registro, status/validade, categoria, área, nível e nome abreviado; política de privacidade publicada | 4, 5 e decisão 7 |
+| 1 | ✅ `feature/cursos` — issue #5, mesclada (PR #6) | Grade de treinamentos presenciais com modal e aviso da plataforma online | — |
+| 1b | ✅ `chore/github-actions-ci` — issue [#13](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/13), mesclada em 27/09/2026 (PR #14) | CI na aba **Actions**: lint, testes e build a cada push; `.gitattributes` padroniza o fim de linha | — |
+| 1c | ✅ `fix/cursos-treinamentos-passados` — issue [#8](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/8), mesclada em 27/09/2026 (PR #12) | Treinamento passado aparece como "Encerrado"; botões de "Pré-inscrição"; primeiro teste automatizado | — |
+| 1d | ✅ `feature/safe-area` — issue [#10](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/10), mesclada em 28/09/2026 (PR #32) | Safe Area em todas as páginas: `viewport-fit=cover` e utilitários `px-safe-N`, `pt-safe`, `pb-safe-N` e `dialog-safe` no header, rodapé, menu, modal, conteúdo e VLibras | — |
+| 1e | ✅ `feature/offline-first-pwa` — issue [#9](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/9), mesclada em 29/09/2026 (PR #50); teste humano OK no computador, Android e iPhone | Site abre sem internet depois da primeira visita e pode ser instalado no celular (PWA), com aviso claro no formulário de contato offline (`SEM_INTERNET`) | — |
+| 1f | ✅ `feature/home-cards-com-foto` — issue [#17](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/17), mesclada em 28/09/2026 (PR #18) | Fotos nos cards de Capacitações da home e cards do topo no tema escuro | — |
+| 1g | ✅ `feature/banners-paginas` — issue [#20](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/20), mesclada em 28/09/2026 (PR #31) | Banners do site original em Áreas de Atuação, Quem Somos e Contato (WebP 800/1600 px) | — |
+| 1h | ✅ `docs/claude-md-produtividade` — issue [#22](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/22), mesclada em 28/09/2026 (PR #23) | Regras no CLAUDE.md para economizar tokens no Claude Code | — |
+| 2 | ✅ `feature/homologacao-hostgator` — issues [#15](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/15), [#19](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/19) e [#24](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/24), mesclada em 28/09/2026 (PR #16) | Primeiro deploy: `homolog.ib-to.org` protegido por senha (pedida só depois do HTTPS), `.htaccess` completo, guia de deploy e formulário protegido (origem, anti-robô, limite de envios, códigos de erro) | — |
+| 2a | ✅ `feature/deploy-automatico-homologacao` — issue [#26](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/26), mesclada em 28/09/2026 (PR #16) | Deploy automático da homologação por FTPS a cada merge na `main` | — |
+| 2b | ✅ `feature/contato-mail-hostgator` — issue [#28](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/28), mesclada em 28/09/2026 (PR #30) | Formulário de contato pelo `mail()` da HostGator, sem Resend: de `comando.ibto@gmail.com` para ele mesmo, `Reply-To` com o visitante, cabeçalhos sem quebra de linha | — |
+| 3 | [#11](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/11) Cadastro das equipes filiadas | Etapa 1: lista pública das equipes em `/rede-nacional`, só com dados autorizados. Etapa 2: [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37), na plataforma | Planilha do Eduardo |
+| 4 | [#4](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/4) Revalidação de QA | Veredito da Aline sobre o site na homologação | Aline |
+| 5 | `feature/ouvidoria` (sem issue ainda) | Chamados com protocolo no site institucional (PHP e MySQL da HostGator), complementando o formulário de contato | — |
+
+### Plataforma de cursos online — épico [#33](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/33)
+
+Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste repositório até a plataforma ter o seu (depois são transferidas com `gh issue transfer`). A lógica de negócio pode ser consultada no DojoManager, sem reaproveitar código nem infraestrutura.
+
+| Issue | Entrega | Depende de |
+| --- | --- | --- |
+| [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34) | **Definições do Eduardo:** Laravel 13, vídeo, pagamento, quem recebe (e divisão com o instrutor), endereço, papéis, quem cadastra filiados | Eduardo |
+| [#35](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/35) | Base: Laravel 13 + React/Vite + MySQL em `cursos-homolog.ib-to.org`, publicação sem SSH (Cron Job), CI | #34 |
+| [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login e papéis: aluno, filiado, instrutor e administrador | #35 |
+| [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37) | Filiados, equipes filiadas e anuidade (R$ 90 em 2027), dados sensíveis criptografados | #36 |
+| [#38](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/38) | Landing page chamativa e catálogo (gratuito restrito, pago aberto, pago restrito) | #35 |
+| [#39](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/39) | Cursos, módulos, aulas (vídeo incorporado) e apostilas na área restrita | #36 e #38 |
+| [#40](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/40) | Filiado cria curso na sua área, com revisão do IBTO | #37 e #39 |
+| [#41](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/41) | Matrícula com PIX manual, trava de vagas, cancelar sem apagar | #39 |
+| [#42](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/42) | Gateway de pagamento e cobrança recorrente da anuidade | #34 e #41 |
+| [#43](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/43) | Provas e progresso do aluno | #39 |
+| [#44](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/44) | Certificados com validação pública | #43 |
+| [#45](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/45) | Painel administrativo: cursos, matrículas (CSV), filiados, financeiro | #37 e #41 |
+| [#46](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/46) | Validação pública da carteirinha (QR code) | #37 |
+| [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47) | LGPD: política de privacidade, consentimento, registro de acesso, DPO | #36 |
+| [#48](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/48) | Link da plataforma na página `/cursos` do site | #35 |
 
 ### Primeiras tarefas da equipe
 
