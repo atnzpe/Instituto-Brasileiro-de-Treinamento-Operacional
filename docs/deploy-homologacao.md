@@ -46,11 +46,11 @@ O site força HTTPS; sem certificado, o navegador mostra erro.
 
 No primeiro envio do formulário, o `mensagem.php` cria sozinho a pasta oculta `.ibto-contact-limits` na raiz da conta (fora das pastas públicas). Ela guarda o limite de 5 mensagens por hora de cada visitante, só com um código embaralhado do IP (nunca o IP em si). Não apague essa pasta.
 
-**O `config.php` é opcional.** O formulário envia pelo `mail()` do PHP da HostGator, de `comando.ibto@ib-to.org` para `comando.ibto@gmail.com`, sem chave nenhuma. Só crie o `config.php` (a partir do `config.example.php`) se precisar trocar esses endereços.
+**O `config.php` é opcional.** O formulário envia pelo `mail()` do PHP da HostGator, de `comando.ibto@gmail.com` para ele mesmo, sem chave nenhuma e sem criar caixa de e-mail. Só crie o `config.php` (a partir do `config.example.php`) se precisar trocar esses endereços.
 
-Para o e-mail chegar na **caixa de entrada** (e não no spam), faça uma vez no cPanel:
+**Risco conhecido:** a HostGator não pode assinar e-mails em nome do `gmail.com`, então o Gmail pode tratar a mensagem como falsificada e mandá-la para o **spam** ou recusá-la. Se isso acontecer no teste, o plano B é:
 
-- [ ] **E-mail Accounts** → crie a caixa `comando.ibto@ib-to.org` (senha forte, guardada fora do repositório). Ela é o remetente do formulário.
+- [ ] **E-mail Accounts** → criar uma caixa do domínio (ex.: `comando.ibto@ib-to.org`) e colocá-la como `CONTACT_FROM_EMAIL` num `config.php` no servidor.
 - [ ] **Email Deliverability** → o domínio `ib-to.org` deve mostrar **SPF** e **DKIM** como "Valid". Se aparecer "Problems Exist", clique em **Repair**.
 
 **Ponto seguro:** site enviado.

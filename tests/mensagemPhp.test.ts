@@ -30,7 +30,7 @@ interface CapturedMail {
   subject: string
   message: string
   headers: Record<string, string>
-  from: string
+  params: string
 }
 
 function sentMails(): CapturedMail[] {
@@ -50,13 +50,14 @@ function decodeHeader(value: string) {
 }
 
 // mensagem.php reads config.php on every request, so tests can swap it.
-function writeConfig(captureFile = mailFile) {
+function writeConfig(captureFile = mailFile, fromEmail?: string) {
   writeFileSync(
     join(workDir, 'config.php'),
     [
       '<?php',
       `define('MAIL_CAPTURE_FILE', ${JSON.stringify(captureFile)});`,
       `define('RATE_LIMIT_DIR', ${JSON.stringify(limitsDir)});`,
+      fromEmail ? `define('CONTACT_FROM_EMAIL', ${JSON.stringify(fromEmail)});` : '',
       '',
     ].join('\n'),
   )
@@ -143,15 +144,22 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     expect((await post({ ...valid, name: 'João Conceição', message })).status).toBe(200)
     const [mail] = sentMails()
     expect(mail.to).toBe('comando.ibto@gmail.com')
-    expect(mail.from).toBe('comando.ibto@ib-to.org')
+    // Gmail sender: no -f, since HostGator can't pass SPF for gmail.com.
+    expect(mail.params).toBe('')
     expect(mail.headers['Reply-To']).toBe(valid.email)
-    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando.ibto@ib-to.org>')
+    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando.ibto@gmail.com>')
     expect(Object.keys(mail.headers)).not.toContain('X-Mailer')
     expect(decodeHeader(mail.subject)).toBe('Nova mensagem de contato — João Conceição')
     // Plain text: "&" stays "&" (no htmlspecialchars), lines end in CRLF.
     const text = Buffer.from(mail.message, 'base64').toString('utf8')
     expect(text).toContain('Nome: João Conceição\r\n')
     expect(text).toContain('Preço & horário do curso?\r\nLinha 2 com acentuação.')
+  })
+
+  test('remetente do próprio domínio vai também no envelope (-f)', async () => {
+    writeConfig(mailFile, 'comando.ibto@ib-to.org')
+    expect((await post(valid)).status).toBe(200)
+    expect(sentMails()[0].params).toBe('-fcomando.ibto@ib-to.org')
   })
 
   test('nenhum cabeçalho do e-mail tem quebra de linha', async () => {

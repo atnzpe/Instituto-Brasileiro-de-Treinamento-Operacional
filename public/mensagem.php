@@ -194,7 +194,7 @@ if ($payload === null) {
 }
 
 $to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
-$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'comando.ibto@ib-to.org';
+$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'comando.ibto@gmail.com';
 
 /** Header values never carry a line break, so nobody can add headers (Bcc…). */
 function header_value($value)
@@ -230,12 +230,14 @@ $headers = [
  */
 function send_mail($to, $subject, $message, $headers, $from)
 {
+    // -f puts the sender in the envelope too, which helps SPF, but only for
+    // our own domain: HostGator isn't an authorized server for gmail.com, so
+    // a Gmail envelope would fail SPF outright. Then the account's default is used.
+    $params = preg_match('/@ib-to\.org$/i', $from) ? '-f' . $from : '';
     if (defined('MAIL_CAPTURE_FILE')) {
-        $mail = compact('to', 'subject', 'message', 'headers', 'from');
+        $mail = compact('to', 'subject', 'message', 'headers', 'params');
         return @file_put_contents(MAIL_CAPTURE_FILE, json_encode($mail) . "\n", FILE_APPEND | LOCK_EX) !== false;
     }
-    // -f puts our domain in the envelope sender too, which helps SPF.
-    $params = filter_var($from, FILTER_VALIDATE_EMAIL) ? '-f' . $from : '';
     try {
         return mail($to, $subject, $message, $headers, $params);
     } catch (Throwable $e) {
