@@ -124,7 +124,7 @@ O GitHub Actions gera o site e envia para `homolog.ib-to.org` por **FTPS** (FTP 
 - [ ] Senha: use o **gerador** do cPanel (senha forte). Guarde para o passo 2; não mande por chat, issue ou WhatsApp.
 - [ ] **Diretório: `homolog.ib-to.org`**. Confira antes de salvar: o cPanel às vezes sugere `public_html/deploy-homolog`, e aí o deploy iria para o lugar errado.
 - [ ] Cota: ilimitada → **Criar conta FTP**.
-- [ ] Na lista, na linha da conta nova, clique em **Configurar cliente FTP** e anote o **usuário completo** (`deploy-homolog@ib-to.org`). O servidor FTP **não** é o `ftp.ib-to.org` que o cPanel sugere: o certificado da HostGator só vale para o nome do servidor, que no nosso plano é **`br1098.hostgator.com.br`** (aparece no cPanel em "Informações gerais" → "Nome do servidor").
+- [ ] Na lista, na linha da conta nova, clique em **Configurar cliente FTP** e anote o **usuário completo** (`deploy-homolog@homolog.ib-to.org`: o cPanel usa o domínio da pasta escolhida). O servidor FTP **não** é o `ftp.ib-to.org` que o cPanel sugere: o certificado da HostGator só vale para o nome do servidor, que no nosso plano é **`br1098.hostgator.com.br`** (aparece no cPanel em "Informações gerais" → "Nome do servidor").
 
 ### 2. Guardar o acesso no GitHub (sem aparecer no código)
 
@@ -134,7 +134,7 @@ O GitHub Actions gera o site e envia para `homolog.ib-to.org` por **FTPS** (FTP 
 | Nome | Valor |
 |---|---|
 | `FTP_SERVER` | `br1098.hostgator.com.br` |
-| `FTP_USERNAME` | o usuário completo (`deploy-homolog@ib-to.org`) |
+| `FTP_USERNAME` | o usuário completo (`deploy-homolog@homolog.ib-to.org`: o cPanel usa o domínio da pasta escolhida) |
 | `FTP_PASSWORD` | a senha da conta FTP |
 
 Depois de salvo, nem você nem ninguém consegue ler o valor de volta no GitHub, só trocar.
