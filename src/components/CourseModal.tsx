@@ -60,7 +60,7 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
       onClick={(event) => {
         if (event.target === event.currentTarget) event.currentTarget.close()
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-2xl border border-white/10 bg-ink p-0 text-white backdrop:bg-black/80"
+      className="dialog-safe m-auto max-w-lg rounded-2xl border border-white/10 bg-ink p-0 text-white backdrop:bg-black/80"
     >
       {course && (
         <div className="relative p-6 sm:p-8">

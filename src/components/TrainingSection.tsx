@@ -9,7 +9,7 @@ export function TrainingSection({ training }: { training: HomeContent['training'
         alt=""
         className="pointer-events-none absolute right-0 top-1/2 hidden h-[44rem] w-auto -translate-y-1/2 translate-x-1/3 opacity-[0.07] sm:block"
       />
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-safe-4 sm:px-safe-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold tracking-[0.2em] text-brand-gold-light">
             {training.eyebrow}

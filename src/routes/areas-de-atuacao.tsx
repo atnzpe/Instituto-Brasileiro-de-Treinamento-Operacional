@@ -25,7 +25,7 @@ function AreasDeAtuacaoPage() {
   return (
     <>
       <PageBanner banner={data.banner} />
-      <div className="bg-ink px-4 py-16 sm:px-6">
+      <div className="bg-ink px-safe-4 py-16 sm:px-safe-6">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <h1 className="text-4xl text-white sm:text-5xl">{data.heading}</h1>

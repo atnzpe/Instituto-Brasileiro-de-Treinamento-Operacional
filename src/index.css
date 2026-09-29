@@ -39,6 +39,37 @@
   }
 }
 
+/* Safe Area (issue #10). index.html uses viewport-fit=cover, so the page
+   runs under the notch, dynamic island, rounded corners and gesture bar;
+   backgrounds stay full-bleed and these keep content out of those areas.
+   On a computer every env() is 0, so nothing changes there.
+   Use px-safe-N instead of px-N on any block that touches the side edges. */
+@utility px-safe-* {
+  padding-left: max(calc(var(--spacing) * --value(integer)), env(safe-area-inset-left, 0px));
+  padding-right: max(calc(var(--spacing) * --value(integer)), env(safe-area-inset-right, 0px));
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Bottom padding of N plus the gesture bar, for blocks at the bottom edge. */
+@utility pb-safe-* {
+  padding-bottom: calc(var(--spacing) * --value(integer) + env(safe-area-inset-bottom, 0px));
+}
+
+/* Modal (<dialog>) always inside the safe area, so its close button can be reached. */
+@utility dialog-safe {
+  width: calc(100% - 2rem - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  max-height: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+
+/* VLibras injects its own CSS ([vw] { right: 0 }); div[vw] wins on
+   specificity and moves the button off the notch with the phone sideways. */
+div[vw].enabled {
+  right: env(safe-area-inset-right, 0px);
+}
+
 @layer components {
   /* QA_REPORT.html P3: no way for keyboard users to bypass the header nav.
      Hidden until focused, then pinned to the top-left corner. */
@@ -55,6 +86,7 @@
   }
 
   .skip-link:focus {
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
+    left: max(1rem, env(safe-area-inset-left, 0px));
   }
 }

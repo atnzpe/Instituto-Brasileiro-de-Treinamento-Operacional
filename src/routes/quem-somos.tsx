@@ -28,7 +28,7 @@ function QuemSomosPage() {
   return (
     <>
       <PageBanner banner={data.banner} />
-      <div className="bg-ink px-4 py-16 sm:px-6">
+      <div className="bg-ink px-safe-4 py-16 sm:px-safe-6">
         <div className="mx-auto max-w-5xl space-y-20">
           <section>
             <h1 className="text-4xl text-white sm:text-5xl">{data.intro.heading}</h1>

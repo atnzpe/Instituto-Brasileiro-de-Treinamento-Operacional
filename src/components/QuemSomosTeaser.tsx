@@ -7,7 +7,7 @@ export function QuemSomosTeaser({
   teaser: HomeContent['quemSomosTeaser']
 }) {
   return (
-    <section className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
+    <section className="mx-auto max-w-3xl px-safe-4 py-20 text-center sm:px-safe-6">
       <p className="text-sm font-semibold tracking-[0.2em] text-brand-gold-light">
         {teaser.eyebrow}
       </p>
