@@ -19,28 +19,45 @@ const port = 18000 + Math.floor(Math.random() * 1000)
 const url = `http://127.0.0.1:${port}/mensagem.php`
 let server: ReturnType<typeof Bun.spawn> | undefined
 
-// Stand-in for the Resend API: answers with fakeStatus and counts the calls,
-// so a "sent" message never leaves this machine.
-let fakeStatus = 200
-let fakeCalls = 0
-const fakeResend = Bun.serve({
-  port: 0,
-  fetch() {
-    fakeCalls++
-    const body = fakeStatus === 200 ? '{"id":"test"}' : '{"message":"domain not verified"}'
-    return new Response(body, { status: fakeStatus })
-  },
-})
+// With MAIL_CAPTURE_FILE set, mensagem.php writes each e-mail to this file
+// (one JSON per line) instead of calling mail(), so nothing leaves the machine.
+const mailFile = join(workDir, 'mails.jsonl')
+// A path that can't be written: stands in for mail() returning false.
+const brokenMailFile = join(workDir, 'no-such-folder', 'mails.jsonl')
+
+interface CapturedMail {
+  to: string
+  subject: string
+  message: string
+  headers: Record<string, string>
+  params: string
+}
+
+function sentMails(): CapturedMail[] {
+  if (!existsSync(mailFile)) return []
+  return readFileSync(mailFile, 'utf8')
+    .trim()
+    .split('\n')
+    .map((line) => JSON.parse(line) as CapturedMail)
+}
+
+/** Reverses PHP's mb_encode_mimeheader (=?UTF-8?B?…?= words). */
+function decodeHeader(value: string) {
+  // Whitespace between two encoded words is folding, not text (RFC 2047).
+  return value
+    .replace(/\?=\s+=\?/g, '?==?')
+    .replace(/=\?UTF-8\?B\?([^?]*)\?=/g, (_, b64: string) => Buffer.from(b64, 'base64').toString('utf8'))
+}
 
 // mensagem.php reads config.php on every request, so tests can swap it.
-function writeConfig(apiKey: string) {
+function writeConfig(captureFile = mailFile, fromEmail?: string) {
   writeFileSync(
     join(workDir, 'config.php'),
     [
       '<?php',
-      `define('RESEND_API_KEY', '${apiKey}');`,
-      `define('RESEND_API_URL', '${fakeResend.url}emails');`,
+      `define('MAIL_CAPTURE_FILE', ${JSON.stringify(captureFile)});`,
       `define('RATE_LIMIT_DIR', ${JSON.stringify(limitsDir)});`,
+      fromEmail ? `define('CONTACT_FROM_EMAIL', ${JSON.stringify(fromEmail)});` : '',
       '',
     ].join('\n'),
   )
@@ -59,7 +76,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 describe.skipIf(skip)('public/mensagem.php', () => {
   beforeAll(async () => {
     copyFileSync(join(root, 'public', 'mensagem.php'), join(workDir, 'mensagem.php'))
-    writeConfig('test-key')
+    writeConfig()
     server = Bun.spawn([php!, '-S', `127.0.0.1:${port}`, '-t', workDir], {
       stdout: 'ignore',
       stderr: 'ignore',
@@ -77,15 +94,13 @@ describe.skipIf(skip)('public/mensagem.php', () => {
 
   afterAll(() => {
     server?.kill()
-    fakeResend.stop(true)
     rmSync(workDir, { recursive: true, force: true })
   })
 
   beforeEach(() => {
     rmSync(limitsDir, { recursive: true, force: true })
-    writeConfig('test-key')
-    fakeStatus = 200
-    fakeCalls = 0
+    rmSync(mailFile, { force: true })
+    writeConfig()
   })
 
   test('só aceita POST', async () => {
@@ -101,7 +116,7 @@ describe.skipIf(skip)('public/mensagem.php', () => {
   test('aceita envio vindo do próprio site', async () => {
     const res = await post(valid, { Origin: `http://127.0.0.1:${port}` })
     expect(res.status).toBe(200)
-    expect(fakeCalls).toBe(1)
+    expect(sentMails()).toHaveLength(1)
   })
 
   test('só aceita JSON', async () => {
@@ -117,33 +132,57 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     const res = await post({ ...valid, website: 'https://spam.example' })
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
-    expect(fakeCalls).toBe(0)
+    expect(sentMails()).toHaveLength(0)
   })
 
   test('recusa nome com quebra de linha', async () => {
     expect((await post({ ...valid, name: 'Maria\nBcc: x@example.com' })).status).toBe(400)
   })
 
-  test('sem a chave da Resend responde 503 CHAVE_RESEND_AUSENTE', async () => {
-    writeConfig('')
-    const res = await post(valid)
-    expect(res.status).toBe(503)
-    expect(await res.json()).toMatchObject({ codigo: 'CHAVE_RESEND_AUSENTE' })
+  test('monta o e-mail: remetente do domínio, resposta para o visitante, sem X-Mailer', async () => {
+    const message = 'Preço & horário do curso?\nLinha 2 com acentuação.'
+    expect((await post({ ...valid, name: 'João Conceição', message })).status).toBe(200)
+    const [mail] = sentMails()
+    expect(mail.to).toBe('comando.ibto@gmail.com')
+    // Gmail sender: no -f, since HostGator can't pass SPF for gmail.com.
+    expect(mail.params).toBe('')
+    expect(mail.headers['Reply-To']).toBe(valid.email)
+    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando.ibto@gmail.com>')
+    expect(Object.keys(mail.headers)).not.toContain('X-Mailer')
+    expect(decodeHeader(mail.subject)).toBe('Nova mensagem de contato — João Conceição')
+    // Plain text: "&" stays "&" (no htmlspecialchars), lines end in CRLF.
+    const text = Buffer.from(mail.message, 'base64').toString('utf8')
+    expect(text).toContain('Nome: João Conceição\r\n')
+    expect(text).toContain('Preço & horário do curso?\r\nLinha 2 com acentuação.')
   })
 
-  test('Resend recusou: 502 com o status dela no código', async () => {
-    fakeStatus = 403
+  test('remetente do próprio domínio vai também no envelope (-f)', async () => {
+    writeConfig(mailFile, 'comando.ibto@ib-to.org')
+    expect((await post(valid)).status).toBe(200)
+    expect(sentMails()[0].params).toBe('-fcomando.ibto@ib-to.org')
+  })
+
+  test('nenhum cabeçalho do e-mail tem quebra de linha', async () => {
+    expect((await post(valid)).status).toBe(200)
+    const [mail] = sentMails()
+    for (const value of [mail.subject, ...Object.values(mail.headers)]) {
+      expect(value).not.toMatch(/[\r\n]/)
+    }
+  })
+
+  test('servidor de e-mail recusou: 502 EMAIL_NAO_ENVIADO', async () => {
+    writeConfig(brokenMailFile)
     const res = await post(valid)
     expect(res.status).toBe(502)
-    expect(await res.json()).toMatchObject({ codigo: 'RESEND_RECUSOU_403' })
+    expect(await res.json()).toMatchObject({ codigo: 'EMAIL_NAO_ENVIADO' })
   })
 
   test('envios que falharam não gastam o limite (revisão da PR #16)', async () => {
-    writeConfig('')
+    writeConfig(brokenMailFile)
     for (let i = 0; i < 6; i++) {
-      expect((await post(valid)).status).toBe(503)
+      expect((await post(valid)).status).toBe(502)
     }
-    writeConfig('test-key')
+    writeConfig()
     expect((await post(valid)).status).toBe(200)
   })
 
@@ -156,7 +195,7 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     const { error, codigo } = (await blocked.json()) as { error: string; codigo: string }
     expect(codigo).toBe('LIMITE_DE_ENVIOS')
     expect(error).toContain('muitas mensagens')
-    expect(fakeCalls).toBe(5)
+    expect(sentMails()).toHaveLength(5)
 
     for (const file of readdirSync(limitsDir)) {
       expect(file).not.toContain('127.0.0.1')

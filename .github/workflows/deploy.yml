@@ -83,8 +83,8 @@ jobs:
           name: site
           path: dist/
 
-      # Only uploads what changed. config.php (the Resend key, created by hand
-      # on the server) is excluded, so it is never overwritten or deleted.
+      # Only uploads what changed. config.php (optional overrides, created by
+      # hand on the server) is excluded, so it is never overwritten or deleted.
       - name: Enviar por FTPS
         uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
         with:

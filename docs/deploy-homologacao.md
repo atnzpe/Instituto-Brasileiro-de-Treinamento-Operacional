@@ -46,7 +46,12 @@ O site força HTTPS; sem certificado, o navegador mostra erro.
 
 No primeiro envio do formulário, o `mensagem.php` cria sozinho a pasta oculta `.ibto-contact-limits` na raiz da conta (fora das pastas públicas). Ela guarda o limite de 5 mensagens por hora de cada visitante, só com um código embaralhado do IP (nunca o IP em si). Não apague essa pasta.
 
-**Não crie o `config.php` agora.** Ele guarda a chave da Resend, que ainda não existe. Sem ele, o formulário de contato mostra uma mensagem de erro — é esperado.
+**O `config.php` é opcional.** O formulário envia pelo `mail()` do PHP da HostGator, de `comando.ibto@gmail.com` para ele mesmo, sem chave nenhuma e sem criar caixa de e-mail. Só crie o `config.php` (a partir do `config.example.php`) se precisar trocar esses endereços.
+
+**Risco conhecido:** a HostGator não pode assinar e-mails em nome do `gmail.com`, então o Gmail pode tratar a mensagem como falsificada e mandá-la para o **spam** ou recusá-la. Se isso acontecer no teste, o plano B é:
+
+- [ ] **E-mail Accounts** → criar uma caixa do domínio (ex.: `comando.ibto@ib-to.org`) e colocá-la como `CONTACT_FROM_EMAIL` num `config.php` no servidor.
+- [ ] **Email Deliverability** → o domínio `ib-to.org` deve mostrar **SPF** e **DKIM** como "Valid". Se aparecer "Problems Exist", clique em **Repair**.
 
 **Ponto seguro:** site enviado.
 
@@ -84,7 +89,7 @@ Use o Chrome ou o Edge. Para ver os detalhes técnicos, abra as ferramentas do n
 - [ ] Abra `/pagina-que-nao-existe`: aparece a página **"não encontrada"** do site. No F12 → aba **Rede (Network)**, recarregue: a primeira linha mostra **status 404**.
 - [ ] Em `/cursos`: selos de status, modal e botões de pré-inscrição funcionando.
 - [ ] Widget **VLibras** (mãozinha azul na lateral) abre e traduz.
-- [ ] Formulário de contato: ao enviar, aparece uma **mensagem de erro** (esperado, falta a chave da Resend).
+- [ ] Formulário de contato: ao enviar, aparece a confirmação de envio e a mensagem chega em `comando.ibto@gmail.com` na **caixa de entrada** (confira também o spam). O remetente é "IBTO — Ouvidoria", e **Responder** vai para o e-mail digitado no formulário. Se aparecer erro com `código: EMAIL_NAO_ENVIADO`, o servidor de e-mail recusou: veja cPanel → **Erros** e avise o Gleyson.
 - [ ] Envie o formulário **6 vezes seguidas**: da 6ª em diante aparece "Você enviou muitas mensagens em pouco tempo…" (limite anti-robô funcionando).
 - [ ] A página `/contato` **não mostra** o e-mail do IBTO escrito (é de propósito: ele fica só no servidor).
 

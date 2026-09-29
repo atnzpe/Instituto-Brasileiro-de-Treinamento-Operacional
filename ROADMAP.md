@@ -27,7 +27,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 
 ### Recursos novos
 
-- [x] Formulário de contato de verdade (validado no navegador e no servidor), envia e-mail pela Resend, com uma versão em PHP como plano B para hospedagens sem suporte a Bun/Node
+- [x] Formulário de contato de verdade (validado no navegador e no servidor), envia e-mail pelo `mail()` do PHP da HostGator (`mensagem.php`; a Resend foi descartada na issue #28)
 - [x] Título e descrição próprios por página nos resultados de busca (antes, toda página mostrava a mesma descrição genérica)
 - [x] Dados estruturados para buscadores e IAs (JSON-LD, `llms.txt`, `robots.txt`)
 - [x] Widget oficial do governo (VLibras) para tradução em Libras, em todas as páginas
@@ -105,7 +105,7 @@ Levantadas na documentação oficial (`docs.cpanel.net/cpanel`) em 26/09/2026. V
   2. **FTP**: um programa como o FileZilla envia a pasta inteira; dá para criar uma conta FTP só para isso em "FTP Accounts".
   3. **Git Version Control**: o servidor puxa o repositório do GitHub e um `.cpanel.yml` copia os arquivos para o site. Como o servidor não roda o build, o `dist/` gerado teria de ser versionado numa branch só de publicação. Fica para depois que a homologação estiver funcionando.
 - Falta criar um `.htaccess` (ver Pendente) para as rotas e o 404 de verdade.
-- Copiar `config.example.php` para `config.php` no servidor e preencher a chave da Resend.
+- Formulário envia de `comando.ibto@gmail.com` para ele mesmo (decisão do Gleyson, 28/09/2026). Se as mensagens caírem no spam, criar no cPanel uma caixa do domínio para ser o remetente e conferir o SPF e o DKIM em **Email Deliverability** (o `config.php` virou opcional).
 - Conferir se o HTTPS está ativo no subdomínio.
 
 ### Plataforma de cursos online: onde e com quê
