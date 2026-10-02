@@ -180,7 +180,7 @@ Registradas na issue [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Tre
 | Vídeo das aulas | **YouTube** como padrão (Eduardo, 02/10), por link incorporado na aula; nada hospedado no nosso servidor. Vimeo e Google Drive seguem aceitos. Ponto de atenção: o link do YouTube não listado pode ser repassado; para cursos pagos, o Vimeo com restrição de domínio protege melhor |
 | Pagamento | **PIX manual primeiro** (comprovante + confirmação no painel), **gateway automático depois** (provedor a escolher; o split de pagamento conta a favor) |
 | Divisão do valor | **50% para o filiado que criou o curso e 50% para o IBTO** (Eduardo, 02/10; substitui o percentual informado pelo instrutor). Cada pagamento gera um conta a pagar (instrutor) e um conta a receber (IBTO); o percentual fica gravado em cada matrícula, para que uma mudança futura da regra não altere as matrículas antigas |
-| Endereço | `cursos.ib-to.org` (testes em `cursos-homolog.ib-to.org`) |
+| Endereço | `cursos.ib-to.org` (testes em `cursos-homolog.ib-to.org`); reconfirmado pelo Eduardo em 02/10 |
 | Estrutura do IBTO | **Um único IBTO**, sem unidades, com **equipes filiadas**; anuidade 2027 de **R$ 90,00** (reconfirmado em 02/10) |
 | Quem cria cursos | Filiado **com permissão** (instrutor), só na área em que é capacitado; o curso **só vai ao ar depois de aprovado pela diretoria** |
 | Papéis | **Hoje o Eduardo faz tudo** (02/10): aprova cursos, confirma pagamentos e cadastra filiados e equipes. O sistema mantém as permissões separadas (**diretoria**, **secretaria/tesouraria**, **setor administrativo**, **instrutor** e **aluno**, que se cadastra sozinho) para delegar depois sem mudar o código |
