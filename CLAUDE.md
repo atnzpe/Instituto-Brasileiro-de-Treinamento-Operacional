@@ -2,6 +2,19 @@
 
 Instruções para o Claude Code (e para qualquer pessoa) trabalhar neste repositório. O README explica o projeto; este arquivo diz **como trabalhar** nele.
 
+## Regra inegociável: código comentado para qualquer pessoa entender
+
+Todo código escrito ou alterado neste projeto é comentado de forma que uma pessoa leiga entenda o que cada parte faz ou deixa de fazer:
+
+- **Arquivo:** começa com um comentário dizendo para que ele serve.
+- **Função, método e componente:** comentário antes, explicando o que faz, cada argumento (o que é, com um exemplo) e o que devolve.
+- **Variável e constante:** comentário dizendo o que guarda e por quê.
+- **Cada linha ou pequeno bloco de lógica:** comentário dizendo o que faz e por quê; numa condição, também o que acontece quando ela não é verdadeira.
+- **Idioma e tom:** português do Brasil, linguagem simples; todo termo técnico vem explicado.
+- **Vale para tudo:** TypeScript/TSX, PHP, SQL (migrations, policies e funções), Python, CSS, HTML e workflows YAML.
+- **Comentário acompanha o código:** ao alterar uma linha, atualize o comentário dela. Comentário desatualizado conta como bug.
+- **Código antigo sem comentários:** comente o trecho que for alterado; não é preciso reescrever o projeto inteiro de uma vez.
+
 ## O projeto
 
 Site institucional do IBTO (Instituto Brasileiro de Treinamento Operacional), reconstruído a partir do site antigo em Brizy, publicado em [ib-to.org](https://ib-to.org).
