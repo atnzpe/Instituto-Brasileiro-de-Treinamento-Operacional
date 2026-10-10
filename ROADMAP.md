@@ -1,6 +1,6 @@
 # Roadmap
 
-Situação da reconstrução do site do IBTO, organizada em relação ao [QA_REPORT.html](./QA_REPORT.html) (auditoria do site antigo) e aos pedidos feitos ao longo do trabalho. Atualizado em 23/09/2026: inclui a página de Cursos presenciais e a proposta para a homologação e para a plataforma de cursos online, que será um projeto à parte.
+Situação da reconstrução do site do IBTO, organizada em relação ao [QA_REPORT.html](./QA_REPORT.html) (auditoria do site antigo) e aos pedidos feitos ao longo do trabalho. Atualizado em 23/09/2026: inclui a página de Cursos presenciais e a proposta para a homologação e para a plataforma de cursos online, que será um projeto à parte. Em 10/10/2026, a seção da plataforma ganhou a visão do produto (landpage + plataforma + painel "Comando Geral") e a situação de cada issue.
 
 Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto, esperando um dado, credencial ou decisão do time de negócio/infra. **🧭 Proposta** é uma recomendação técnica que precisa de aprovação. **🔭 Próximos passos** são as próximas issues/branches, na ordem em que devem ser feitas (o caminho de cada uma está no [fluxo de trabalho do README](./README.md#fluxo-de-trabalho)).
 
@@ -215,15 +215,27 @@ Cada linha vira uma issue e uma branch, na ordem abaixo, seguindo o fluxo de tra
 
 ### Plataforma de cursos online — épico [#33](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/33)
 
-Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste repositório até a plataforma ter o seu (depois são transferidas com `gh issue transfer`). A lógica de negócio pode ser consultada no DojoManager, sem reaproveitar código nem infraestrutura.
+Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste repositório até a plataforma ter o seu (depois são transferidas com `gh issue transfer`). A lógica de negócio pode ser consultada no DojoManager, sem reaproveitar código nem infraestrutura. Código da plataforma: [atnzpe/ibto-plataforma](https://github.com/atnzpe/ibto-plataforma).
+
+**Visão do produto (Gleyson, 10/10/2026):** o IBTO tem três partes, cada uma com o seu público.
+
+| Parte | Endereço | Para quem | O que tem |
+| --- | --- | --- | --- |
+| **Landpage** (este repositório) | `ib-to.org` | Público, sem login | Site institucional; `/cursos` mostra os cursos abertos ao público vindos da plataforma (#52, #48) |
+| **Plataforma de cursos** | `cursos.ib-to.org` | Com login, em três visões | **Aluno:** catálogo, cursos e trilhas, aulas, provas, certificado e dossiê (#38, #39, #41, #43, #44). **Instrutor:** cria cursos na sua área, com revisão do IBTO (#40). **Admin de equipe:** filiados e anuidade da própria equipe (#37) |
+| **Painel "Comando Geral"** | `cursos.ib-to.org` | Equipe do IBTO, por permissão | Cadastros, usuários e permissões, financeiro (#59), anuidade, histórico de tudo e indicadores (#45) |
+
+Situação em 10/10/2026: ✅ = fechada; 🚧 = em andamento.
 
 | Issue | Entrega | Depende de |
 | --- | --- | --- |
 | ✅ [#34](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/34) | **Definições:** Laravel 13, vídeo, pagamento, quem recebe (e divisão com o instrutor), endereço, papéis, quem cadastra filiados — fechadas em 29/09/2026 (ver "Decisões da plataforma") | — |
-| [#35](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/35) | Base: Laravel 13 + React/Vite + MySQL em `cursos-homolog.ib-to.org`, publicação sem SSH (Cron Job), CI | #34 |
-| [#53](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/53) | **Três idiomas** em todas as telas (pt-BR padrão, inglês e espanhol), com seletor e escolha lembrada; vem antes do login para as telas já nascerem traduzidas | #35 |
-| [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login e papéis: aluno, filiado, instrutor e administrador | #53 |
-| [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37) | Filiados, equipes filiadas e anuidade (R$ 90 em 2027), dados sensíveis criptografados | #36 |
+| ✅ [#35](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/35) | Base: Laravel 13 + React/Vite + MySQL em `cursos-homolog.ib-to.org`, publicação sem SSH (Cron Job), CI | #34 |
+| ✅ [#53](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/53) | **Três idiomas** em todas as telas (pt-BR padrão, inglês e espanhol), pelo Google Tradutor (decisão de 07/10/2026) | #35 |
+| ✅ [#36](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/36) | Login com duas travas de tentativas, Aluno automático no cadastro, papéis e uma permissão por tela, com auditoria (os termos de uso ficaram na #47) | #53 |
+| ✅ [#58](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/58) | Nenhum erro em silêncio: 403, erro 500 e erros das telas no log, com código | #36 |
+| 🚧 [#37](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/37) | Filiados, equipes filiadas e anuidade (R$ 90 em 2027; 2026 isento), dados sensíveis criptografados. **Feito:** cadastros, equipes, filiados, convite e importação da planilha. **Na PR do financeiro:** anuidade, cujo pagamento gera a receita no livro-caixa. **Falta:** registro de quem viu dados sensíveis e consentimento campo a campo | #36 |
+| 🚧 [#59](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/59) | **Financeiro** do Comando Geral: livro-caixa (a receber e a pagar), baixa total ou parcial, parcelas, cancelamento e estorno com motivo, histórico só leitura, categorias e formas de pagamento. **Falta:** o painel de indicadores com dados reais | #37 |
 | [#38](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/38) | Landing page chamativa e catálogo (gratuito restrito, pago aberto, pago restrito) | #35 |
 | [#39](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/39) | Cursos, módulos, aulas (vídeo incorporado) e apostilas na área restrita | #36 e #38 |
 | [#40](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/40) | Filiado cria curso na sua área, com revisão do IBTO | #37 e #39 |
@@ -231,7 +243,7 @@ Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". Ficam neste 
 | [#42](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/42) | Gateway de pagamento e cobrança recorrente da anuidade | #34 e #41 |
 | [#43](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/43) | Provas e progresso do aluno | #39 |
 | [#44](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/44) | Certificados com validação pública | #43 |
-| [#45](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/45) | Painel administrativo: cursos, matrículas (CSV), filiados, financeiro | #37 e #41 |
+| [#45](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/45) | Painel **"Comando Geral"**: indicadores (desenho aprovado em 09/10/2026), cursos, matrículas (CSV), filiados, financeiro | #37, #41 e #59 |
 | [#46](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/46) | Validação pública da carteirinha (QR code) | #37 |
 | [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47) | LGPD: política de privacidade, consentimento, registro de acesso, DPO | #36 |
 | [#48](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/48) | Link da plataforma na página `/cursos` do site | #35 |
