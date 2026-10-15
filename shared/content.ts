@@ -629,26 +629,9 @@ export const cursos: CursosContent = {
     },
   ],
   cursos: [
-    {
-      slug: 'formacao-de-instrutores',
-      title: 'Treinamento para Formação de Instrutores',
-      format: 'Presencial',
-      summary:
-        'Formação de instrutores em três módulos: operador de arma de fogo, combate com faca e combate corpo a corpo.',
-      access: 'pago-filiados',
-      status: 'aberto',
-      schedule: '10 e 11 de outubro de 2026 · 08h às 18h',
-      endsAt: '2026-10-11',
-      location: 'Recife',
-      price: 'R$ 1.500',
-      modules: [
-        { title: 'Operador de Arma de Fogo', instructor: 'Caetano — Especialista em Tiro' },
-        { title: 'Combate com Faca', instructor: 'Marcelo — Perito em Kali' },
-        { title: 'Combate Corpo a Corpo', instructor: 'Trinca — Especialista em Artes Marciais' },
-      ],
-      includes: ['Certificado', 'Camisa', 'Munições', 'Estande de tiro', 'E muito mais'],
-      whatsapp: ['(81) 99162-3046', '(81) 99809-8742'],
-    },
+    // A Formação de Instrutores NÃO aparece no site (decisão do Gleyson,
+    // 14/10/2026): é um curso FECHADO, só para quem o IBTO matricula, e fica
+    // apenas na plataforma de cursos. Por isso ela não está nesta lista.
     {
       slug: 'combate-corpo-a-corpo',
       title: 'Treinamento para Combate Corpo a Corpo',
