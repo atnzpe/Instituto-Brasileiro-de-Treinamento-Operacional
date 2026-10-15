@@ -152,3 +152,76 @@ export function precoBr(centavos: number): string {
   // Intl.NumberFormat escreve no jeito do Brasil (R$, vírgula nos centavos).
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(centavos / 100)
 }
+
+/** Uma área de atuação como a API pública da plataforma devolve (#57). */
+export interface AreaDaPlataforma {
+  nome: string
+  /** Endereço da imagem cadastrada na plataforma, ou null. */
+  imagem_url: string | null
+}
+
+/** Uma área como a página do site desenha (título e imagem). */
+export interface AreaNoSite {
+  title: string
+  image: string
+}
+
+// Imagem usada quando a área não tem imagem na plataforma nem no site.
+export const IMAGEM_PADRAO_DA_AREA = '/images/hero.webp'
+
+/**
+ * Deixa um nome comparável: sem acento, sem maiúscula e só letras e números.
+ * Ex.: 'Combate Corpo-a-corpo' → 'combatecorpoacorpo'.
+ */
+function nomeComparavel(nome: string): string {
+  return nome
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+}
+
+/**
+ * Junta as áreas da plataforma (a fonte, #57) com as imagens que o site já tem.
+ * Imagem: a da plataforma; senão, a do site com o mesmo nome; senão, a padrão.
+ *
+ * @param daPlataforma As áreas ativas da plataforma, na ordem dela.
+ * @param reserva A lista escrita no site (usada só para achar as imagens).
+ * @returns As áreas para a página desenhar.
+ */
+export function juntarAreas(daPlataforma: AreaDaPlataforma[], reserva: AreaNoSite[]): AreaNoSite[] {
+  // Mapa "nome comparável → imagem do site". Ex.: 'selva' → '/images/services/selva.webp'.
+  const imagensDoSite = new Map(reserva.map((area) => [nomeComparavel(area.title), area.image]))
+
+  return daPlataforma.map((area) => ({
+    title: area.nome,
+    image: area.imagem_url ?? imagensDoSite.get(nomeComparavel(area.nome)) ?? IMAGEM_PADRAO_DA_AREA,
+  }))
+}
+
+/**
+ * Busca as áreas de atuação ativas na plataforma.
+ *
+ * @returns As áreas (lista vazia se não houver nenhuma).
+ * @throws Error se a plataforma não responder em 5 segundos ou responder com erro.
+ */
+export async function buscarAreasDaPlataforma(): Promise<AreaDaPlataforma[]> {
+  const controle = new AbortController()
+  const relogio = setTimeout(() => controle.abort(), ESPERA_MAXIMA_MS)
+
+  try {
+    const resposta = await fetch(linkDaPlataforma('/api/publico/areas-atuacao'), {
+      signal: controle.signal,
+      headers: { Accept: 'application/json' },
+    })
+    // Resposta de erro: avisa quem chamou (a página fica com a lista do site).
+    if (!resposta.ok) {
+      throw new Error(`PLATAFORMA_RESPONDEU_${resposta.status}`)
+    }
+    const dados = (await resposta.json()) as { areas: AreaDaPlataforma[] }
+
+    return dados.areas
+  } finally {
+    clearTimeout(relogio)
+  }
+}
