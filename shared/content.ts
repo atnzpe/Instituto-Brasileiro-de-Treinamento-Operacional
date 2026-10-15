@@ -704,8 +704,9 @@ export const cursos: CursosContent = {
   ],
   onlinePlatform: {
     title: 'Cursos online',
+    // A plataforma de cursos está no ar (#48, 15/10/2026); o botão leva ao catálogo dela.
     description:
-      'Estamos criando uma plataforma exclusiva para os cursos online do IBTO, como Gestão de Risco Operacional, Cybersegurança Urbana, TCCC, Reconhecimento Aéreo e Introdução à Inteligência Operacional.',
+      'Os cursos do IBTO ficam na nossa plataforma: aulas em vídeo, apostilas, chamada dos encontros presenciais e certificado com QR code para conferência.',
     label: 'Acessar a plataforma de cursos',
   },
   footnote: 'Novos treinamentos em breve.',

@@ -4,7 +4,7 @@
  * Rodam sem navegador: `bun test`.
  */
 import { describe, expect, test } from 'bun:test'
-import { enderecoDaPlataforma } from '../src/lib/plataforma'
+import { enderecoDaPlataforma, linkDaPlataforma } from '../src/lib/plataforma'
 
 describe('enderecoDaPlataforma', () => {
   test('site oficial (com ou sem www) → plataforma oficial', () => {
@@ -15,5 +15,11 @@ describe('enderecoDaPlataforma', () => {
   test('site de testes e computador local → plataforma de testes', () => {
     expect(enderecoDaPlataforma('homolog.ib-to.org')).toBe('https://cursos-homolog.ib-to.org')
     expect(enderecoDaPlataforma('localhost:5173')).toBe('https://cursos-homolog.ib-to.org')
+  })
+})
+
+describe('linkDaPlataforma', () => {
+  test('fora do navegador (testes) usa a plataforma de testes, com o caminho', () => {
+    expect(linkDaPlataforma('/login')).toBe('https://cursos-homolog.ib-to.org/login')
   })
 })

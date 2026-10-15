@@ -43,6 +43,20 @@ export function enderecoDaPlataforma(host: string): string {
 }
 
 /**
+ * O endereço da plataforma do ambiente em que o site está aberto agora.
+ * Fora do navegador (ex.: testes), usa a plataforma de testes.
+ *
+ * @param caminho O caminho dentro da plataforma. Ex.: '/login'
+ * @returns Ex.: 'https://cursos.ib-to.org/login'
+ */
+export function linkDaPlataforma(caminho = ''): string {
+  // "window" só existe no navegador.
+  const host = typeof window !== 'undefined' ? window.location.host : ''
+
+  return `${enderecoDaPlataforma(host)}${caminho}`
+}
+
+/**
  * Busca os posts mais recentes do blog na plataforma.
  *
  * @param quantos Quantos posts. Ex.: 3
