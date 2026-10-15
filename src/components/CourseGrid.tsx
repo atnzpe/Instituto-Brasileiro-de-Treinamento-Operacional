@@ -4,6 +4,7 @@ import { courseStatus, hasEnded, sortByStatus, todayInBrazil } from '../lib/cour
 import { CourseAccessBadge } from './CourseAccessBadge'
 import { linkDaPlataforma } from '../lib/plataforma'
 import { CourseModal } from './CourseModal'
+import { CursosDaPlataforma } from './CursosDaPlataforma'
 import { CourseStatusBadge } from './CourseStatusBadge'
 
 export function CourseGrid({ data }: { data: CursosContent }) {
@@ -73,6 +74,8 @@ export function CourseGrid({ data }: { data: CursosContent }) {
           {data.onlinePlatform.title}
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-white/70">{data.onlinePlatform.description}</p>
+        {/* Os cursos publicados na plataforma, vindos de lá sozinhos (#52); some se ela não responder. */}
+        <CursosDaPlataforma />
         {/* O botão leva ao catálogo da plataforma do mesmo ambiente (#48). Um "href"
             fixo no conteúdo, se existir, tem prioridade. */}
         <a

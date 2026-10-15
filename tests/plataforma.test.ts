@@ -4,7 +4,7 @@
  * Rodam sem navegador: `bun test`.
  */
 import { describe, expect, test } from 'bun:test'
-import { enderecoDaPlataforma, linkDaPlataforma } from '../src/lib/plataforma'
+import { enderecoDaPlataforma, linkDaPlataforma, precoBr } from '../src/lib/plataforma'
 
 describe('enderecoDaPlataforma', () => {
   test('site oficial (com ou sem www) → plataforma oficial', () => {
@@ -21,5 +21,13 @@ describe('enderecoDaPlataforma', () => {
 describe('linkDaPlataforma', () => {
   test('fora do navegador (testes) usa a plataforma de testes, com o caminho', () => {
     expect(linkDaPlataforma('/login')).toBe('https://cursos-homolog.ib-to.org/login')
+  })
+})
+
+describe('precoBr', () => {
+  test('zero é gratuito; o resto em reais', () => {
+    expect(precoBr(0)).toBe('Gratuito')
+    // O Intl usa um espaço especial depois do "R$": troca por espaço comum para comparar.
+    expect(precoBr(25000).replace(/\s/g, ' ')).toBe('R$ 250,00')
   })
 })
