@@ -11,7 +11,7 @@ O IBTO foi fundado por militares e ex-militares com experiência real em combate
 - [Quem somos](https://ib-to.org/quem-somos): história, missão, visão, valores e a diretoria (Eduardo Lopes — Presidente; Julio Cesar Moura — Vice-presidente).
 - [Contato](https://ib-to.org/contato): formulário de contato e canais (WhatsApp, Facebook, Instagram).
 - [Rede Nacional](https://ib-to.org/rede-nacional): representantes, instrutores, monitores e centros de treinamento credenciados por estado (em expansão).
-- [Cursos e Treinamentos](https://ib-to.org/cursos): treinamentos, cursos e seminários presenciais (Formação de Instrutores, Combate Corpo a Corpo, Combate com Faca, Seminário Bastão Tático, Curso Sobrevivência Urbana Nível 1), com datas, local, preço, instrutor e contato. Os cursos online terão uma plataforma própria, ainda em construção.
+- [Cursos e Treinamentos](https://ib-to.org/cursos): treinamentos, cursos e seminários presenciais (Combate Corpo a Corpo, Combate com Faca, Seminário Bastão Tático, Curso Sobrevivência Urbana Nível 1), com datas, local, preço, instrutor e contato. Os cursos online terão uma plataforma própria, ainda em construção.
 
 ## Notas para agentes e crawlers
 
