@@ -1,7 +1,23 @@
+/**
+ * SEÇÃO "TREINAMENTOS E CAPACITAÇÕES" da página inicial: três cartões com foto
+ * e o botão "Conheça os cursos e treinamentos".
+ *
+ * Os cartões e o botão levam ao CATÁLOGO DA PLATAFORMA de cursos (outro
+ * endereço, do mesmo ambiente: testes ou oficial), porque os cursos agora são
+ * cadastrados lá (#52, #48).
+ */
 import { Link } from '@tanstack/react-router'
 import type { HomeContent } from '../../shared/content'
+import { linkDaPlataforma } from '../lib/plataforma'
 import { ArrowRightIcon } from './Icon'
 
+/**
+ * Desenha a seção de treinamentos.
+ *
+ * @param training Os textos e cartões da seção, vindos de shared/content.ts.
+ *                 Ex.: { eyebrow: 'TREINAMENTOS E CAPACITAÇÕES', cards: [...] }
+ * @returns A seção pronta para a página inicial.
+ */
 export function TrainingSection({ training }: { training: HomeContent['training'] }) {
   return (
     <section className="relative isolate overflow-hidden py-20">
@@ -47,6 +63,22 @@ export function TrainingSection({ training }: { training: HomeContent['training'
             const cardClassName =
               'group relative isolate flex min-h-[26rem] flex-col justify-end overflow-hidden rounded-2xl border border-white/10 p-6'
 
+            // Cartão que aponta para a plataforma: link comum (<a>), porque é
+            // outro endereço; o roteador do site só abre páginas deste site.
+            if (card.href && card.naPlataforma) {
+              return (
+                <a
+                  key={card.title}
+                  href={linkDaPlataforma(card.href)}
+                  className={`${cardClassName} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold-light`}
+                >
+                  {content}
+                </a>
+              )
+            }
+
+            // Cartão com página deste site: link do roteador (abre sem recarregar).
+            // Sem link nenhum: só o cartão, sem clique.
             return card.href ? (
               <Link
                 key={card.title}
@@ -64,12 +96,14 @@ export function TrainingSection({ training }: { training: HomeContent['training'
         </div>
 
         <div className="mt-10 text-center">
-          <Link
-            to="/cursos"
+          {/* Catálogo da plataforma do mesmo ambiente. Ex.: no site de testes,
+              https://cursos-homolog.ib-to.org/cursos. Link comum: é outro endereço. */}
+          <a
+            href={linkDaPlataforma('/cursos')}
             className="inline-block rounded-full bg-brand-gold px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink"
           >
             Conheça os cursos e treinamentos
-          </Link>
+          </a>
         </div>
       </div>
     </section>

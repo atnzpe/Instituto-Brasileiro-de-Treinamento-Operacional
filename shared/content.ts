@@ -18,6 +18,10 @@ export interface FeatureCard {
   title: string
   description: string
   href?: string
+  // true = o "href" é um caminho DENTRO da plataforma de cursos (outro endereço),
+  // não uma página deste site. Ex.: href '/cursos' + naPlataforma abre
+  // https://cursos-homolog.ib-to.org/cursos no site de testes. Sem o campo: página do site.
+  naPlataforma?: boolean
   image?: { src: string; alt: string }
 }
 
@@ -81,7 +85,9 @@ export const home: HomeContent = {
         title: 'Formação Operacional',
         description:
           'Programas estruturados para desenvolvimento de competências técnicas, disciplina, tomada de decisão e preparo para ambientes de alta exigência.',
+        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
         href: '/cursos',
+        naPlataforma: true,
         image: {
           src: '/images/training/formacao-operacional.webp',
           alt: 'Instrutor do IBTO apresenta os princípios operacionais a uma turma em sala de aula.',
@@ -91,7 +97,9 @@ export const home: HomeContent = {
         title: 'Treinamentos Especializados',
         description:
           'Capacitações voltadas para aplicação prática, atualização profissional e desenvolvimento contínuo de habilidades operacionais.',
+        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
         href: '/cursos',
+        naPlataforma: true,
         image: {
           src: '/images/training/treinamentos-especializados.webp',
           alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
@@ -101,7 +109,9 @@ export const home: HomeContent = {
         title: 'Certificação e Credenciamento',
         description:
           'Reconhecimento institucional para participantes, instrutores e profissionais que concluem os programas de formação do IBTO.',
+        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
         href: '/cursos',
+        naPlataforma: true,
         image: {
           src: '/images/training/certificacao-e-credenciamento.webp',
           alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
