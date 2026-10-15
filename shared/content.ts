@@ -703,7 +703,8 @@ export const cursos: CursosContent = {
     },
   ],
   onlinePlatform: {
-    title: 'Cursos online',
+    // Presenciais e online: a seção mostra os cursos publicados na plataforma (#52).
+    title: 'Na plataforma de cursos',
     // A plataforma de cursos está no ar (#48, 15/10/2026); o botão leva ao catálogo dela.
     description:
       'Os cursos do IBTO ficam na nossa plataforma: aulas em vídeo, apostilas, chamada dos encontros presenciais e certificado com QR code para conferência.',

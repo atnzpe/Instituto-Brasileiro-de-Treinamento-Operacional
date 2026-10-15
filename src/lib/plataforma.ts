@@ -87,3 +87,68 @@ export async function buscarUltimosPosts(quantos = 3): Promise<PostResumo[]> {
     clearTimeout(relogio)
   }
 }
+
+/** Um curso como a API pública da plataforma devolve (#52). */
+export interface CursoDaPlataforma {
+  titulo: string
+  chamada: string | null
+  /** Ex.: 'Presencial' ou 'Online' */
+  modalidade: string
+  area: string | null
+  /** true = exclusivo para filiados */
+  restrito: boolean
+  /** Ex.: 'Pago · aberto ao público' */
+  tipo: string
+  /** Preço em centavos (0 = gratuito). Ex.: 25000 */
+  valor_centavos: number
+  /** Ex.: '2026-11-08' */
+  data_inicio: string | null
+  local: string | null
+  carga_horaria: number | null
+  instrutor: string | null
+  imagem_url: string | null
+  /** O endereço completo da página do curso na plataforma. */
+  url: string
+}
+
+/**
+ * Busca os cursos publicados na plataforma (os fechados nunca vêm).
+ *
+ * @returns Os cursos (lista vazia se não houver nenhum).
+ * @throws Error se a plataforma não responder em 5 segundos ou responder com erro.
+ */
+export async function buscarCursosDaPlataforma(): Promise<CursoDaPlataforma[]> {
+  const controle = new AbortController()
+  const relogio = setTimeout(() => controle.abort(), ESPERA_MAXIMA_MS)
+
+  try {
+    const resposta = await fetch(linkDaPlataforma('/api/publico/cursos'), {
+      signal: controle.signal,
+      headers: { Accept: 'application/json' },
+    })
+    // Resposta de erro: avisa quem chamou (a seção some).
+    if (!resposta.ok) {
+      throw new Error(`PLATAFORMA_RESPONDEU_${resposta.status}`)
+    }
+    const dados = (await resposta.json()) as { cursos: CursoDaPlataforma[] }
+
+    return dados.cursos
+  } finally {
+    clearTimeout(relogio)
+  }
+}
+
+/**
+ * Preço para mostrar. Ex.: 25000 → 'R$ 250,00'; 0 → 'Gratuito'.
+ *
+ * @param centavos O preço em centavos.
+ */
+export function precoBr(centavos: number): string {
+  // Zero: o curso é gratuito.
+  if (centavos === 0) {
+    return 'Gratuito'
+  }
+
+  // Intl.NumberFormat escreve no jeito do Brasil (R$, vírgula nos centavos).
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(centavos / 100)
+}
