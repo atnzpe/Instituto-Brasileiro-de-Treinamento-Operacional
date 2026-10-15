@@ -4,7 +4,13 @@
  * Rodam sem navegador: `bun test`.
  */
 import { describe, expect, test } from 'bun:test'
-import { enderecoDaPlataforma, linkDaPlataforma, precoBr } from '../src/lib/plataforma'
+import {
+  IMAGEM_PADRAO_DA_AREA,
+  enderecoDaPlataforma,
+  juntarAreas,
+  linkDaPlataforma,
+  precoBr,
+} from '../src/lib/plataforma'
 
 describe('enderecoDaPlataforma', () => {
   test('site oficial (com ou sem www) → plataforma oficial', () => {
@@ -29,5 +35,30 @@ describe('precoBr', () => {
     expect(precoBr(0)).toBe('Gratuito')
     // O Intl usa um espaço especial depois do "R$": troca por espaço comum para comparar.
     expect(precoBr(25000).replace(/\s/g, ' ')).toBe('R$ 250,00')
+  })
+})
+
+describe('juntarAreas', () => {
+  const reserva = [
+    { title: 'Combate Corpo-a-corpo', image: '/images/services/combate-corpo-a-corpo.webp' },
+    { title: 'Selva', image: '/images/services/selva.webp' },
+  ]
+
+  test('a ordem e os nomes vêm da plataforma; a imagem, na ordem: plataforma, site, padrão', () => {
+    const areas = juntarAreas(
+      [
+        { nome: 'Selva', imagem_url: 'https://cursos.ib-to.org/imagens/areas-atuacao/3' },
+        // Mesmo nome com acento/traço diferente: acha a imagem do site.
+        { nome: 'Combate Corpo a Corpo', imagem_url: null },
+        { nome: 'Área nova', imagem_url: null },
+      ],
+      reserva,
+    )
+
+    expect(areas).toEqual([
+      { title: 'Selva', image: 'https://cursos.ib-to.org/imagens/areas-atuacao/3' },
+      { title: 'Combate Corpo a Corpo', image: '/images/services/combate-corpo-a-corpo.webp' },
+      { title: 'Área nova', image: IMAGEM_PADRAO_DA_AREA },
+    ])
   })
 })
