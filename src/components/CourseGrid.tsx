@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Course, CursosContent } from '../../shared/content'
 import { courseStatus, hasEnded, sortByStatus, todayInBrazil } from '../lib/courseStatus'
 import { CourseAccessBadge } from './CourseAccessBadge'
+import { linkDaPlataforma } from '../lib/plataforma'
 import { CourseModal } from './CourseModal'
 import { CourseStatusBadge } from './CourseStatusBadge'
 
@@ -72,20 +73,14 @@ export function CourseGrid({ data }: { data: CursosContent }) {
           {data.onlinePlatform.title}
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-white/70">{data.onlinePlatform.description}</p>
-        {data.onlinePlatform.href ? (
-          <a
-            href={data.onlinePlatform.href}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-block rounded-full bg-brand-gold px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink"
-          >
-            {data.onlinePlatform.label}
-          </a>
-        ) : (
-          <span className="mt-6 inline-block rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white/70">
-            Em breve
-          </span>
-        )}
+        {/* O botão leva ao catálogo da plataforma do mesmo ambiente (#48). Um "href"
+            fixo no conteúdo, se existir, tem prioridade. */}
+        <a
+          href={data.onlinePlatform.href ?? linkDaPlataforma('/cursos')}
+          className="mt-6 inline-block rounded-full bg-brand-gold px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-gold-light hover:text-ink"
+        >
+          {data.onlinePlatform.label}
+        </a>
       </section>
 
       <p className="mt-8 text-center text-sm text-white/70">{data.footnote}</p>

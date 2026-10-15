@@ -1,6 +1,14 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useNav } from '../hooks/useContent'
+import { linkDaPlataforma } from '../lib/plataforma'
+
+/*
+ * CABEÇALHO do site: o logo, o menu e o botão "Entrar / Área do aluno" (#48,
+ * decisão do Gleyson em 14/10/2026), que leva à tela de entrar da plataforma
+ * de cursos do mesmo ambiente (testes ou oficial). No celular, o menu abre
+ * pelo botão de três tracinhos e o botão fica no fim da lista.
+ */
 
 export function Header() {
   const { data: nav } = useNav()
@@ -25,6 +33,13 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {/* Entrar / Área do aluno: abre a plataforma de cursos (link comum: é outro endereço). */}
+          <a
+            href={linkDaPlataforma('/login')}
+            className="inline-flex min-h-11 items-center rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide text-white uppercase transition-colors hover:bg-brand-gold-light hover:text-ink"
+          >
+            Entrar / Área do aluno
+          </a>
         </nav>
 
         <button
@@ -57,6 +72,13 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {/* No celular, o botão da plataforma fica no fim do menu. */}
+          <a
+            href={linkDaPlataforma('/login')}
+            className="mt-2 inline-flex min-h-11 items-center justify-center rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide text-white uppercase"
+          >
+            Entrar / Área do aluno
+          </a>
         </nav>
       )}
     </header>
