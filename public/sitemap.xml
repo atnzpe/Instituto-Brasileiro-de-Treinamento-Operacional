@@ -26,8 +26,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://ib-to.org/cursos</loc>
+    <loc>https://ib-to.org/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ib-to.org/eventos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

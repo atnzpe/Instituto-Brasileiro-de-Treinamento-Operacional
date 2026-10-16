@@ -11,6 +11,8 @@
 
 /** Um post do blog como a API pública da plataforma devolve. */
 export interface PostResumo {
+  /** O nome do post no endereço; o site monta o link /blog/{slug} com ele (#61, B4). */
+  slug: string
   titulo: string
   categoria: string
   resumo: string | null

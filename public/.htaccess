@@ -24,7 +24,11 @@ AddType application/manifest+json .webmanifest
   # Site pages only exist in the browser: serve index.html with status 200.
   # Every page in src/routes must be listed here — tests/htaccess.test.ts
   # fails the build otherwise.
-  RewriteRule ^(areas-de-atuacao|quem-somos|contato|rede-nacional|cursos)/?$ /index.html [L]
+  RewriteRule ^(areas-de-atuacao|quem-somos|contato|rede-nacional|cursos|blog|eventos)/?$ /index.html [L]
+  # Blog post and event album pages (#61, B4): /blog/<slug> and /eventos/<slug>.
+  # The slug only takes lowercase letters, digits and hyphens (the format the
+  # platform generates); anything else falls through to the 404 page.
+  RewriteRule ^(blog|eventos)/[a-z0-9-]+/?$ /index.html [L]
 </IfModule>
 
 # Secrets for mensagem.php: readable by PHP on disk, never over HTTP.
@@ -66,10 +70,12 @@ AddType application/manifest+json .webmanifest
 
   # connect-src inclui a plataforma de cursos (cursos.ib-to.org e a de testes):
   # o bloco "Últimas do IBTO" da página inicial busca os posts do blog lá (#61).
+  # frame-src inclui o YouTube sem cookies (vídeo dos posts do blog, #61 B4) e
+  # media-src a plataforma (vídeo enviado como arquivo).
   # Report-only for now: logs violations in the browser console without
   # blocking anything, so the VLibras widget's real needs can be checked
   # before this is enforced.
-  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; font-src 'self' data: https://fonts.gstatic.com https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; img-src 'self' data: blob: https:; connect-src 'self' https://cursos.ib-to.org https://cursos-homolog.ib-to.org https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; frame-src https://vlibras.gov.br https://*.vlibras.gov.br; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; font-src 'self' data: https://fonts.gstatic.com https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; img-src 'self' data: blob: https:; connect-src 'self' https://cursos.ib-to.org https://cursos-homolog.ib-to.org https://vlibras.gov.br https://*.vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/; frame-src https://www.youtube-nocookie.com https://vlibras.gov.br https://*.vlibras.gov.br; media-src 'self' https://cursos.ib-to.org https://cursos-homolog.ib-to.org; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
   # Staging must never be indexed by search engines.
   <If "%{HTTP_HOST} == 'homolog.ib-to.org'">
