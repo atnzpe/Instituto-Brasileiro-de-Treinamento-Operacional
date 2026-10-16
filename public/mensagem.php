@@ -193,8 +193,11 @@ if ($payload === null) {
     fail(400, 'DADOS_INVALIDOS', 'Dados inválidos. Preencha nome, e-mail e mensagem.');
 }
 
-$to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando.ibto@gmail.com';
-$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'comando.ibto@gmail.com';
+// Destino e remetente padrão: a caixa do domínio do IBTO (16/10/2026). A HostGator
+// assina os e-mails do ib-to.org (SPF/DKIM), então a mensagem não cai no spam como
+// acontecia com o remetente gmail.com. config.php pode trocar os dois.
+$to = defined('CONTACT_TO_EMAIL') ? CONTACT_TO_EMAIL : 'comando@ib-to.org';
+$from = defined('CONTACT_FROM_EMAIL') ? CONTACT_FROM_EMAIL : 'comando@ib-to.org';
 
 /** Header values never carry a line break, so nobody can add headers (Bcc…). */
 function header_value($value)
