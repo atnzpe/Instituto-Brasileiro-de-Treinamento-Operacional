@@ -14,6 +14,14 @@ describe('página inicial', () => {
     expect(existsSync(join(publicDir, home.hero.image))).toBe(true)
   })
 
+  test('as fotos dos diferenciais existem e têm texto alternativo', () => {
+    for (const card of home.features) {
+      expect(card.image).toBeDefined()
+      expect(existsSync(join(publicDir, card.image!.src))).toBe(true)
+      expect(card.image!.alt.trim().length).toBeGreaterThan(20)
+    }
+  })
+
   test('todo botão de ação tem texto e destino', () => {
     const acoes = [
       ...home.hero.ctas,

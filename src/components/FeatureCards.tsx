@@ -1,6 +1,6 @@
 /**
  * LINHA 1 DE CARTÕES DA PÁGINA INICIAL ("por que o IBTO"): três diferenciais,
- * logo abaixo da imagem principal. O cartão com link leva a outra página; o
+ * cada um com uma foto real do IBTO, logo abaixo da imagem principal. O cartão com link leva a outra página; o
  * cartão sem link só informa.
  */
 import { Link } from '@tanstack/react-router'
@@ -19,15 +19,31 @@ export function FeatureCards({ features }: { features: FeatureCard[] }) {
     <section className="mx-auto -mt-20 max-w-6xl px-safe-4 sm:px-safe-6">
       <div className="relative z-10 grid gap-6 sm:grid-cols-3">
         {features.map((feature) => {
+          // overflow-hidden: a foto respeita os cantos arredondados do cartão.
           const cardClassName =
-            'flex flex-col gap-4 rounded-2xl border border-white/10 bg-neutral-950/90 p-8 shadow-xl shadow-black/40 backdrop-blur transition-colors'
+            'flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/90 shadow-xl shadow-black/40 backdrop-blur transition-colors'
           const content = (
             <>
-              <h3 className="text-xl text-white">{feature.title}</h3>
-              <p className="text-sm leading-relaxed text-white/75">{feature.description}</p>
-              {/* A seta só aparece no cartão que é link: seta sem destino confunde
-                  (ajuste de 15/10/2026). Sem link: nada aqui. */}
-              {feature.href && <ArrowRightIcon className="mt-auto h-5 w-5 text-brand-gold-light" />}
+              {/* Foto real no alto do cartão (com texto alternativo). Sem foto: só o texto. */}
+              {feature.image && (
+                <img
+                  src={feature.image.src}
+                  alt={feature.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width={800}
+                  height={450}
+                  className="aspect-video w-full object-cover"
+                />
+              )}
+              {/* O texto do cartão, com o espaço interno (a foto vai de borda a borda). */}
+              <div className="flex flex-1 flex-col gap-4 p-8">
+                <h3 className="text-xl text-white">{feature.title}</h3>
+                <p className="text-sm leading-relaxed text-white/75">{feature.description}</p>
+                {/* A seta só aparece no cartão que é link: seta sem destino confunde
+                    (ajuste de 15/10/2026). Sem link: nada aqui. */}
+                {feature.href && <ArrowRightIcon className="mt-auto h-5 w-5 text-brand-gold-light" />}
+              </div>
             </>
           )
 

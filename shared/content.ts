@@ -23,6 +23,8 @@ export interface FeatureCard {
   description: string
   /** Página do site para onde o cartão leva. Sem link: o cartão só informa (e não mostra seta). */
   href?: string
+  /** Foto real do IBTO no alto do cartão, com o texto alternativo para o leitor de tela. */
+  image?: { src: string; alt: string }
 }
 
 /**
@@ -93,23 +95,36 @@ export const home: HomeContent = {
       { label: 'Fale com o IBTO', href: '/contato' },
     ],
   },
-  // POR QUE O IBTO: três diferenciais reais. Só informam (sem link), então nenhum mostra seta:
+  // POR QUE O IBTO: três diferenciais reais, cada um com uma foto real que combina com o texto.
+  // Só informam (sem link), então nenhum mostra seta:
   // antes, um levava a uma página ainda vazia (/rede-nacional) e os outros a lugar nenhum.
   features: [
     {
       title: 'Atuação Nacional',
       description:
         'Rede de instrutores, representantes e centros de treinamento em expansão por todo o território brasileiro.',
+      image: {
+        src: '/images/training/treinamentos-especializados.webp',
+        alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
+      },
     },
     {
       title: 'Metodologia de Instrução',
       description:
         'Demonstrar, explicar, praticar, corrigir e avaliar: o mesmo método em todos os treinamentos, para o aluno aprender de verdade.',
+      image: {
+        src: '/images/training/formacao-operacional.webp',
+        alt: 'Instrutor do IBTO apresenta os princípios operacionais a uma turma em sala de aula.',
+      },
     },
     {
       title: 'Certificado Verificável',
       description:
         'Todo certificado tem QR code: qualquer pessoa confere na hora, pela internet, se ele é verdadeiro.',
+      image: {
+        src: '/images/training/certificacao-e-credenciamento.webp',
+        alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
+      },
     },
   ],
   // O QUE ACONTECE AGORA: os próximos cursos, vindos da plataforma (a fonte única dos cursos).
