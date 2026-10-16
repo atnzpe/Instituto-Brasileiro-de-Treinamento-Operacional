@@ -36,7 +36,7 @@ Dúvidas sobre **prioridade, escopo ou aceite de uma entrega** → Aline. Dúvid
 
 ## Status atual
 
-Situação em 16/10/2026: o site está no ar na homologação (`homolog.ib-to.org`, com senha) e é publicado sozinho a cada merge na `main`. A revalidação de QA da Aline (#4) foi fechada: todos os achados do [QA_REPORT.html](./QA_REPORT.html) estão resolvidos (detalhe em [QA_REPORT_V2.html](./QA_REPORT_V2.html) e no comentário de fechamento da #4). A produção (`ib-to.org`) vira um clone da homologação depois do piloto da plataforma de cursos (#56). A ordem das próximas tarefas está no [ROADMAP.md](./ROADMAP.md).
+Situação em 16/10/2026: o site está no ar na homologação (`homolog.ib-to.org`, com senha) e é publicado sozinho a cada merge na `main`. A revalidação de QA da Aline (#4) foi fechada: todos os achados do [QA_REPORT.html](./QA_REPORT.html) estão resolvidos (detalhe em [QA_REPORT_V2.html](./QA_REPORT_V2.html) e no comentário de fechamento da #4). A produção (`ib-to.org`) vira um clone da homologação depois do piloto da plataforma de cursos (#56). A ordem das próximas tarefas está no [ROADMAP.md](./ROADMAP.md). Versão atual: **0.1.0** (piloto); o que mudou em cada versão está no [CHANGELOG.md](./CHANGELOG.md).
 
 Em resumo, o que mudou em relação ao site antigo:
 
