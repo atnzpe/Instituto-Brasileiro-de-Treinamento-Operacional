@@ -127,7 +127,7 @@ bun run preview   # visualiza a versão de produção localmente
 Copie `.env.example` para `.env` e preencha com valores reais (esse arquivo detalha cada uma):
 
 - `REDIS_URL` — opcional, só usada pela API.
-- `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — destino e remetente do formulário de contato (opcionais; o padrão é `comando.ibto@gmail.com` nos dois). No ambiente local o formulário não envia nada: a API só mostra no terminal o e-mail que seria enviado.
+- `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` — destino e remetente do formulário de contato (opcionais; o padrão é `comando@ib-to.org` nos dois). No ambiente local o formulário não envia nada: a API só mostra no terminal o e-mail que seria enviado.
 - `VITE_CONTACT_ENDPOINT` — endereço do formulário de contato. Deixe em branco no ambiente local; o build de produção já recebe `/mensagem.php` pelo arquivo `.env.production` (sem segredos).
 
 ### Publicação (deploy)
@@ -145,7 +145,7 @@ Para quem for validar entregas (Aline ou qualquer pessoa do time):
 2. Confira as quatro páginas principais: Início, Áreas de Atuação, Quem Somos e Contato — mais as novas páginas Rede Nacional e Cursos (em Cursos, clique em um curso para abrir o modal de detalhes e feche com o X, com Esc ou clicando fora).
 3. Teste em celular (ou reduza a janela do navegador) — o site foi construído mobile-first.
 4. Teste o menu só com o teclado (Tab) — todos os links devem ser alcançáveis.
-5. Teste o formulário de Contato — na homologação, a mensagem deve chegar em `comando.ibto@gmail.com` (caixa de entrada, não spam), e "Responder" deve ir para quem escreveu; se o envio falhar, aparece uma mensagem de erro com código, nunca um falso "enviado".
+5. Teste o formulário de Contato — na homologação, a mensagem deve chegar em `comando@ib-to.org` (caixa de entrada, não spam), e "Responder" deve ir para quem escreveu; se o envio falhar, aparece uma mensagem de erro com código, nunca um falso "enviado".
 6. Compare com os achados do `QA_REPORT.html` e marque no `ROADMAP.md` o que já foi validado.
 
 ## Fluxo de trabalho

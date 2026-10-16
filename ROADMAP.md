@@ -46,7 +46,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 
 ## 🚧 Pendente — falta um dado, credencial ou decisão, não código
 
-- [ ] **E-mail do formulário de contato** — hoje envia de `comando.ibto@gmail.com` para ele mesmo; a HostGator não assina pelo `gmail.com` e a mensagem pode cair no spam. Proposta (16/10/2026): usar `comando@ib-to.org` como remetente e destino, depois de confirmar que a caixa existe e que o SPF/DKIM está "Valid" no cPanel
+- [x] **E-mail do formulário de contato** — desde 16/10/2026 envia de `comando@ib-to.org` para `comando@ib-to.org` (caixa do domínio, assinada pela HostGator). Falta só conferir um envio real na homologação e se não existe um `config.php` antigo no servidor apontando para o Gmail
 - [ ] **Lista real da Rede Nacional** (#11) — depende da autorização do Mestre Eduardo; proposta: equipes ativas sempre, instrutores só com autorização (LGPD), com filtros por estado e área
 - [ ] **Sobrevivência Urbana N1** — data, local, valor e instrutor (o Mestre cadastra no teste do piloto)
 - [ ] **Autorização de imagem** dos instrutores dos cartazes e das fotos do Instagram usadas no blog e na galeria

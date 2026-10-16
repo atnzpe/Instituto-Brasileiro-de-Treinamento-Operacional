@@ -143,11 +143,11 @@ describe.skipIf(skip)('public/mensagem.php', () => {
     const message = 'Preço & horário do curso?\nLinha 2 com acentuação.'
     expect((await post({ ...valid, name: 'João Conceição', message })).status).toBe(200)
     const [mail] = sentMails()
-    expect(mail.to).toBe('comando.ibto@gmail.com')
-    // Gmail sender: no -f, since HostGator can't pass SPF for gmail.com.
-    expect(mail.params).toBe('')
+    expect(mail.to).toBe('comando@ib-to.org')
+    // Padrão desde 16/10/2026: remetente do domínio ib-to.org, então vai também no envelope (-f), o que ajuda o SPF.
+    expect(mail.params).toBe('-fcomando@ib-to.org')
     expect(mail.headers['Reply-To']).toBe(valid.email)
-    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando.ibto@gmail.com>')
+    expect(decodeHeader(mail.headers.From)).toBe('IBTO — Ouvidoria <comando@ib-to.org>')
     expect(Object.keys(mail.headers)).not.toContain('X-Mailer')
     expect(decodeHeader(mail.subject)).toBe('Nova mensagem de contato — João Conceição')
     // Plain text: "&" stays "&" (no htmlspecialchars), lines end in CRLF.
