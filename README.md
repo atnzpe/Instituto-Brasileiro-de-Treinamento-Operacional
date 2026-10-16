@@ -46,6 +46,7 @@ Em resumo, o que mudou em relação ao site antigo:
 - **Contato de verdade**: a página de Contato agora tem um formulário funcional que envia e-mail pela HostGator (antes não existia nenhuma forma de contato pelo site).
 - **Blog e eventos**: notícias, conteúdos técnicos e fotos dos treinamentos, cadastrados pela diretoria na plataforma de cursos e mostrados aqui (`/blog` e `/eventos`).
 - **Ligado à plataforma de cursos**: áreas de atuação e publicações vêm de lá sozinhas; o botão "Entrar / Área do aluno" e o endereço `/cursos` levam ao catálogo.
+- **Página inicial clara** (16/10/2026): uma mensagem por seção, sem frases repetidas e com toda ação levando a um lugar real: topo com "Ver cursos" e "Fale com o IBTO", diferenciais, próximos cursos e áreas vindos da plataforma, blog, quem somos e convite final.
 - **Funciona sem internet**: depois da primeira visita, as páginas e as publicações já vistas abrem offline, e o site pode ser instalado no celular.
 - **Encontrabilidade (SEO)**: cada página tem título e descrição próprios nos resultados de busca e ao compartilhar o link (antes, todo link mostrava a mesma informação genérica).
 

@@ -47,10 +47,13 @@ export function UltimasDoIbto() {
           ))}
         </ul>
 
-        {/* Para quem quer mais: a lista completa do blog, neste site. */}
-        <div className="mt-8 text-center">
+        {/* Para quem quer mais: a lista completa do blog e a galeria de eventos, neste site. */}
+        <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-2">
           <Link to="/blog" className="inline-flex min-h-11 items-center font-semibold text-brand-gold-light hover:underline">
             Ver todas as publicações
+          </Link>
+          <Link to="/eventos" className="inline-flex min-h-11 items-center font-semibold text-brand-gold-light hover:underline">
+            Ver as fotos dos eventos
           </Link>
         </div>
       </div>

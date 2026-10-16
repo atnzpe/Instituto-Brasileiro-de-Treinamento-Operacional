@@ -17,132 +17,148 @@ export const nav: NavLink[] = [
   { label: 'Contato', href: '/contato' },
 ]
 
+/** Um cartão de diferencial (linha "por que o IBTO" da página inicial). */
 export interface FeatureCard {
   title: string
   description: string
+  /** Página do site para onde o cartão leva. Sem link: o cartão só informa (e não mostra seta). */
   href?: string
-  // true = o "href" é um caminho DENTRO da plataforma de cursos (outro endereço),
-  // não uma página deste site. Ex.: href '/cursos' + naPlataforma abre
-  // https://cursos-homolog.ib-to.org/cursos no site de testes. Sem o campo: página do site.
-  naPlataforma?: boolean
+  /** Foto real do IBTO no alto do cartão, com o texto alternativo para o leitor de tela. */
   image?: { src: string; alt: string }
 }
 
+/**
+ * Um botão de ação (ex.: "Ver cursos").
+ * naPlataforma = true: o href é um caminho DENTRO da plataforma de cursos (outro
+ * endereço, do mesmo ambiente). Ex.: '/cursos' abre https://cursos-homolog.ib-to.org/cursos
+ * no site de testes. Sem o campo: página deste site.
+ */
+export interface ChamadaParaAcao {
+  label: string
+  href: string
+  naPlataforma?: boolean
+}
+
+/**
+ * A PÁGINA INICIAL (reorganizada em 16/10/2026 com conceitos de web design):
+ * uma mensagem por seção, nenhuma frase repetida, e toda ação levando a um
+ * lugar real. Ordem: quem é e o que fazer (topo) → por que confiar
+ * (diferenciais) → o que acontece agora (próximos cursos) → o que se aprende
+ * (áreas) → novidades (blog) → quem está por trás (quem somos) → convite final.
+ */
 export interface HomeContent {
   hero: {
     eyebrow: string
     heading: string[]
+    /** Uma frase dizendo para quem é. */
+    subheading: string
     image: string
+    /** A ação principal e a secundária. */
+    ctas: ChamadaParaAcao[]
   }
   features: FeatureCard[]
-  training: {
+  proximosCursos: {
     eyebrow: string
+    heading: string
     intro: string
-    cards: FeatureCard[]
+    cta: ChamadaParaAcao
+  }
+  areasTeaser: {
+    eyebrow: string
+    heading: string
+    intro: string
+    cta: ChamadaParaAcao
+  }
+  quemSomosTeaser: {
+    eyebrow: string
+    heading: string
+    paragraph: string
+    cta: ChamadaParaAcao
   }
   banner: {
     heading: string[]
     body: string
-  }
-  quemSomosTeaser: {
-    eyebrow: string
-    paragraphs: string[]
-  }
-  areasTeaser: {
-    heading: string
-    paragraphs: string[]
-    cta: { label: string; href: string }
+    ctas: ChamadaParaAcao[]
   }
 }
 
 export const home: HomeContent = {
+  // TOPO: quem é, para quem é e o que fazer agora (uma ação principal e uma secundária).
   hero: {
-    eyebrow: 'Formação Operacional de Alto Nível',
+    // Frase do próprio IBTO (perfil @ibto_pernambuco); não repete o banner do fim da página.
+    eyebrow: 'Formação real. Resultado operacional.',
     heading: ['Instituto Brasileiro de', 'Treinamento Operacional'],
+    subheading: 'Treinamento para civis, profissionais de segurança, policiais e militares.',
     image: '/images/hero.webp',
+    ctas: [
+      { label: 'Ver cursos', href: '/cursos', naPlataforma: true },
+      { label: 'Fale com o IBTO', href: '/contato' },
+    ],
   },
-  // Linha 1 da página inicial: POR QUE O IBTO (diferenciais reais, sem repetir
-  // a linha 2). Ajuste de 15/10/2026: antes as duas linhas diziam o mesmo.
+  // POR QUE O IBTO: três diferenciais reais, cada um com uma foto real que combina com o texto.
+  // Só informam (sem link), então nenhum mostra seta:
+  // antes, um levava a uma página ainda vazia (/rede-nacional) e os outros a lugar nenhum.
   features: [
     {
       title: 'Atuação Nacional',
       description:
         'Rede de instrutores, representantes e centros de treinamento em expansão por todo o território brasileiro.',
-      href: '/rede-nacional',
+      image: {
+        src: '/images/training/treinamentos-especializados.webp',
+        alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
+      },
     },
     {
       title: 'Metodologia de Instrução',
       description:
         'Demonstrar, explicar, praticar, corrigir e avaliar: o mesmo método em todos os treinamentos, para o aluno aprender de verdade.',
+      image: {
+        src: '/images/training/formacao-operacional.webp',
+        alt: 'Instrutor do IBTO apresenta os princípios operacionais a uma turma em sala de aula.',
+      },
     },
     {
       title: 'Certificado Verificável',
       description:
         'Todo certificado tem QR code: qualquer pessoa confere na hora, pela internet, se ele é verdadeiro.',
+      image: {
+        src: '/images/training/certificacao-e-credenciamento.webp',
+        alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
+      },
     },
   ],
-  training: {
-    eyebrow: 'TREINAMENTOS E CAPACITAÇÕES',
-    intro:
-      'Programas desenvolvidos para formação, aperfeiçoamento e especialização de profissionais e cidadãos que buscam elevar seu nível de preparo técnico, físico e operacional.',
-    // Linha 2 da página inicial: O QUE VOCÊ ENCONTRA AQUI (cada cartão leva a
-    // um lugar de verdade: o catálogo da plataforma, os eventos e o blog).
-    cards: [
-      {
-        title: 'Cursos e Treinamentos',
-        description:
-          'Presenciais e online, abertos ao público ou exclusivos para filiados, com inscrição e certificado pela plataforma.',
-        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
-        href: '/cursos',
-        naPlataforma: true,
-        image: {
-          src: '/images/training/formacao-operacional.webp',
-          alt: 'Instrutor do IBTO apresenta os princípios operacionais a uma turma em sala de aula.',
-        },
-      },
-      {
-        title: 'Eventos',
-        description: 'Fotos dos treinamentos, formações e seminários do IBTO pelo Brasil.',
-        // Página de eventos deste site (#61, B4).
-        href: '/eventos',
-        image: {
-          src: '/images/training/certificacao-e-credenciamento.webp',
-          alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
-        },
-      },
-      {
-        title: 'Blog',
-        description:
-          'Notícias e conteúdos técnicos: defesa pessoal, instrução, análise pós-ação e o dia a dia das equipes.',
-        // Página do blog deste site (#61, B4).
-        href: '/blog',
-        image: {
-          src: '/images/training/treinamentos-especializados.webp',
-          alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
-        },
-      },
-    ],
+  // O QUE ACONTECE AGORA: os próximos cursos, vindos da plataforma (a fonte única dos cursos).
+  proximosCursos: {
+    eyebrow: 'PRÓXIMOS CURSOS',
+    heading: 'Inscrições abertas',
+    intro: 'Presenciais e online, com inscrição, pagamento e certificado pela plataforma de cursos do IBTO.',
+    cta: { label: 'Ver todos os cursos', href: '/cursos', naPlataforma: true },
   },
+  // O QUE SE APRENDE: os emblemas das áreas, vindos da plataforma.
+  areasTeaser: {
+    eyebrow: 'ÁREAS DE ATUAÇÃO',
+    heading: 'Do combate corpo a corpo ao APH tático',
+    intro:
+      'Com uma abordagem prática e orientada para resultados, buscamos oferecer conhecimentos aplicáveis a diferentes contextos.',
+    cta: { label: 'Ver todas as áreas', href: '/areas-de-atuacao' },
+  },
+  // QUEM ESTÁ POR TRÁS: um parágrafo só (o texto completo fica em /quem-somos).
+  quemSomosTeaser: {
+    eyebrow: 'QUEM SOMOS',
+    // Frase do anúncio oficial do IBTO em Pernambuco.
+    heading: 'Treinamento sério, estruturado e orientado para resultados',
+    paragraph:
+      'O Instituto Brasileiro de Treinamento Operacional (IBTO) é uma organização dedicada à formação, capacitação e desenvolvimento de profissionais e cidadãos que buscam excelência em preparação operacional, defesa, segurança e sobrevivência.',
+    cta: { label: 'Conheça o IBTO', href: '/quem-somos' },
+  },
+  // CONVITE FINAL: repete a ação principal no fim da rolagem (quem leu tudo está pronto para agir).
   banner: {
     heading: ['FORMAÇÃO OPERACIONAL', 'DE ALTO NÍVEL'],
     body: 'Capacitação para civis, profissionais de segurança, policiais e militares que buscam elevar seu nível de preparo técnico, físico e operacional.',
-  },
-  quemSomosTeaser: {
-    eyebrow: 'QUEM SOMOS',
-    paragraphs: [
-      'O Instituto Brasileiro de Treinamento Operacional (IBTO) é uma organização dedicada à formação, capacitação e desenvolvimento de profissionais e cidadãos que buscam excelência em preparação operacional, defesa, segurança e sobrevivência.',
-      'Nossa missão é promover treinamentos de alto nível, combinando conhecimento técnico, disciplina, preparo físico e aplicação prática, formando indivíduos mais preparados para enfrentar desafios em ambientes urbanos, rurais e operacionais.',
-      'Com atuação em diversas áreas de treinamento especializado, o IBTO trabalha para elevar padrões de qualificação e contribuir para o desenvolvimento contínuo de seus alunos, instrutores e parceiros em todo o Brasil.',
+    ctas: [
+      { label: 'Ver cursos', href: '/cursos', naPlataforma: true },
+      { label: 'Fale com o IBTO', href: '/contato' },
     ],
-  },
-  areasTeaser: {
-    heading: 'Áreas de Atuação',
-    paragraphs: [
-      'O IBTO atua na formação e capacitação de profissionais por meio de programas voltados ao desenvolvimento de competências operacionais, técnicas e estratégicas. Nossos treinamentos abrangem áreas relacionadas à defesa pessoal, preparação operacional, sobrevivência, atendimento em situações de emergência, segurança e desenvolvimento profissional.',
-      'Com uma abordagem prática e orientada para resultados, buscamos oferecer conhecimentos aplicáveis a diferentes contextos, contribuindo para a formação de indivíduos mais preparados, disciplinados e capazes de atuar com eficiência diante dos desafios do mundo atual.',
-      'Nossos programas são desenvolvidos para atender desde iniciantes até profissionais que buscam aperfeiçoamento contínuo e especialização em suas áreas de atuação.',
-    ],
-    cta: { label: 'Saber mais', href: '/areas-de-atuacao' },
   },
 }
 
