@@ -36,14 +36,17 @@ Dúvidas sobre **prioridade, escopo ou aceite de uma entrega** → Aline. Dúvid
 
 ## Status atual
 
-A branch `feature/landpage` já foi mesclada na `main` e fechou a issue "Auditoria IB #1": todos os itens do `QA_REPORT.html` foram corrigidos ou têm um motivo documentado para ainda estarem pendentes (ver [Próximos passos](#próximos-passos) e o arquivo [ROADMAP.md](./ROADMAP.md), que traz o detalhe item a item). O relatório [QA_REPORT_V2.html](./QA_REPORT_V2.html) compara, item a item, o que a auditoria original encontrou contra o que existe hoje no código, e é o ponto de partida para a validação de QA da Aline.
+Situação em 16/10/2026: o site está no ar na homologação (`homolog.ib-to.org`, com senha) e é publicado sozinho a cada merge na `main`. A revalidação de QA da Aline (#4) foi fechada: todos os achados do [QA_REPORT.html](./QA_REPORT.html) estão resolvidos (detalhe em [QA_REPORT_V2.html](./QA_REPORT_V2.html) e no comentário de fechamento da #4). A produção (`ib-to.org`) vira um clone da homologação depois do piloto da plataforma de cursos (#56). A ordem das próximas tarefas está no [ROADMAP.md](./ROADMAP.md).
 
 Em resumo, o que mudou em relação ao site antigo:
 
 - **Visual**: tema escuro fiel ao emblema do IBTO em todas as páginas, com contraste de texto validado (ninguém mais vai ter dificuldade de ler por causa de cor).
 - **Velocidade**: imagens que pesavam megabytes agora pesam alguns KB — o site carrega muito mais rápido, principalmente no celular.
 - **Acessibilidade**: menu utilizável por teclado e leitor de tela, e o **widget oficial do governo (VLibras)** para tradução em Libras em todas as páginas.
-- **Contato de verdade**: a página de Contato agora tem um formulário funcional que envia e-mail (antes não existia nenhuma forma de contato pelo site).
+- **Contato de verdade**: a página de Contato agora tem um formulário funcional que envia e-mail pela HostGator (antes não existia nenhuma forma de contato pelo site).
+- **Blog e eventos**: notícias, conteúdos técnicos e fotos dos treinamentos, cadastrados pela diretoria na plataforma de cursos e mostrados aqui (`/blog` e `/eventos`).
+- **Ligado à plataforma de cursos**: áreas de atuação e publicações vêm de lá sozinhas; o botão "Entrar / Área do aluno" e o endereço `/cursos` levam ao catálogo.
+- **Funciona sem internet**: depois da primeira visita, as páginas e as publicações já vistas abrem offline, e o site pode ser instalado no celular.
 - **Encontrabilidade (SEO)**: cada página tem título e descrição próprios nos resultados de busca e ao compartilhar o link (antes, todo link mostrava a mesma informação genérica).
 
 ## Guia rápido para quem não é da área técnica
@@ -80,7 +83,7 @@ Você não precisa instalar nada nem entender de código para acompanhar o proje
 shared/content.ts        # todo o texto/conteúdo real do site — usado pelo front-end e pela API
 src/
   routes/                # páginas: /, /areas-de-atuacao, /quem-somos, /contato,
-                          # /rede-nacional, /cursos, /services (redirecionamento legado)
+                          # /rede-nacional, /blog, /eventos, /cursos (leva ao catálogo da plataforma), /services (redirecionamento legado)
   components/             # Header, Footer, Hero, TeamCard, ServiceGrid, ContactForm, etc.
   hooks/                  # useContent.ts (busca de conteúdo), useDocumentTitle.ts
   lib/api.ts              # funções que chamam a API de conteúdo e o endpoint de contato
