@@ -9,7 +9,7 @@ Legenda: **✅ Feito** já está no código. **🚧 Pendente** é código pronto
 | Parte | Endereço de testes | Situação |
 | --- | --- | --- |
 | Site institucional | `homolog.ib-to.org` | No ar: páginas institucionais, **blog e eventos** (vindos da plataforma, #61), áreas de atuação vindas da plataforma (#57), botão "Entrar / Área do aluno" (#48), três idiomas, VLibras, PWA offline. O endereço `/cursos` leva ao catálogo da plataforma (PR #67) |
-| Plataforma de cursos | `cursos-homolog.ib-to.org` | No ar: cadastros, filiados, financeiro, anuidade, cursos e trilhas, matrícula com PIX, chamada, certificado com QR, Meu dossiê, blog e galeria (detalhe no README da plataforma) |
+| Plataforma de cursos | `cursos-homolog.ib-to.org` | No ar: cadastros, filiados, financeiro, anuidade, cursos e trilhas, matrícula com PIX, chamada, certificado com QR, Meu dossiê, blog e galeria, tour e manual por perfil, cadastro fechado com aprovação, e-mails com a marca, fotos (detalhe no CHANGELOG da plataforma) |
 | QA | — | Revalidação da Aline fechada em 16/10/2026 (#4): todos os achados do QA_REPORT resolvidos; ficam os testes humanos com leitor de tela, celulares físicos e envio real do formulário |
 | Piloto | — | Base de demonstração em montagem (filiados reais já cadastrados); depois, o teste guiado da diretoria |
 | Produção | `ib-to.org` e `cursos.ib-to.org` | Clone da homologação depois do piloto (#56) |
@@ -243,6 +243,11 @@ Issues com o rótulo `plataforma` e o marco "Plataforma de cursos". ✅ = no ar 
 | [#47](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/47) | LGPD: política de privacidade, consentimento, registro de acesso, DPO | #36 |
 | ✅ [#48](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/48) | Link da plataforma na página `/cursos` do site | #35 |
 | ✅ [#52](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/52) | Página `/cursos` do site lista sozinha os cursos online **abertos ao público** vindos da plataforma (restritos e em revisão ficam de fora; se a plataforma cair, volta o aviso) | #38 e #48 |
+| ✅ [#68](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/68) | **Tour guiado e manual por perfil** (página Ajuda): aluno, instrutor, admin de equipe, Comando Geral e Tecnologia | #36 |
+| ✅ [#71](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/71) | **Sala ao vivo** nos encontros online (Meet, Zoom, Teams ou YouTube), só para confirmados | #39 |
+| ✅ [#72](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/72) | **Certificado automático** do curso gravado (100% das aulas assistidas) | #44 |
+| ✅ [#84](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/84) | **Cadastro com aprovação — grupo fechado:** começa fechado (só convite); pedido de acesso passa pelo admin da equipe ou pelo Comando Geral | #36 |
+| ✅ [#78](https://github.com/atnzpe/Instituto-Brasileiro-de-Treinamento-Operacional/issues/78) | **Foto de perfil e 3x4 do filiado**, em pasta privada, com autorização de imagem para a Rede Nacional (desmarcada por padrão) | #37 |
 
 ### Primeiras tarefas da equipe
 
