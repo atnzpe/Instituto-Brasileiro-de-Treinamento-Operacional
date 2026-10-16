@@ -47,7 +47,7 @@ Em resumo, o que mudou em relação ao site antigo:
 - **Blog e eventos**: notícias, conteúdos técnicos e fotos dos treinamentos, cadastrados pela diretoria na plataforma de cursos e mostrados aqui (`/blog` e `/eventos`).
 - **Ligado à plataforma de cursos**: áreas de atuação e publicações vêm de lá sozinhas; o botão "Entrar / Área do aluno" e o endereço `/cursos` levam ao catálogo.
 - **Página inicial clara** (16/10/2026): uma mensagem por seção, sem frases repetidas e com toda ação levando a um lugar real: topo com "Ver cursos" e "Fale com o IBTO", diferenciais, próximos cursos e áreas vindos da plataforma, blog, quem somos e convite final.
-- **Funciona sem internet**: depois da primeira visita, as páginas e as publicações já vistas abrem offline, e o site pode ser instalado no celular.
+- **Funciona sem internet e vira app**: depois da primeira visita, as páginas e as publicações já vistas abrem offline. O site convida a instalar o app (faixa discreta 3 s depois de abrir; no iPhone, o passo a passo), com o emblema oficial como ícone (gerado por `scripts/gerar-icones.py`).
 - **Encontrabilidade (SEO)**: cada página tem título e descrição próprios nos resultados de busca e ao compartilhar o link (antes, todo link mostrava a mesma informação genérica).
 
 ## Guia rápido para quem não é da área técnica

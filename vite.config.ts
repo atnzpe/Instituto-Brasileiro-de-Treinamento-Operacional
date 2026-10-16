@@ -40,7 +40,14 @@ export default defineConfig({
       workbox: {
         // Downloaded on the first visit: only what every page needs, so a
         // phone on mobile data doesn't pull 2 MB of photos up front.
-        globPatterns: ['**/*.{html,js,css,ico}', 'icons/*.png', 'images/logo.webp'],
+        // Ícones: só os pequenos (192 px e o do iPhone). Os de 512 px (≈ 340 KB juntos)
+        // são baixados pelo celular apenas na hora de instalar o app (16/10/2026).
+        globPatterns: [
+          '**/*.{html,js,css,ico}',
+          'icons/icon-192.png',
+          'icons/apple-touch-icon.png',
+          'images/logo.webp',
+        ],
         // Other photos are kept as the visitor sees them (own site only).
         runtimeCaching: [
           {

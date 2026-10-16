@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router'
 import { contato } from '../../shared/content'
+import { ConviteInstalar } from '../components/ConviteInstalar'
 import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
 
@@ -52,6 +53,8 @@ function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      {/* Convite para instalar o app (PWA): faixa embaixo, 3 s depois de abrir; some se já instalado ou recusado. */}
+      <ConviteInstalar />
     </div>
   )
 }
