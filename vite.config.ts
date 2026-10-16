@@ -51,6 +51,35 @@ export default defineConfig({
               expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
+          // Blog, eventos e cursos (#61, B4): os dados públicos da plataforma de
+          // cursos (outro endereço). NetworkFirst = tenta a internet primeiro (o
+          // conteúdo novo aparece na hora); se ela falhar ou demorar mais de
+          // 4 segundos, usa a última resposta guardada. Assim, quem já abriu um
+          // post lê de novo mesmo sem sinal (offline first).
+          {
+            urlPattern: ({ url }) =>
+              /^cursos(-homolog)?\.ib-to\.org$/.test(url.hostname) && url.pathname.startsWith('/api/publico/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'ibto-conteudo-plataforma',
+              networkTimeoutSeconds: 4,
+              // Guarda só respostas de sucesso (200): erro nunca vira "conteúdo".
+              cacheableResponse: { statuses: [200] },
+              expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 7 },
+            },
+          },
+          // Capas e fotos da plataforma (/imagens/...): CacheFirst = depois da
+          // primeira vez, abrem do aparelho, sem gastar dados móveis.
+          {
+            urlPattern: ({ url }) =>
+              /^cursos(-homolog)?\.ib-to\.org$/.test(url.hostname) && url.pathname.startsWith('/imagens/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'ibto-imagens-plataforma',
+              cacheableResponse: { statuses: [200] },
+              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 30, purgeOnQuotaError: true },
+            },
+          },
         ],
         // Every page is the same index.html (SPA); PHP and API calls always
         // go to the network so the form never gets a cached answer.

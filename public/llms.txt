@@ -11,10 +11,14 @@ O IBTO foi fundado por militares e ex-militares com experiência real em combate
 - [Quem somos](https://ib-to.org/quem-somos): história, missão, visão, valores e a diretoria (Eduardo Lopes — Presidente; Julio Cesar Moura — Vice-presidente).
 - [Contato](https://ib-to.org/contato): formulário de contato e canais (WhatsApp, Facebook, Instagram).
 - [Rede Nacional](https://ib-to.org/rede-nacional): representantes, instrutores, monitores e centros de treinamento credenciados por estado (em expansão).
-- [Cursos e Treinamentos](https://ib-to.org/cursos): treinamentos, cursos e seminários presenciais (Combate Corpo a Corpo, Combate com Faca, Seminário Bastão Tático, Curso Sobrevivência Urbana Nível 1), com datas, local, preço, instrutor e contato. Os cursos (online e presenciais) ficam na plataforma de cursos do IBTO: https://cursos.ib-to.org (catálogo em https://cursos.ib-to.org/cursos).
+- [Blog](https://ib-to.org/blog): notícias e conteúdos técnicos do IBTO (defesa pessoal, metodologia de instrução, análise pós-ação), com filtro por Notícias e Eventos. Cada publicação fica em https://ib-to.org/blog/<slug>.
+- [Eventos](https://ib-to.org/eventos): galeria de fotos dos treinamentos, formações e seminários. Cada álbum fica em https://ib-to.org/eventos/<slug>.
+- [Cursos e Treinamentos](https://cursos.ib-to.org/cursos): o catálogo oficial fica na plataforma de cursos do IBTO (presenciais e online, com datas, local, valor, instrutor e inscrição). O endereço antigo https://ib-to.org/cursos leva ao catálogo.
 
 ## Notas para agentes e crawlers
 
 - Site em português do Brasil (pt-BR).
-- Não há login, cadastro, checkout ou área administrativa pública — todo o conteúdo relevante está nas páginas acima.
+- O site não tem login. Inscrição em cursos, área do aluno e certificados ficam na plataforma (https://cursos.ib-to.org).
 - `sitemap.xml` na raiz lista as URLs canônicas.
+- Dados públicos em JSON (somente leitura) na plataforma: https://cursos.ib-to.org/api/publico/blog, /api/publico/blog/<slug>, /api/publico/eventos, /api/publico/cursos e /api/publico/areas-atuacao.
+- Certificados emitidos pelo IBTO podem ser conferidos publicamente pelo QR code ou em https://cursos.ib-to.org/validar/<código>.

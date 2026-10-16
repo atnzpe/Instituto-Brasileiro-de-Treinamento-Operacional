@@ -1,7 +1,19 @@
+/**
+ * LINHA 1 DE CARTÕES DA PÁGINA INICIAL ("por que o IBTO"): três diferenciais,
+ * logo abaixo da imagem principal. O cartão com link leva a outra página; o
+ * cartão sem link só informa.
+ */
 import { Link } from '@tanstack/react-router'
 import type { FeatureCard } from '../../shared/content'
 import { ArrowRightIcon } from './Icon'
 
+/**
+ * Desenha os cartões.
+ *
+ * @param features Os cartões, vindos de shared/content.ts.
+ *                 Ex.: [{ title: 'Atuação Nacional', description: '...', href: '/rede-nacional' }]
+ * @returns A seção com os cartões (1 coluna no celular, 3 na tela larga).
+ */
 export function FeatureCards({ features }: { features: FeatureCard[] }) {
   return (
     <section className="mx-auto -mt-20 max-w-6xl px-safe-4 sm:px-safe-6">
@@ -13,10 +25,13 @@ export function FeatureCards({ features }: { features: FeatureCard[] }) {
             <>
               <h3 className="text-xl text-white">{feature.title}</h3>
               <p className="text-sm leading-relaxed text-white/75">{feature.description}</p>
-              <ArrowRightIcon className="mt-auto h-5 w-5 text-brand-gold-light" />
+              {/* A seta só aparece no cartão que é link: seta sem destino confunde
+                  (ajuste de 15/10/2026). Sem link: nada aqui. */}
+              {feature.href && <ArrowRightIcon className="mt-auto h-5 w-5 text-brand-gold-light" />}
             </>
           )
 
+          // Com link: o cartão inteiro é clicável. Sem link: um bloco simples.
           return feature.href ? (
             <Link
               key={feature.title}

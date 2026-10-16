@@ -46,7 +46,9 @@ function RootLayout() {
         Pular para o conteúdo
       </a>
       <Header />
-      <main id="main-content" className="flex-1">
+      {/* bg-ink no <main>: em página curta (ex.: "não encontrado"), o fundo escuro vai até
+          o rodapé, sem a faixa branca que aparecia antes (ajuste de 16/10/2026). */}
+      <main id="main-content" className="flex-1 bg-ink">
         <Outlet />
       </main>
       <Footer />

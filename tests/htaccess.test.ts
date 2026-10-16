@@ -10,10 +10,24 @@ const NOT_REWRITTEN = new Set(['__root', 'index', 'services'])
 const root = join(import.meta.dir, '..')
 const htaccess = readFileSync(join(root, 'public', '.htaccess'), 'utf8')
 
-const pages = readdirSync(join(root, 'src', 'routes'))
+const routeNames = readdirSync(join(root, 'src', 'routes'))
   .filter((file) => file.endsWith('.tsx'))
   .map((file) => file.replace(/\.tsx$/, ''))
-  .filter((name) => !NOT_REWRITTEN.has(name))
+
+// Páginas de um nível (ex.: 'contato') e as listas com página filha
+// ('blog.index' vira 'blog'). Páginas com nome variável ('blog.$slug') ficam
+// de fora daqui: elas têm a regra própria, conferida no teste de baixo.
+const pages = [
+  ...new Set(
+    routeNames
+      .filter((name) => !name.includes('$'))
+      .map((name) => name.replace(/\.index$/, ''))
+      .filter((name) => !NOT_REWRITTEN.has(name)),
+  ),
+]
+
+// As seções com página de nome variável. Ex.: 'blog.$slug' → 'blog'.
+const slugSections = routeNames.filter((name) => name.includes('.$')).map((name) => name.split('.')[0])
 
 const rewrittenPages = (() => {
   const match = htaccess.match(/RewriteRule \^\(([^)]+)\)\/\?\$ \/index\.html/)
@@ -23,6 +37,12 @@ const rewrittenPages = (() => {
 describe('public/.htaccess', () => {
   test('libera todas as páginas do site (senão elas dão 404 no Apache)', () => {
     expect(rewrittenPages.sort()).toEqual(pages.sort())
+  })
+
+  test('libera as páginas com nome variável (ex.: /blog/<slug>), só no formato seguro', () => {
+    const match = htaccess.match(/RewriteRule \^\(([^)]+)\)\/\[a-z0-9-\]\+\/\?\$ \/index\.html/)
+    expect(match).not.toBeNull()
+    expect(match![1].split('|').sort()).toEqual([...new Set(slugSections)].sort())
   })
 
   test('service worker e manifesto do PWA nunca ficam presos no cache', () => {

@@ -11,6 +11,9 @@ export const nav: NavLink[] = [
   { label: 'Início', href: '/' },
   { label: 'Áreas de atuação', href: '/areas-de-atuacao' },
   { label: 'Quem somos', href: '/quem-somos' },
+  // Blog e eventos (#61, B4): o conteúdo cadastrado na plataforma, mostrado no site.
+  { label: 'Blog', href: '/blog' },
+  { label: 'Eventos', href: '/eventos' },
   { label: 'Contato', href: '/contato' },
 ]
 
@@ -58,6 +61,8 @@ export const home: HomeContent = {
     heading: ['Instituto Brasileiro de', 'Treinamento Operacional'],
     image: '/images/hero.webp',
   },
+  // Linha 1 da página inicial: POR QUE O IBTO (diferenciais reais, sem repetir
+  // a linha 2). Ajuste de 15/10/2026: antes as duas linhas diziam o mesmo.
   features: [
     {
       title: 'Atuação Nacional',
@@ -66,25 +71,27 @@ export const home: HomeContent = {
       href: '/rede-nacional',
     },
     {
-      title: 'Formação Especializada',
+      title: 'Metodologia de Instrução',
       description:
-        'Treinamentos estruturados com metodologia operacional voltada para civis, profissionais de segurança, policiais e militares.',
+        'Demonstrar, explicar, praticar, corrigir e avaliar: o mesmo método em todos os treinamentos, para o aluno aprender de verdade.',
     },
     {
-      title: 'Certificação Profissional',
+      title: 'Certificado Verificável',
       description:
-        'Cursos, seminários e capacitações com certificação institucional e registro junto ao sistema IBTO.',
+        'Todo certificado tem QR code: qualquer pessoa confere na hora, pela internet, se ele é verdadeiro.',
     },
   ],
   training: {
     eyebrow: 'TREINAMENTOS E CAPACITAÇÕES',
     intro:
       'Programas desenvolvidos para formação, aperfeiçoamento e especialização de profissionais e cidadãos que buscam elevar seu nível de preparo técnico, físico e operacional.',
+    // Linha 2 da página inicial: O QUE VOCÊ ENCONTRA AQUI (cada cartão leva a
+    // um lugar de verdade: o catálogo da plataforma, os eventos e o blog).
     cards: [
       {
-        title: 'Formação Operacional',
+        title: 'Cursos e Treinamentos',
         description:
-          'Programas estruturados para desenvolvimento de competências técnicas, disciplina, tomada de decisão e preparo para ambientes de alta exigência.',
+          'Presenciais e online, abertos ao público ou exclusivos para filiados, com inscrição e certificado pela plataforma.',
         // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
         href: '/cursos',
         naPlataforma: true,
@@ -94,27 +101,24 @@ export const home: HomeContent = {
         },
       },
       {
-        title: 'Treinamentos Especializados',
-        description:
-          'Capacitações voltadas para aplicação prática, atualização profissional e desenvolvimento contínuo de habilidades operacionais.',
-        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
-        href: '/cursos',
-        naPlataforma: true,
-        image: {
-          src: '/images/training/treinamentos-especializados.webp',
-          alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
-        },
-      },
-      {
-        title: 'Certificação e Credenciamento',
-        description:
-          'Reconhecimento institucional para participantes, instrutores e profissionais que concluem os programas de formação do IBTO.',
-        // Abre o catálogo da plataforma de cursos (fonte única dos cursos desde a #52).
-        href: '/cursos',
-        naPlataforma: true,
+        title: 'Eventos',
+        description: 'Fotos dos treinamentos, formações e seminários do IBTO pelo Brasil.',
+        // Página de eventos deste site (#61, B4).
+        href: '/eventos',
         image: {
           src: '/images/training/certificacao-e-credenciamento.webp',
           alt: 'Turma formada pelo IBTO posa com os certificados em campo de treinamento.',
+        },
+      },
+      {
+        title: 'Blog',
+        description:
+          'Notícias e conteúdos técnicos: defesa pessoal, instrução, análise pós-ação e o dia a dia das equipes.',
+        // Página do blog deste site (#61, B4).
+        href: '/blog',
+        image: {
+          src: '/images/training/treinamentos-especializados.webp',
+          alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
         },
       },
     ],
