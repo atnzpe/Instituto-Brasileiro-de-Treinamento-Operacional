@@ -94,7 +94,12 @@ function PaginaDeEventos() {
                       <div className="p-5">
                         <h2 className="text-lg text-white">{album.titulo}</h2>
                         <p className="mt-1 text-sm text-white/70">
-                          {[album.data_evento && dataBr(album.data_evento), album.local_evento, rotuloDeFotos(album.fotos)]
+                          {[
+                            album.data_evento && dataBr(album.data_evento),
+                            album.local_evento,
+                            // Modo privado: em vez de "12 fotos", avisa que as fotos são para filiados.
+                            album.fotos_restritas ? 'Fotos para filiados' : rotuloDeFotos(album.fotos),
+                          ]
                             .filter(Boolean)
                             .join(' · ')}
                         </p>

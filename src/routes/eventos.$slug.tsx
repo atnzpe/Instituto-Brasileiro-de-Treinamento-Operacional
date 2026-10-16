@@ -3,6 +3,7 @@
  * O álbum de fotos: título, data, local, descrição e a grade de fotos, com o
  * link para o post do blog sobre o evento, se houver.
  */
+import { AvisoFotosRestritas } from '../components/blog/AvisoFotosRestritas'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
@@ -79,9 +80,14 @@ function PaginaDoEvento() {
                 </Link>
               </p>
             )}
-            <div className="mt-8">
-              <GradeDeFotos fotos={album.fotos} />
-            </div>
+            {/* Fotos só para filiados (modo privado): o aviso com o botão para entrar na plataforma. */}
+            {album.fotos_restritas ? (
+              <AvisoFotosRestritas destino={`/eventos/${album.slug}`} />
+            ) : (
+              <div className="mt-8">
+                <GradeDeFotos fotos={album.fotos} />
+              </div>
+            )}
           </>
         )}
       </div>

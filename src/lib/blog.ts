@@ -72,7 +72,10 @@ export interface PostCompleto extends CartaoDoPost {
   video: Video | null
   /** O curso aberto ligado ao post (com o link da inscrição), ou null. */
   curso: { titulo: string; url: string } | null
+  /** Vazia no modo privado da galeria (fotos só para filiados, na plataforma). */
   fotos: Foto[]
+  /** true = o post tem fotos de evento, mas elas são só para filiados (16/10/2026). */
+  fotos_restritas?: boolean
 }
 
 /** Um álbum na lista de eventos. */
@@ -84,8 +87,11 @@ export interface CartaoDoAlbum {
   local_evento: string | null
   /** Quantas fotos o álbum tem. */
   fotos: number
+  /** null no modo privado (a foto da capa também é só para filiados). */
   capa_url: string | null
   capa_descricao: string | null
+  /** true = as fotos são só para filiados, na plataforma (16/10/2026). */
+  fotos_restritas?: boolean
 }
 
 /** Um álbum inteiro (a página do evento). */
@@ -97,7 +103,10 @@ export interface AlbumCompleto {
   local_evento: string | null
   /** O post ligado ao álbum, se já está no site. */
   post: { slug: string; titulo: string } | null
+  /** Vazia no modo privado (fotos só para filiados, na plataforma). */
   fotos: Foto[]
+  /** true = as fotos são só para filiados, com login na plataforma (16/10/2026). */
+  fotos_restritas?: boolean
 }
 
 /**
