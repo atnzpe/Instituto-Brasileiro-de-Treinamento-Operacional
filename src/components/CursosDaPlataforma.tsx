@@ -1,5 +1,5 @@
 /**
- * CURSOS DA PLATAFORMA na página /cursos (#52): a lista dos cursos publicados
+ * CURSOS DA PLATAFORMA (#52; na página inicial desde 16/10/2026, com limite): a lista dos cursos publicados
  * na plataforma de cursos (presenciais e online; os fechados nunca vêm), em
  * cartões com a modalidade, o tipo, a data, o local, o preço e o link "Ver na
  * plataforma". Assim um curso novo aparece no site SOZINHO, sem mudar o site.
@@ -22,9 +22,10 @@ function dataBr(data: string): string {
 }
 
 /**
+ * @param limite Quantos cursos mostrar no máximo. Ex.: 3 na página inicial; sem limite, todos.
  * @returns A lista de cursos, ou nada (carregando, com erro ou sem cursos).
  */
-export function CursosDaPlataforma() {
+export function CursosDaPlataforma({ limite }: { limite?: number } = {}) {
   // Guarda a resposta por 5 minutos e NÃO tenta de novo quando falha.
   const { data: cursos } = useQuery({
     queryKey: ['cursos-da-plataforma'],
@@ -41,7 +42,8 @@ export function CursosDaPlataforma() {
   return (
     // Cartões: 1 coluna no celular, 2 no tablet, 3 na tela larga.
     <ul className="mt-6 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-3">
-      {cursos.map((curso) => (
+      {/* slice: corta no limite pedido (sem limite, vão todos). */}
+      {cursos.slice(0, limite).map((curso) => (
         <li
           key={curso.url}
           className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink"
