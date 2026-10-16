@@ -10,6 +10,7 @@
  * As fotos da plataforma usam crossOrigin="anonymous": pedidas no modo liberado
  * pela plataforma (CORS), o modo offline as guarda sabendo se vieram certas.
  */
+import { AvisoFotosRestritas } from '../components/blog/AvisoFotosRestritas'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
@@ -127,6 +128,9 @@ function PaginaDoPost() {
                 <track kind="captions" />
               </video>
             )}
+
+            {/* Fotos do evento só para filiados (modo privado): o aviso com o botão para entrar. */}
+            {post.fotos_restritas && <AvisoFotosRestritas destino="/eventos" />}
 
             {/* Fotos dos álbuns de evento ligados ao post. */}
             {post.fotos.length > 0 && (
