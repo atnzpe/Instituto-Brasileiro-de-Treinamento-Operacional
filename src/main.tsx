@@ -6,6 +6,10 @@ import { NotFound } from './components/NotFound'
 import './index.css'
 import { routeTree } from './routeTree.gen'
 
+// Versão e build no console do navegador (#75, pedido do Gleyson): o suporte abre o
+// console (F12) e vê o que está no ar, sem precisar perguntar.
+console.info(`%cIBTO site%c v${__VERSAO_SITE__} · build ${__BUILD_SITE__}`, 'font-weight:bold;color:#c9bd94', 'color:inherit')
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

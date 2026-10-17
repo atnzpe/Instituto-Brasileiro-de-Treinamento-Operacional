@@ -3,9 +3,16 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { readFileSync } from 'node:fs'
+
+// A versão do site (#75), lida do package.json: vai para o rodapé como __VERSAO_SITE__.
+const versaoDoSite: string = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')).version
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Troca, no momento do build: __VERSAO_SITE__ pelo número da versão (ex.: "0.2.0") e
+  // __BUILD_SITE__ pela data e hora do build (ex.: "2026-10-17T03:10:00.000Z").
+  define: { __VERSAO_SITE__: JSON.stringify(versaoDoSite), __BUILD_SITE__: JSON.stringify(new Date().toISOString()) },
   plugins: [
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react(),
