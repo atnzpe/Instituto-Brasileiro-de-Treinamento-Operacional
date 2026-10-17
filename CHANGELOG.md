@@ -12,10 +12,17 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+## [0.2.0] — 17/10/2026 — piloto (homologação)
+
+### Adicionado
+
+- Versão no rodapé (#75), lida do `package.json`: o suporte sabe o que está no ar.
+
 ### Alterado
 
 - Preto equilibrado em todo o site: o fundo passa do preto absoluto para um carvão (`#14161a`), o branco dos textos para um branco quente (`#f3f1ec`) e os cartões ganham um tom acima do fundo, para não cansar a vista; contraste continua acima do AA.
-- Áreas de atuação: cada emblema num medalhão com contorno dourado fino, que reforça ao passar o mouse.
+- Áreas de atuação: cada emblema num medalhão (o emblema preenche o círculo, sem o quadrado preto), com contorno dourado fino e leve realce de brilho (PRs #92 e #93).
+- Contato: WhatsApp, Facebook e Instagram em medalhões circulares, no mesmo estilo (PR #94).
 - Eventos: fotos só para filiados, com aviso e botão para entrar na plataforma (PR #91).
 
 ## [0.1.0] — 16/10/2026 — piloto (homologação)
