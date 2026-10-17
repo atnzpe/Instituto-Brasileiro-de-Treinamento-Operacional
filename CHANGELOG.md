@@ -12,6 +12,12 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Alterado
+
+- Preto equilibrado em todo o site: o fundo passa do preto absoluto para um carvão (`#14161a`), o branco dos textos para um branco quente (`#f3f1ec`) e os cartões ganham um tom acima do fundo, para não cansar a vista; contraste continua acima do AA.
+- Áreas de atuação: cada emblema num medalhão com contorno dourado fino, que reforça ao passar o mouse.
+- Eventos: fotos só para filiados, com aviso e botão para entrar na plataforma (PR #91).
+
 ## [0.1.0] — 16/10/2026 — piloto (homologação)
 
 Primeira versão marcada do site, publicada na homologação (`homolog.ib-to.org`) para o piloto da plataforma de cursos.
