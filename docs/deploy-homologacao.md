@@ -55,9 +55,11 @@ No primeiro envio do formulário, o `mensagem.php` cria sozinho a pasta oculta `
 
 **Ponto seguro:** site enviado.
 
-## Parte D — Proteger com senha
+## Parte D — Proteger com senha (DESATIVADA desde 17/10/2026)
 
-A homologação é só para o time. O `.htaccess` do pacote **já pede a senha** (só em `homolog.ib-to.org` e só depois de passar para HTTPS, para a senha nunca viajar sem criptografia). O cPanel só guarda o usuário e a senha. Esta parte é feita **uma vez**.
+> **Desde 17/10/2026 (início do piloto) a homologação não tem mais a janelinha de senha**, a pedido do Gleyson: várias pessoas indicadas vão acessar. O `.htaccess` não pede mais a senha e o deploy confere o "noindex" (fora do Google) no lugar do 401. Os passos abaixo ficam como registro, para o caso de a senha voltar (reverter a PR que a tirou).
+
+A homologação era só para o time. O `.htaccess` do pacote **já pede a senha** (só em `homolog.ib-to.org` e só depois de passar para HTTPS, para a senha nunca viajar sem criptografia). O cPanel só guarda o usuário e a senha. Esta parte é feita **uma vez**.
 
 - [ ] cPanel → **Directory Privacy** (Privacidade do Diretório) → entre na pasta **`homolog.ib-to.org`**.
 - [ ] Em "Create User", crie o usuário `equipe` com uma **senha forte** (use o gerador do cPanel) → **Salvar**. Se ele já existe, pule.
@@ -156,7 +158,7 @@ Depois de salvo, nem você nem ninguém consegue ler o valor de volta no GitHub,
 ### 3. Primeiro deploy
 
 - [ ] GitHub → **Actions** → **Deploy homologação** → **Run workflow** → branch em teste → **Run workflow**. O botão só aparece quando o `deploy.yml` já está na `main`; o primeiro deploy (#15) usou, por isso, um gatilho temporário de push na própria branch.
-- [ ] Os dois passos ficam verdes. O último confere sozinho que `https://` pede a senha e que `http://` vai para `https://`.
+- [ ] Os dois passos ficam verdes. O último confere sozinho que `https://` responde (200) com o "noindex" e que `http://` vai para `https://`.
 - [ ] Se o passo "Enviar por FTPS" falhar com erro de **certificado**, mande a mensagem para o Claude: o endereço do servidor FTP precisa ser o que o certificado da HostGator cobre.
 - [ ] Faça a Parte E.
 

@@ -42,20 +42,12 @@ AddType application/manifest+json .webmanifest
   Require all denied
 </Files>
 
-# Staging password (issue #24). Asked only on homolog.ib-to.org and only over
-# HTTPS: plain HTTP has no password prompt, so the HTTPS redirect above runs
-# first and the password never travels unencrypted. Living here (instead of
-# cPanel's Directory Privacy block) also means a new package can't switch it
-# off. The password file is the one Directory Privacy created, outside the
-# public folder. AuthMerging And keeps config.php denied even with the
-# password. Production (ib-to.org) never asks for one.
-<If "%{HTTP_HOST} == 'homolog.ib-to.org' && %{HTTPS} == 'on'">
-  AuthMerging And
-  AuthType Basic
-  AuthName "Homologacao IBTO"
-  AuthUserFile "/home1/edua1187/.htpasswds/homolog.ib-to.org/passwd"
-  Require valid-user
-</If>
+# Janelinha de usuário e senha da homologação (issue #24): TIRADA em 17/10/2026,
+# a pedido do Gleyson, para o piloto (várias pessoas indicadas vão acessar). O
+# site é a vitrine pública; o que tem dado fica na plataforma, com login. A
+# homologação continua fora do Google pelo "noindex" mais abaixo. Para VOLTAR
+# com a janelinha, reverta a PR que a tirou (o bloco <If> da senha básica do
+# Apache e o arquivo .htpasswds/homolog.ib-to.org/passwd).
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
