@@ -120,7 +120,7 @@ export function ConviteInstalar() {
     <aside
       aria-live="polite"
       aria-label="Instalar o app do IBTO"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-neutral-950/95 px-safe-4 pt-4 pb-safe-4 backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-superficie/95 px-safe-4 pt-4 pb-safe-4 backdrop-blur"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
         <img src="/icons/icon-192.png" alt="" width={48} height={48} className="h-12 w-12 shrink-0 rounded-xl" />

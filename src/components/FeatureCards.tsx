@@ -21,7 +21,7 @@ export function FeatureCards({ features }: { features: FeatureCard[] }) {
         {features.map((feature) => {
           // overflow-hidden: a foto respeita os cantos arredondados do cartão.
           const cardClassName =
-            'flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/90 shadow-xl shadow-black/40 backdrop-blur transition-colors'
+            'flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-superficie shadow-xl shadow-black/40 backdrop-blur transition-colors'
           const content = (
             <>
               {/* Foto real no alto do cartão (com texto alternativo). Sem foto: só o texto. */}

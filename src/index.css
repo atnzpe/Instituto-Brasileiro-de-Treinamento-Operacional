@@ -18,7 +18,18 @@
   --color-brand-gold-light: #c9bd94;
   /* Warm sand tint for light section backgrounds, replacing the old icy blue. */
   --color-brand-sand: #f4f1e8;
-  --color-ink: #000000;
+  /* PRETO EQUILIBRADO (pedido do Gleyson, 16/10/2026: "um preto que não force nem
+     canse a visão"). O preto absoluto (#000) com branco puro "vibra" e cansa a
+     leitura; o carvão abaixo mantém a identidade escura do IBTO e descansa a vista.
+     Tudo que usa bg-ink (fundo das páginas, menu, rodapé) herda daqui. */
+  --color-ink: #14161a;
+  /* O "preto" das sombras, degradês sobre as fotos e faixas: também suavizado. */
+  --color-black: #101215;
+  /* O "branco" dos textos no fundo escuro: um branco quente, com menos brilho.
+     Contraste com o fundo carvão: cerca de 15:1 (o mínimo AA é 4,5:1). */
+  --color-white: #f3f1ec;
+  /* Cartões e quadros: um tom ACIMA do fundo, para dar camadas sem luz forte. */
+  --color-superficie: #1d2025;
   --color-body: rgb(51 51 51 / 0.8);
   --color-muted: #555555;
 }
@@ -27,7 +38,9 @@
   body {
     font-family: var(--font-body);
     color: var(--color-muted);
-    background-color: #ffffff;
+    /* O fundo da página é o carvão do site (todas as seções são escuras): sem
+       "clarão" branco ao rolar além do fim da página no celular. */
+    background-color: var(--color-ink);
   }
 
   h1,
