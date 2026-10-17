@@ -98,11 +98,14 @@ jobs:
           exclude: |
             **/config.php
 
-      - name: Conferir que o site está no ar e protegido
+      # Desde 17/10/2026 (piloto) a homologação não tem mais a janelinha de senha:
+      # confere que o site responde e que continua fora do Google (noindex).
+      - name: Conferir que o site está no ar e fora do Google
         run: |
           code=$(curl -s -o /dev/null -w '%{http_code}' https://homolog.ib-to.org/)
           echo "https://homolog.ib-to.org/ respondeu $code"
-          test "$code" = "401" || { echo "Esperado 401 (senha da homologação)"; exit 1; }
+          test "$code" = "200" || { echo "Esperado 200 (site no ar)"; exit 1; }
+          curl -s -I https://homolog.ib-to.org/ | grep -i '^x-robots-tag:.*noindex' || { echo "Esperado o cabeçalho X-Robots-Tag: noindex"; exit 1; }
           code=$(curl -s -o /dev/null -w '%{http_code}' http://homolog.ib-to.org/)
           echo "http://homolog.ib-to.org/ respondeu $code"
           test "$code" = "301" || { echo "Esperado 301 para HTTPS, sem pedir senha"; exit 1; }

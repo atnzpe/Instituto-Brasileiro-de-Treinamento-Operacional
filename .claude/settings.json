@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" issue view 35 --json title,body,state,comments --jq '.title, .state, .body, \\(.comments[] | \"---COMENTÁRIO \" + .author.login + \" \" + .createdAt + \"\\\\n\" + .body\\)')",
+      "Bash(cd /c/workspace/ibto; grep -n -i -E \"htpasswd|AuthUserFile|FTP|subdom|raiz|document root|php 8|MultiPHP|cron\" landpage/docs/deploy-homologacao.md | head -40; echo ---; cat plataforma/public/.htaccess; echo ---; cat plataforma/routes/api.php 2>/dev/null || grep -rn \"saude\" plataforma/routes plataforma/bootstrap/app.php; echo ---; cat plataforma/routes/console.php; grep -n \"APP_INDEXAVEL\\\\|X-Robots\" -r plataforma/app plataforma/config plataforma/resources/views | head)",
+      "Read(//c/workspace/ibto/**)",
+      "Bash(php artisan *)",
+      "PowerShell(cd C:\\\\workspace\\\\ibto\\\\plataforma; \\(Get-Command php\\).Source; php artisan test --compact | Select-Object -Last 15)"
+    ]
+  }
+}
