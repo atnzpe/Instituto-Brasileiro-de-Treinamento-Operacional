@@ -12,6 +12,10 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Adicionado (licença provisória)
+
+- Arquivo LICENSE: repositório público só para leitura, todos os direitos reservados ao IBTO até a diretoria escolher a licença aberta (#85).
+
 ### Alterado
 
 - CI só nas PRs (antes rodava também a cada push), para economizar os minutos do GitHub Actions.
