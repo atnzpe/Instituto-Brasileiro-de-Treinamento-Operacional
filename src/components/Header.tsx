@@ -2,12 +2,15 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useNav } from '../hooks/useContent'
 import { linkDaPlataforma } from '../lib/plataforma'
+import { MenuIdiomas } from './MenuIdiomas'
 
 /*
  * CABEÇALHO do site: o logo, o menu e o botão "Entrar / Área do aluno" (#48,
  * decisão do Gleyson em 14/10/2026), que leva à tela de entrar da plataforma
  * de cursos do mesmo ambiente (testes ou oficial). No celular, o menu abre
  * pelo botão de três tracinhos e o botão fica no fim da lista.
+ * O menu de idiomas (#54: português, inglês e espanhol pelo Google Tradutor)
+ * fica ao lado do botão no computador e no fim do menu no celular.
  */
 
 export function Header() {
@@ -33,6 +36,8 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {/* Idiomas (#54): a mesma página traduzida pelo Google. */}
+          <MenuIdiomas />
           {/* Entrar / Área do aluno: abre a plataforma de cursos (link comum: é outro endereço). */}
           <a
             href={linkDaPlataforma('/login')}
@@ -72,6 +77,8 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {/* Idiomas (#54) no celular: a lista abre dentro do menu. */}
+          <MenuIdiomas noCelular />
           {/* No celular, o botão da plataforma fica no fim do menu. */}
           <a
             href={linkDaPlataforma('/login')}

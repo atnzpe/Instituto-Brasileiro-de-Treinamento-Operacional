@@ -12,6 +12,10 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Adicionado
+
+- Menu de idiomas no topo de todas as páginas (#54): Português (padrão), English e Español, com bandeira. Cada idioma abre a mesma página traduzida pelo Google Tradutor, sem carregar script do Google no site. No celular, fica no fim do menu.
+
 ## [0.2.0] — 17/10/2026 — piloto (homologação)
 
 ### Adicionado
