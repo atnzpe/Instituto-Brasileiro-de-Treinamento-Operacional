@@ -12,6 +12,10 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Alterado
+
+- CI só nas PRs (antes rodava também a cada push), para economizar os minutos do GitHub Actions.
+
 ### Adicionado
 
 - Menu de idiomas no topo de todas as páginas (#54): Português (padrão), English e Español, com bandeira. Cada idioma abre a mesma página traduzida pelo Google Tradutor, sem carregar script do Google no site. No celular, fica no fim do menu.
