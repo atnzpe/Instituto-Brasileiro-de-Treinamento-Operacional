@@ -1,11 +1,11 @@
 # Automated tests of the delivery flow (README, "Fluxo de trabalho"):
-# every push runs lint, unit tests and the production build.
+# every PR runs lint, unit tests and the production build.
+# ECONOMIA DE MINUTOS (18/10/2026, 90% da cota do GitHub Actions usada): roda só
+# na PR (antes rodava também a cada push em qualquer branch, ou seja, duas vezes).
 name: CI
 
 on:
-  push:
-    branches: ['**']
-  # Also checks each PR merged with the current main, so two PRs that pass
+  # Checks each PR merged with the current main, so two PRs that pass
   # on their own can't break main once both are merged.
   pull_request:
     branches: [main]
