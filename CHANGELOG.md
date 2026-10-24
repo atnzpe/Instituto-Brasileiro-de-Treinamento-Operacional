@@ -12,6 +12,11 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Corrigido (cabeçalho)
+
+- O logo ganhou fundo transparente: antes aparecia uma caixa preta sobre o cabeçalho cinza-escuro.
+- O menu completo só aparece a partir de 1280 px, onde cabe numa linha (antes, de 768 px a 1280 px, "Áreas de atuação" e "Quem somos" quebravam em duas linhas e encostavam no logo). Abaixo disso, vale o menu de três tracinhos.
+
 ### Adicionado (Rede Nacional, #11)
 
 - Página Rede Nacional com a foto personalizada dos monitores e instrutores credenciados, organizados por estado (modelo pedido pelo Mestre Eduardo, com a cara do IBTO): abas Instrutores e Monitores com endereço próprio (`?aba=monitores`), grade das 27 siglas que leva ao bloco do estado e cartões com foto, nível, nome abreviado, equipe, estado e áreas. Os dados vêm da plataforma, só de quem autorizou a imagem. Sem telefone nem cidade: o contato é pelo botão "Falar com o IBTO".

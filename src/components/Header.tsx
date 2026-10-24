@@ -11,6 +11,12 @@ import { MenuIdiomas } from './MenuIdiomas'
  * pelo botão de três tracinhos e o botão fica no fim da lista.
  * O menu de idiomas (#54: português, inglês e espanhol pelo Google Tradutor)
  * fica ao lado do botão no computador e no fim do menu no celular.
+ *
+ * Ajuste de 24/10/2026 (o Gleyson achou "feio"): o menu completo só aparece a
+ * partir de 1280 px (xl), onde os 6 itens, o idioma e o botão cabem numa linha
+ * só. Abaixo disso (tablet e notebook pequeno), vale o menu de três tracinhos,
+ * como no celular. Antes ele aparecia já em 768 px e os itens quebravam em duas
+ * linhas, encostando no logo. O logo ganhou fundo transparente (era preto).
  */
 
 export function Header() {
@@ -19,18 +25,20 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 pt-safe backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-safe-4 py-3 sm:px-safe-6">
+      {/* max-w-7xl: um pouco mais de largura; gap-6: o logo nunca encosta no menu. */}
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-safe-4 py-3 sm:px-safe-6">
         <Link to="/" className="shrink-0" onClick={() => setOpen(false)}>
           <img src="/images/logo.webp" alt="IBTO" className="h-12 w-auto" />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        {/* Menu completo: só a partir de 1280 px (xl), onde cabe numa linha. */}
+        <nav className="hidden items-center gap-6 xl:flex">
           {nav.map((link) => (
             <Link
               key={link.href}
               to={link.href}
               activeOptions={{ exact: true }}
-              className="py-2 font-body text-sm font-medium tracking-wide text-white/70 uppercase transition-colors hover:text-brand-gold-light"
+              className="py-2 font-body text-sm font-medium tracking-wide whitespace-nowrap text-white/70 uppercase transition-colors hover:text-brand-gold-light"
               activeProps={{ className: 'text-brand-gold-light', 'aria-current': 'page' }}
             >
               {link.label}
@@ -41,7 +49,7 @@ export function Header() {
           {/* Entrar / Área do aluno: abre a plataforma de cursos (link comum: é outro endereço). */}
           <a
             href={linkDaPlataforma('/login')}
-            className="inline-flex min-h-11 items-center rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide text-white uppercase transition-colors hover:bg-brand-gold-light hover:text-ink"
+            className="inline-flex min-h-11 items-center rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide whitespace-nowrap text-white uppercase transition-colors hover:bg-brand-gold-light hover:text-ink"
           >
             Entrar / Área do aluno
           </a>
@@ -49,7 +57,7 @@ export function Header() {
 
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center md:hidden"
+          className="flex h-11 w-11 items-center justify-center xl:hidden"
           aria-label={open ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -64,7 +72,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-white/10 bg-ink px-safe-4 pb-4 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-white/10 bg-ink px-safe-4 pb-4 xl:hidden">
           {nav.map((link) => (
             <Link
               key={link.href}
