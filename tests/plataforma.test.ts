@@ -6,9 +6,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   IMAGEM_PADRAO_DA_AREA,
-  areasDaLista,
   contarPorUf,
-  filtrarPorArea,
   enderecoDaPlataforma,
   juntarAreas,
   linkDaPlataforma,
@@ -76,28 +74,5 @@ describe('contarPorUf (Rede Nacional, #11)', () => {
       ]),
     ).toEqual({ PE: 2, BA: 1 })
     expect(contarPorUf([])).toEqual({})
-  })
-})
-
-describe('filtro por área (Rede Nacional, #11)', () => {
-  const pessoa = (areas: string[]) => ({ nome: 'A', nivel: null, equipe: null, uf: 'PE', areas, foto_url: '' })
-  const estados = [
-    { uf: 'BA', estado: 'Bahia', pessoas: [pessoa(['Kapap'])] },
-    { uf: 'PE', estado: 'Pernambuco', pessoas: [pessoa(['Krav Maga', 'Kapap']), pessoa(['Defesa Pessoal'])] },
-  ]
-
-  test('lista as áreas sem repetir, em ordem alfabética', () => {
-    expect(areasDaLista(estados)).toEqual(['Defesa Pessoal', 'Kapap', 'Krav Maga'])
-  })
-
-  test('deixa só quem atua na área; estado sem ninguém some', () => {
-    const soKrav = filtrarPorArea(estados, 'Krav Maga')
-    expect(soKrav.map((estado) => estado.uf)).toEqual(['PE'])
-    expect(soKrav[0].pessoas).toHaveLength(1)
-    expect(filtrarPorArea(estados, 'Kapap').map((estado) => estado.uf)).toEqual(['BA', 'PE'])
-  })
-
-  test('sem área escolhida, devolve tudo', () => {
-    expect(filtrarPorArea(estados, null)).toBe(estados)
   })
 })

@@ -302,36 +302,3 @@ export async function buscarRedeNacional(): Promise<RedeNacionalDaPlataforma> {
 export function contarPorUf(estados: EstadoDaRede[]): Record<string, number> {
   return Object.fromEntries(estados.map((estado) => [estado.uf, estado.pessoas.length]))
 }
-
-/**
- * As áreas de atuação que aparecem numa lista, sem repetir e em ordem
- * alfabética, para as etiquetas do filtro (#11, pedido de 16/10/2026).
- *
- * @param estados Os estados de uma das listas (instrutores ou monitores).
- * @returns As áreas. Ex.: ['Defesa Pessoal', 'Kapap', 'Krav Maga']
- */
-export function areasDaLista(estados: EstadoDaRede[]): string[] {
-  // Set: guarda cada área uma vez só, mesmo que muita gente tenha a mesma.
-  const areas = new Set(estados.flatMap((estado) => estado.pessoas.flatMap((pessoa) => pessoa.areas)))
-
-  // localeCompare com 'pt-BR': "Ávila" fica junto do "A", e não no fim.
-  return [...areas].sort((a, b) => a.localeCompare(b, 'pt-BR'))
-}
-
-/**
- * Deixa só quem atua numa área. O estado que fica sem ninguém some da lista.
- *
- * @param estados Os estados de uma das listas.
- * @param area A área escolhida (ex.: 'Krav Maga'), ou null para não filtrar.
- * @returns Os estados com as pessoas daquela área (a lista original, se area for null).
- */
-export function filtrarPorArea(estados: EstadoDaRede[], area: string | null): EstadoDaRede[] {
-  // Sem área escolhida: tudo como veio.
-  if (area === null) {
-    return estados
-  }
-
-  return estados
-    .map((estado) => ({ ...estado, pessoas: estado.pessoas.filter((pessoa) => pessoa.areas.includes(area)) }))
-    .filter((estado) => estado.pessoas.length > 0)
-}
