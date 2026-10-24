@@ -6,6 +6,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   IMAGEM_PADRAO_DA_AREA,
+  contarPorUf,
   enderecoDaPlataforma,
   juntarAreas,
   linkDaPlataforma,
@@ -60,5 +61,18 @@ describe('juntarAreas', () => {
       { title: 'Combate Corpo a Corpo', image: '/images/services/combate-corpo-a-corpo.webp' },
       { title: 'Área nova', image: IMAGEM_PADRAO_DA_AREA },
     ])
+  })
+})
+
+describe('contarPorUf (Rede Nacional, #11)', () => {
+  test('conta as pessoas de cada estado; estado sem ninguém não aparece', () => {
+    const pessoa = { nome: 'A', nivel: null, equipe: null, uf: 'PE', areas: [], foto_url: '' }
+    expect(
+      contarPorUf([
+        { uf: 'PE', estado: 'Pernambuco', pessoas: [pessoa, pessoa] },
+        { uf: 'BA', estado: 'Bahia', pessoas: [pessoa] },
+      ]),
+    ).toEqual({ PE: 2, BA: 1 })
+    expect(contarPorUf([])).toEqual({})
   })
 })
