@@ -8,7 +8,9 @@
  *   (?aba=instrutores ou ?aba=monitores), para o link ir direto;
  * - no topo, a grade das 27 siglas: clicar leva ao bloco do estado; estado
  *   sem ninguém fica apagado;
- * - os cartões por estado (A→Z) e, dentro dele, pela hierarquia.
+ * - os cartões por estado (A→Z) e, dentro dele, pela hierarquia;
+ * - filtro por área de atuação (pedido de 16/10/2026), também no endereço
+ *   (?area=Krav%20Maga), para mandar o link já filtrado.
  *
  * Os dados vêm da plataforma (API pública, só de quem autorizou a imagem).
  * Sem resposta da plataforma, a página mostra "Rede em expansão" e o resto do
@@ -18,7 +20,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { CredenciadoCard } from '../components/CredenciadoCard'
 import { useRedeNacionalContent } from '../hooks/useContent'
-import { buscarRedeNacional, contarPorUf } from '../lib/plataforma'
+import { areasDaLista, buscarRedeNacional, contarPorUf, filtrarPorArea } from '../lib/plataforma'
 import { redeNacional } from '../../shared/content'
 
 // O título da aba do navegador e do compartilhamento.
@@ -28,14 +30,19 @@ const TITULO = `${redeNacional.heading} | Instituto Brasileiro de Treinamento Op
 type Aba = 'instrutores' | 'monitores'
 
 /**
- * Lê a aba do endereço e LIMPA o valor: qualquer coisa diferente de
- * 'monitores' vira 'instrutores' (a aba padrão).
+ * Lê a aba e a área do endereço e LIMPA os valores: qualquer coisa diferente
+ * de 'monitores' vira 'instrutores' (a aba padrão); área vazia ou estranha
+ * (não é texto, ou tem mais de 60 letras) vira "sem filtro".
  *
- * @param busca Os parâmetros do endereço. Ex.: { aba: 'monitores' }
- * @returns A aba válida. Ex.: { aba: 'monitores' }
+ * @param busca Os parâmetros do endereço. Ex.: { aba: 'monitores', area: 'Kapap' }
+ * @returns A aba válida e a área (ou undefined). Ex.: { aba: 'monitores', area: 'Kapap' }
  */
-function abaLimpa(busca: Record<string, unknown>): { aba: Aba } {
-  return { aba: busca.aba === 'monitores' ? 'monitores' : 'instrutores' }
+function buscaLimpa(busca: Record<string, unknown>): { aba: Aba; area?: string } {
+  const aba: Aba = busca.aba === 'monitores' ? 'monitores' : 'instrutores'
+  // Área só se for um texto curto; senão, o filtro fica desligado.
+  const area = typeof busca.area === 'string' && busca.area.trim() !== '' && busca.area.length <= 60 ? busca.area.trim() : undefined
+
+  return area ? { aba, area } : { aba }
 }
 
 export const Route = createFileRoute('/rede-nacional')({
@@ -48,7 +55,7 @@ export const Route = createFileRoute('/rede-nacional')({
       { property: 'og:url', content: 'https://ib-to.org/rede-nacional' },
     ],
   }),
-  validateSearch: abaLimpa,
+  validateSearch: buscaLimpa,
   component: RedeNacionalPage,
 })
 
@@ -60,8 +67,8 @@ export const Route = createFileRoute('/rede-nacional')({
 function RedeNacionalPage() {
   // Título e subtítulo (editáveis no conteúdo do site).
   const { data: textos } = useRedeNacionalContent()
-  // A aba escolhida (já limpa pelo validateSearch).
-  const { aba } = Route.useSearch()
+  // A aba e a área escolhidas (já limpas pelo validateSearch).
+  const { aba, area } = Route.useSearch()
   // A lista da plataforma; guardada por 5 minutos (a plataforma também guarda por 5).
   const { data: rede, isPending } = useQuery({
     queryKey: ['plataforma', 'rede-nacional'],
@@ -71,7 +78,13 @@ function RedeNacionalPage() {
   })
 
   // Os estados da aba escolhida (vazio enquanto carrega ou se a plataforma falhar).
-  const estados = rede ? rede[aba] : []
+  const daAba = rede ? rede[aba] : []
+  // As áreas que existem nesta aba, para as etiquetas do filtro.
+  const areas = areasDaLista(daAba)
+  // A área só filtra se existir nesta aba (um link antigo com área sumida mostra todos).
+  const areaAtiva = area && areas.includes(area) ? area : null
+  // Os estados depois do filtro de área (é o que a grade e os cartões mostram).
+  const estados = filtrarPorArea(daAba, areaAtiva)
   // Quantas pessoas por estado, para a grade de siglas.
   const contagem = contarPorUf(estados)
   // O rótulo da aba no singular/plural, para os textos. Ex.: 'instrutores'.
@@ -111,6 +124,31 @@ function RedeNacionalPage() {
           })}
         </nav>
 
+        {/* FILTRO POR ÁREA: etiquetas; "Todas" desliga. Só aparece com 2 áreas ou mais. */}
+        {areas.length > 1 && (
+          <nav aria-label="Áreas de atuação" className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-2">
+            {[null, ...areas].map((opcao) => {
+              const atual = opcao === areaAtiva
+
+              return (
+                <Link
+                  key={opcao ?? 'todas'}
+                  to="/rede-nacional"
+                  search={opcao ? { aba, area: opcao } : { aba }}
+                  aria-current={atual ? 'true' : undefined}
+                  className={`inline-flex min-h-11 items-center rounded-full border px-5 text-sm ${
+                    atual
+                      ? 'border-brand-gold-light bg-brand-gold-light/15 text-brand-gold-light'
+                      : 'border-white/15 text-white/70 hover:border-brand-gold-light'
+                  }`}
+                >
+                  {opcao ?? 'Todas as áreas'}
+                </Link>
+              )
+            })}
+          </nav>
+        )}
+
         {/* GRADE DOS ESTADOS: as 27 siglas; com gente = link para o bloco; sem ninguém = apagada. */}
         {rede && (
           <nav aria-label="Estados" className="mx-auto mt-8 grid max-w-3xl grid-cols-6 gap-2 sm:grid-cols-9">
@@ -146,8 +184,9 @@ function RedeNacionalPage() {
           ) : estados.length === 0 ? (
             // Ninguém nesta aba (ou a plataforma não respondeu): a mensagem de expansão.
             <p className="mx-auto max-w-md text-center text-white/70">
-              Rede em expansão: em breve, os {nomeDaAba} credenciados pelo IBTO aparecerão aqui,
-              organizados por estado.
+              {areaAtiva
+                ? `Nenhum dos ${nomeDaAba} credenciados atua em ${areaAtiva} ainda.`
+                : `Rede em expansão: em breve, os ${nomeDaAba} credenciados pelo IBTO aparecerão aqui, organizados por estado.`}
             </p>
           ) : (
             <div className="space-y-12">
