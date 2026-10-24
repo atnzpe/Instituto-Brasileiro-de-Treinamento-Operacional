@@ -19,7 +19,6 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ### Adicionado (Rede Nacional, #11)
 
-- Filtro por área de atuação na Rede Nacional: etiquetas ("Todas as áreas", Krav Maga, Kapap...) que mostram só quem atua naquela área. A área vai no endereço (`?area=`), para mandar o link já filtrado.
 - Página Rede Nacional com a foto personalizada dos monitores e instrutores credenciados, organizados por estado (modelo pedido pelo Mestre Eduardo, com a cara do IBTO): abas Instrutores e Monitores com endereço próprio (`?aba=monitores`), grade das 27 siglas que leva ao bloco do estado e cartões com foto, nível, nome abreviado, equipe, estado e áreas. Os dados vêm da plataforma, só de quem autorizou a imagem. Sem telefone nem cidade: o contato é pelo botão "Falar com o IBTO".
 
 ### Adicionado (licença provisória)
