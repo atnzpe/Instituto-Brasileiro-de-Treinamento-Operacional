@@ -227,3 +227,78 @@ export async function buscarAreasDaPlataforma(): Promise<AreaDaPlataforma[]> {
     clearTimeout(relogio)
   }
 }
+
+// ===== REDE NACIONAL (#11, pedido do Mestre Eduardo em 23/10/2026) =====
+// Monitores e instrutores credenciados, por estado, vindos da plataforma. Só
+// aparecem os que autorizaram a imagem; a plataforma NUNCA manda contato.
+
+/** Uma pessoa no cartão da Rede Nacional. */
+export interface CredenciadoDaRede {
+  /** Nome abreviado. Ex.: 'Gleyson A. S.' */
+  nome: string
+  /** O nível (graduação). Ex.: 'Instrutor Expert II' */
+  nivel: string | null
+  /** A equipe filiada. Ex.: 'IBTO Pernambuco' */
+  equipe: string | null
+  /** A sigla do estado. Ex.: 'PE' */
+  uf: string
+  /** As áreas de atuação. Ex.: ['Defesa Pessoal', 'Krav Maga'] */
+  areas: string[]
+  /** O endereço completo da foto personalizada. */
+  foto_url: string
+}
+
+/** Um estado com as pessoas dele, já na ordem da hierarquia. */
+export interface EstadoDaRede {
+  uf: string
+  /** O nome do estado. Ex.: 'Pernambuco' */
+  estado: string
+  pessoas: CredenciadoDaRede[]
+}
+
+/** A resposta completa da API da Rede Nacional. */
+export interface RedeNacionalDaPlataforma {
+  instrutores: EstadoDaRede[]
+  monitores: EstadoDaRede[]
+  /** Os 27 estados (sigla → nome), para a grade de siglas. */
+  estados: Record<string, string>
+  /** Quantas pessoas no total (instrutores + monitores). */
+  total: number
+}
+
+/**
+ * Busca a Rede Nacional na plataforma.
+ *
+ * @returns As duas listas (instrutores e monitores), por estado.
+ * @throws Error se a plataforma não responder em 5 segundos ou responder com erro.
+ */
+export async function buscarRedeNacional(): Promise<RedeNacionalDaPlataforma> {
+  const controle = new AbortController()
+  const relogio = setTimeout(() => controle.abort(), ESPERA_MAXIMA_MS)
+
+  try {
+    const resposta = await fetch(linkDaPlataforma('/api/publico/rede-nacional'), {
+      signal: controle.signal,
+      headers: { Accept: 'application/json' },
+    })
+    // Resposta de erro: avisa quem chamou (a página mostra "rede em expansão").
+    if (!resposta.ok) {
+      throw new Error(`PLATAFORMA_RESPONDEU_${resposta.status}`)
+    }
+
+    return (await resposta.json()) as RedeNacionalDaPlataforma
+  } finally {
+    clearTimeout(relogio)
+  }
+}
+
+/**
+ * Quantas pessoas cada estado tem numa lista, para a grade de siglas
+ * (estado com 0 fica apagado, sem link).
+ *
+ * @param estados Os estados de uma das listas. Ex.: [{ uf: 'PE', pessoas: [a, b] }]
+ * @returns Sigla → quantidade. Ex.: { PE: 2 } (estado ausente = 0).
+ */
+export function contarPorUf(estados: EstadoDaRede[]): Record<string, number> {
+  return Object.fromEntries(estados.map((estado) => [estado.uf, estado.pessoas.length]))
+}

@@ -12,6 +12,10 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Adicionado (Rede Nacional, #11)
+
+- Página Rede Nacional com a foto personalizada dos monitores e instrutores credenciados, organizados por estado (modelo pedido pelo Mestre Eduardo, com a cara do IBTO): abas Instrutores e Monitores com endereço próprio (`?aba=monitores`), grade das 27 siglas que leva ao bloco do estado e cartões com foto, nível, nome abreviado, equipe, estado e áreas. Os dados vêm da plataforma, só de quem autorizou a imagem. Sem telefone nem cidade: o contato é pelo botão "Falar com o IBTO".
+
 ### Adicionado (licença provisória)
 
 - Arquivo LICENSE: repositório público só para leitura, todos os direitos reservados ao IBTO até a diretoria escolher a licença aberta (#85).
