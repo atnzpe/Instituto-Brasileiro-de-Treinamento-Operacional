@@ -53,9 +53,12 @@ describe('página inicial', () => {
     expect(new Set(frases).size).toBe(frases.length)
   })
 
-  test('os diferenciais não têm link para página vazia', () => {
-    for (const card of home.features) {
-      expect(card.href).not.toBe('/rede-nacional')
-    }
+  // Só a "Atuação Nacional" leva a outra página (a Rede Nacional, já com credenciados
+  // no ar); os outros diferenciais só informam, para nenhum cartão levar a lugar nenhum.
+  test('só a Atuação Nacional tem link, e ele leva à Rede Nacional', () => {
+    const comLink = home.features.filter((card) => card.href)
+    expect(comLink.map((card) => [card.title, card.href])).toEqual([
+      ['Atuação Nacional', '/rede-nacional'],
+    ])
   })
 })

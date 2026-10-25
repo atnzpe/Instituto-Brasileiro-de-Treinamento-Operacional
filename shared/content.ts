@@ -96,13 +96,15 @@ export const home: HomeContent = {
     ],
   },
   // POR QUE O IBTO: três diferenciais reais, cada um com uma foto real que combina com o texto.
-  // Só informam (sem link), então nenhum mostra seta:
-  // antes, um levava a uma página ainda vazia (/rede-nacional) e os outros a lugar nenhum.
+  // Só a "Atuação Nacional" tem link (e seta): leva à Rede Nacional, que já tem credenciados
+  // no ar (Gleyson, 24/10/2026; o link tinha saído em 18/10, quando a página estava vazia).
+  // Os outros dois só informam, sem seta.
   features: [
     {
       title: 'Atuação Nacional',
       description:
         'Rede de instrutores, representantes e centros de treinamento em expansão por todo o território brasileiro.',
+      href: '/rede-nacional',
       image: {
         src: '/images/training/treinamentos-especializados.webp',
         alt: 'Instrutor do IBTO orienta um aluno em treinamento prático de retenção de arma.',
