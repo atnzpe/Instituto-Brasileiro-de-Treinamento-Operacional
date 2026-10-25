@@ -7,6 +7,7 @@
  * contato passa pela página de Contato do IBTO (regra do Eduardo, 26/09/2026).
  */
 import type { CredenciadoDaRede } from '../lib/plataforma'
+import { FotoInteira } from './FotoInteira'
 
 /**
  * @param pessoa Os dados do cartão, como a plataforma devolve.
@@ -16,14 +17,11 @@ import type { CredenciadoDaRede } from '../lib/plataforma'
 export function CredenciadoCard({ pessoa }: { pessoa: CredenciadoDaRede }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-brand-gold-light/30 bg-white/5">
-      {/* Foto quadrada, do tamanho do cartão; "lazy" = só baixa quando chega perto da tela. */}
-      <img
+      {/* Foto INTEIRA, em pé (3:4), na mesma moldura em todos os cartões (grade simétrica).
+          Antes era um quadrado recortado, que cortava o rosto (Gleyson, 24/10/2026). */}
+      <FotoInteira
         src={pessoa.foto_url}
         alt={`Foto de ${pessoa.nome}${pessoa.nivel ? `, ${pessoa.nivel}` : ''}`}
-        loading="lazy"
-        width={400}
-        height={400}
-        className="aspect-square w-full object-cover"
       />
       <div className="flex flex-1 flex-col gap-1 p-4">
         {/* O nível em destaque dourado (é a "patente" do credenciado). */}
