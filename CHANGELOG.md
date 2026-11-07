@@ -12,6 +12,10 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Melhorado (rodapé, 07/11/2026)
+
+- O rodapé ganhou uma linha discreta, no estilo de placa tática e simétrica em volta de um losango central: **Desenvolvido por Gleyson Atanazio** de um lado e a **versão do site** do outro.
+
 ### Melhorado (fotos inteiras, #105)
 
 - Fotos e capas aparecem **inteiras**, sem cortar rosto, cabeça ou pés: cartões e página do blog, grade de fotos dos posts, eventos, cursos da plataforma, cartões de destaque da home e a equipe. A moldura tem o mesmo tamanho em toda a grade e a sobra é preenchida com a própria foto desfocada, igual à Rede Nacional.
