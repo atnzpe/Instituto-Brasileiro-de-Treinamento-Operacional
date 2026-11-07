@@ -8,6 +8,8 @@
  */
 import { Link } from '@tanstack/react-router'
 import { type CartaoDoPost as Post, dataBr } from '../../lib/blog'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from '../FotoInteira'
 
 /**
  * Desenha o cartão.
@@ -24,15 +26,14 @@ export function CartaoDoPost({ post, nivelDoTitulo = 'h2' }: { post: Post; nivel
     <li className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5">
       {/* Capa com a descrição para o leitor de tela (sem capa: só o texto). */}
       {post.capa_url && (
-        <img
-          crossOrigin="anonymous"
+        // Capa inteira na moldura 16:9: cartões iguais, ninguém cortado (#105).
+        <FotoInteira
           src={post.capa_url}
           alt={post.capa_descricao ?? ''}
-          loading="lazy"
-          decoding="async"
-          width={800}
-          height={450}
-          className="aspect-video w-full object-cover"
+          proporcao="aspect-video"
+          largura={800}
+          altura={450}
+          crossOrigin="anonymous"
         />
       )}
       <div className="flex flex-1 flex-col gap-2 p-5">

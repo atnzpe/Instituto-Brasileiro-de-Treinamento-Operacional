@@ -1,14 +1,16 @@
 import type { TeamMember } from '../../shared/content'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from './FotoInteira'
 
 export function TeamCard({ member }: { member: TeamMember }) {
   return (
     <article className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
       <div className="flex flex-col gap-6 p-8 sm:flex-row">
-        <img
-          src={member.photo}
-          alt={member.name}
-          className="h-64 w-52 shrink-0 self-center rounded-xl object-cover sm:h-80 sm:w-64 sm:self-start"
-        />
+        {/* Foto inteira da pessoa (sem cortar o rosto), na mesma moldura em todos os cartões (#105).
+            A caixa de fora guarda o tamanho de antes: 13rem x 16rem no celular, 16rem x 20rem na tela larga. */}
+        <div className="h-64 w-52 shrink-0 self-center overflow-hidden rounded-xl sm:h-80 sm:w-64 sm:self-start">
+          <FotoInteira src={member.photo} alt={member.name} proporcao="h-full" />
+        </div>
         <div>
           <h3 className="text-xl text-white">{member.name}</h3>
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-gold-light">

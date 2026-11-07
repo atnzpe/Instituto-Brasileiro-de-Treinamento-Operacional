@@ -4,6 +4,8 @@
  * Tocar na foto abre a imagem inteira numa nova aba.
  */
 import type { Foto } from '../../lib/blog'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from '../FotoInteira'
 
 /**
  * Desenha a grade.
@@ -24,16 +26,16 @@ export function GradeDeFotos({ fotos }: { fotos: Foto[] }) {
           <figure>
             {/* Link para a foto inteira; rel="noopener" impede a nova aba de mexer nesta. */}
             <a href={foto.url} target="_blank" rel="noopener noreferrer" className="block">
-              {/* crossOrigin: pede a foto no modo liberado pela plataforma (CORS), para o modo offline guardá-la com segurança. */}
-              <img
-                crossOrigin="anonymous"
+              {/* Foto inteira na moldura 4:3 (#105). crossOrigin: pede a foto no modo liberado pela
+                  plataforma (CORS), para o modo offline guardá-la com segurança. */}
+              <FotoInteira
                 src={foto.url}
                 alt={foto.descricao ?? ''}
-                loading="lazy"
-                decoding="async"
-                width={600}
-                height={450}
-                className="aspect-[4/3] w-full rounded-xl object-cover"
+                proporcao="aspect-[4/3]"
+                className="rounded-xl"
+                largura={600}
+                altura={450}
+                crossOrigin="anonymous"
               />
               <span className="sr-only">(abre a foto inteira numa nova aba)</span>
             </a>

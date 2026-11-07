@@ -12,6 +12,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { AvisoDeEstado } from '../components/blog/AvisoDeEstado'
 import { Paginacao } from '../components/blog/Paginacao'
 import { buscaLimpa, buscarAlbuns, dataBr, ESTILO_DO_LINK_DE_PAGINA, rotuloDeFotos } from '../lib/blog'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from '../components/FotoInteira'
 
 // O título da aba do navegador e dos compartilhamentos.
 const TITULO = 'Eventos | Instituto Brasileiro de Treinamento Operacional'
@@ -80,15 +82,14 @@ function PaginaDeEventos() {
                       className="block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-gold-light"
                     >
                       {album.capa_url && (
-                        <img
-                          crossOrigin="anonymous"
+                        // Capa do álbum inteira na moldura 4:3 (#105).
+                        <FotoInteira
                           src={album.capa_url}
                           alt={album.capa_descricao ?? ''}
-                          loading="lazy"
-                          decoding="async"
-                          width={800}
-                          height={600}
-                          className="aspect-[4/3] w-full object-cover"
+                          proporcao="aspect-[4/3]"
+                          largura={800}
+                          altura={600}
+                          crossOrigin="anonymous"
                         />
                       )}
                       <div className="p-5">

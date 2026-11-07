@@ -6,6 +6,8 @@
 import { Link } from '@tanstack/react-router'
 import type { FeatureCard } from '../../shared/content'
 import { ArrowRightIcon } from './Icon'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from './FotoInteira'
 
 /**
  * Desenha os cartões.
@@ -26,14 +28,13 @@ export function FeatureCards({ features }: { features: FeatureCard[] }) {
             <>
               {/* Foto real no alto do cartão (com texto alternativo). Sem foto: só o texto. */}
               {feature.image && (
-                <img
+                // Foto inteira na moldura 16:9 (#105).
+                <FotoInteira
                   src={feature.image.src}
                   alt={feature.image.alt}
-                  loading="lazy"
-                  decoding="async"
-                  width={800}
-                  height={450}
-                  className="aspect-video w-full object-cover"
+                  proporcao="aspect-video"
+                  largura={800}
+                  altura={450}
                 />
               )}
               {/* O texto do cartão, com o espaço interno (a foto vai de borda a borda). */}

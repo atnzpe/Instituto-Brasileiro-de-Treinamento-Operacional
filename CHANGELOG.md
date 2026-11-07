@@ -12,6 +12,12 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Melhorado (fotos inteiras, #105)
+
+- Fotos e capas aparecem **inteiras**, sem cortar rosto, cabeça ou pés: cartões e página do blog, grade de fotos dos posts, eventos, cursos da plataforma, cartões de destaque da home e a equipe. A moldura tem o mesmo tamanho em toda a grade e a sobra é preenchida com a própria foto desfocada, igual à Rede Nacional.
+- `FotoInteira` aceita cantos arredondados, carregamento imediato (foto do topo) e o `crossOrigin` das fotos da plataforma (o modo offline continua guardando as fotos certas).
+- Teste de guarda: o build reprova se alguma parte voltar a cortar foto fora das exceções (fundo do topo, ícones de contato e emblemas redondos).
+
 ### Corrigido (cabeçalho)
 
 - O logo ganhou fundo transparente: antes aparecia uma caixa preta sobre o cabeçalho cinza-escuro.
