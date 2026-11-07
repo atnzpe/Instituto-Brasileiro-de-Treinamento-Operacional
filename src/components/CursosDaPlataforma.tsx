@@ -9,6 +9,8 @@
  */
 import { useQuery } from '@tanstack/react-query'
 import { buscarCursosDaPlataforma, precoBr } from '../lib/plataforma'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from './FotoInteira'
 
 /**
  * Data no formato do Brasil. Ex.: '2026-11-08' → '08/11/2026'.
@@ -50,12 +52,11 @@ export function CursosDaPlataforma({ limite }: { limite?: number } = {}) {
         >
           {/* Capa do curso (decorativa: o título vem escrito logo abaixo). */}
           {curso.imagem_url && (
-            <img
+            // Imagem do curso inteira, só de enfeite (alt vazio) (#105).
+            <FotoInteira
               src={curso.imagem_url}
               alt=""
-              loading="lazy"
-              decoding="async"
-              className="h-40 w-full object-cover"
+              proporcao="h-40"
             />
           )}
           <div className="flex flex-1 flex-col gap-2 p-5">

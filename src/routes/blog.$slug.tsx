@@ -17,6 +17,8 @@ import { useEffect } from 'react'
 import { AvisoDeEstado } from '../components/blog/AvisoDeEstado'
 import { GradeDeFotos } from '../components/blog/GradeDeFotos'
 import { buscarPost, dataBr, jsonLdDoPost, paragrafos } from '../lib/blog'
+// Foto inteira, sem cortar o rosto, com o fundo desfocado (#105).
+import { FotoInteira } from '../components/FotoInteira'
 
 export const Route = createFileRoute('/blog/$slug')({
   component: PaginaDoPost,
@@ -87,14 +89,16 @@ function PaginaDoPost() {
 
             {/* Capa grande, com a descrição para o leitor de tela. */}
             {post.capa_url && (
-              <img
-                crossOrigin="anonymous"
+              // Capa do post inteira; é a foto do topo, então já carrega (#105).
+              <FotoInteira
                 src={post.capa_url}
                 alt={post.capa_descricao ?? ''}
-                decoding="async"
-                width={1200}
-                height={675}
-                className="mt-8 aspect-video w-full rounded-2xl object-cover"
+                proporcao="aspect-video"
+                className="mt-8 rounded-2xl"
+                largura={1200}
+                altura={675}
+                carregar="eager"
+                crossOrigin="anonymous"
               />
             )}
 
