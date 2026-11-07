@@ -15,6 +15,7 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 ### Melhorado (rodapé, 07/11/2026)
 
 - O rodapé ganhou uma linha discreta, no estilo de placa tática e simétrica em volta de um losango central: **Desenvolvido por Gleyson Atanazio** de um lado e a **versão do site** do outro.
+- Simetria militar: o logo fica entre duas "asas" iguais; os dois blocos têm a mesma largura e o texto centralizado, separados por uma divisa (traço, estrela, traço).
 
 ### Melhorado (fotos inteiras, #105)
 
