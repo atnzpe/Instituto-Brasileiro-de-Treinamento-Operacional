@@ -22,7 +22,8 @@ export function AvisoFotosRestritas({ destino }: { destino: string }) {
       <h2 id="t-fotos-restritas" className="text-lg text-white">
         Fotos exclusivas para filiados
       </h2>
-      <p className="mt-2 max-w-2xl">
+      {/* mx-auto: o parágrafo no centro do quadro. */}
+      <p className="mx-auto mt-2 max-w-2xl">
         Muitos dos nossos alunos e instrutores são operadores de segurança. Por isso, as fotos dos treinamentos ficam na
         plataforma do IBTO, só para filiados, com login.
       </p>

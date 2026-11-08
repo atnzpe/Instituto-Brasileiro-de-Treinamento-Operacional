@@ -29,7 +29,8 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="mx-auto max-w-xl text-left">
+    // Simetria militar: rótulos, campos e botão no eixo central (text-center).
+    <form onSubmit={handleSubmit} noValidate className="mx-auto max-w-xl text-center">
       <div>
         <label htmlFor={nameId} className="block text-sm font-semibold text-white">
           Nome

@@ -37,7 +37,8 @@ export function CredenciadoCard({ pessoa }: { pessoa: CredenciadoDaRede }) {
         </p>
         {/* Áreas de atuação em etiquetas pequenas (só se houver). */}
         {pessoa.areas.length > 0 && (
-          <ul className="mt-2 flex flex-wrap gap-1" aria-label="Áreas de atuação">
+          // justify-center: as etiquetas das áreas no eixo central.
+          <ul className="mt-2 flex flex-wrap justify-center gap-1" aria-label="Áreas de atuação">
             {pessoa.areas.map((area) => (
               <li
                 key={area}

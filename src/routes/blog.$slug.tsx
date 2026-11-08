@@ -103,7 +103,8 @@ function PaginaDoPost() {
             )}
 
             {/* O texto, um parágrafo por bloco digitado (como TEXTO, sem HTML). */}
-            <div className="mt-8 space-y-4 leading-relaxed text-white/90">
+            {/* prosa: margens retas e a última linha centralizada (documento militar). */}
+            <div className="prosa mt-8 space-y-4 leading-relaxed text-white/90">
               {paragrafos(post.texto).map((trecho, indice) => (
                 // whitespace-pre-line: as quebras de linha simples dentro do parágrafo ficam.
                 <p key={indice} className="whitespace-pre-line">

@@ -167,8 +167,9 @@ export function MenuIdiomas({ noCelular = false }: { noCelular?: boolean }) {
   return (
     // translate="no": o Google não traduz o próprio menu (os nomes já estão no idioma de cada um).
     <details ref={menu} className={noCelular ? 'relative mt-2' : 'relative'} translate="no">
+      {/* justify-center (simetria militar): bandeira, nome e seta no centro do botão. */}
       <summary
-        className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-brand-gold/40 px-5 font-body text-sm text-white/80 hover:border-brand-gold-light focus-visible:outline-2 focus-visible:outline-brand-gold-light [&::-webkit-details-marker]:hidden"
+        className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-full border border-brand-gold/40 px-5 font-body text-sm text-white/80 hover:border-brand-gold-light focus-visible:outline-2 focus-visible:outline-brand-gold-light [&::-webkit-details-marker]:hidden"
         aria-label={`Idioma / Language / Idioma: ${idiomaDoBotao.nome}`}
       >
         <Bandeira codigo={idiomaDoBotao.codigo} />
@@ -182,7 +183,9 @@ export function MenuIdiomas({ noCelular = false }: { noCelular?: boolean }) {
         className={
           noCelular
             ? 'mt-2 flex flex-col rounded-md border border-white/10 bg-ink py-1'
-            : 'absolute right-0 z-50 mt-2 min-w-40 rounded-md border border-brand-gold/40 bg-ink py-1 shadow-lg'
+            : // No computador, a lista abre CENTRALIZADA embaixo do botão (left-1/2 e
+              // -translate-x-1/2 = metade para cada lado), não puxada para a direita.
+              'absolute left-1/2 z-50 mt-2 min-w-40 -translate-x-1/2 rounded-md border border-brand-gold/40 bg-ink py-1 shadow-lg'
         }
       >
         {IDIOMAS.map((idioma) => (
@@ -194,7 +197,8 @@ export function MenuIdiomas({ noCelular = false }: { noCelular?: boolean }) {
               aria-label={idioma.aviso}
               // Marca o idioma atual para o leitor de tela ("atual").
               aria-current={idioma.codigo === atual ? 'true' : undefined}
-              className="flex min-h-11 items-center gap-2 px-3 font-body text-sm text-white/80 hover:bg-brand-gold/15 focus-visible:outline-2 focus-visible:outline-brand-gold-light aria-[current=true]:font-semibold aria-[current=true]:text-brand-gold-light"
+              // justify-center: cada idioma da lista também fica no eixo central.
+              className="flex min-h-11 items-center justify-center gap-2 px-3 font-body text-sm text-white/80 hover:bg-brand-gold/15 focus-visible:outline-2 focus-visible:outline-brand-gold-light aria-[current=true]:font-semibold aria-[current=true]:text-brand-gold-light"
             >
               <Bandeira codigo={idioma.codigo} />
               {idioma.nome}

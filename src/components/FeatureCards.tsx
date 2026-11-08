@@ -19,7 +19,8 @@ import { FotoInteira } from './FotoInteira'
 export function FeatureCards({ features }: { features: FeatureCard[] }) {
   return (
     <section className="mx-auto -mt-20 max-w-6xl px-safe-4 sm:px-safe-6">
-      <div className="relative z-10 grid gap-6 sm:grid-cols-3">
+      {/* Grade simétrica: 3 colunas iguais; se houver menos cartões, ficam no centro. */}
+      <div className="grade-simetrica relative z-10 [--col-sm:3]">
         {features.map((feature) => {
           // overflow-hidden: a foto respeita os cantos arredondados do cartão.
           const cardClassName =
@@ -43,7 +44,7 @@ export function FeatureCards({ features }: { features: FeatureCard[] }) {
                 <p className="text-sm leading-relaxed text-white/75">{feature.description}</p>
                 {/* A seta só aparece no cartão que é link: seta sem destino confunde
                     (ajuste de 15/10/2026). Sem link: nada aqui. */}
-                {feature.href && <ArrowRightIcon className="mt-auto h-5 w-5 text-brand-gold-light" />}
+                {feature.href && <ArrowRightIcon className="mt-auto h-5 w-5 self-center text-brand-gold-light" />}
               </div>
             </>
           )

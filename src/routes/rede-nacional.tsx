@@ -113,7 +113,9 @@ function RedeNacionalPage() {
 
         {/* GRADE DOS ESTADOS: as 27 siglas; com gente = link para o bloco; sem ninguém = apagada. */}
         {rede && (
-          <nav aria-label="Estados" className="mx-auto mt-8 grid max-w-3xl grid-cols-6 gap-2 sm:grid-cols-9">
+          // Siglas dos estados: 6 por fileira no celular, 9 na tela maior; a última
+          // fileira fica centralizada (grade simétrica).
+          <nav aria-label="Estados" className="grade-simetrica mx-auto mt-8 max-w-3xl [--col:6] [--col-sm:9] [--vao:0.5rem]">
             {Object.entries(rede.estados).map(([uf, nome]) =>
               contagem[uf] ? (
                 <a
@@ -158,7 +160,8 @@ function RedeNacionalPage() {
                     {estado.estado}{' '}
                     <span className="text-base text-brand-gold-light">({estado.uf})</span>
                   </h2>
-                  <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {/* Cartões do estado: 1, 2 ou 4 por fileira, a última centralizada. */}
+                  <div className="grade-simetrica mt-6 [--col-sm:2] [--col-lg:4]">
                     {estado.pessoas.map((pessoa) => (
                       <CredenciadoCard key={pessoa.foto_url} pessoa={pessoa} />
                     ))}

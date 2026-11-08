@@ -61,7 +61,8 @@ function PaginaDoEvento() {
               {[album.data_evento && dataBr(album.data_evento), album.local_evento].filter(Boolean).join(' · ')}
             </p>
             {/* A descrição como TEXTO, um parágrafo por bloco digitado. */}
-            <div className="mt-6 max-w-3xl space-y-3 text-white/85">
+            {/* mx-auto: o bloco no centro; prosa: margens retas e última linha centralizada. */}
+            <div className="prosa mx-auto mt-6 max-w-3xl space-y-3 text-white/85">
               {paragrafos(album.descricao).map((trecho, indice) => (
                 <p key={indice} className="whitespace-pre-line">
                   {trecho}

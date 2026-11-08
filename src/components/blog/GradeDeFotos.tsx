@@ -20,7 +20,9 @@ export function GradeDeFotos({ fotos }: { fotos: Foto[] }) {
   }
 
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+    // Grade simétrica: 2 fotos por fileira no celular, 3 na tela maior; a última
+    // fileira fica centralizada.
+    <ul className="grade-simetrica [--col:2] [--col-sm:3] [--vao:0.75rem]">
       {fotos.map((foto) => (
         <li key={foto.id}>
           <figure>

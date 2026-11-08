@@ -69,7 +69,8 @@ function PaginaDeEventos() {
             <AvisoDeEstado estado="vazio" />
           ) : (
             <>
-              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Grade simétrica: a última fileira de eventos fica centralizada. */}
+              <ul className="grade-simetrica [--col-sm:2] [--col-lg:3]">
                 {consulta.data.albuns.map((album) => (
                   <li
                     key={album.slug}

@@ -32,7 +32,8 @@ function QuemSomosPage() {
         <div className="mx-auto max-w-5xl space-y-20">
           <section>
             <h1 className="text-4xl text-white sm:text-5xl">{data.intro.heading}</h1>
-            <div className="mt-6 max-w-3xl space-y-4">
+            {/* mx-auto: o bloco no centro; prosa: margens retas e última linha centralizada. */}
+            <div className="prosa mx-auto mt-6 max-w-3xl space-y-4">
               {data.intro.paragraphs.map((paragraph) => (
                 <p key={paragraph} className="text-white/70">
                   {paragraph}
@@ -43,7 +44,8 @@ function QuemSomosPage() {
 
           <section>
             <h2 className="text-3xl text-white">{data.oQueFazemos.heading}</h2>
-            <div className="mt-6 max-w-3xl space-y-4">
+            {/* mx-auto: o bloco no centro; prosa: margens retas e última linha centralizada. */}
+            <div className="prosa mx-auto mt-6 max-w-3xl space-y-4">
               {data.oQueFazemos.paragraphs.map((paragraph) => (
                 <p key={paragraph} className="text-white/70">
                   {paragraph}
