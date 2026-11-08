@@ -47,7 +47,7 @@ export function CartaoDoPost({ post, nivelDoTitulo = 'h2' }: { post: Post; nivel
         <Link
           to="/blog/$slug"
           params={{ slug: post.slug }}
-          className="mt-auto inline-flex min-h-11 items-center font-semibold text-brand-gold-light hover:underline"
+          className="mt-auto inline-flex min-h-11 items-center justify-center self-center font-semibold text-brand-gold-light hover:underline"
         >
           Ler mais
           {/* Para o leitor de tela: "Ler mais: título", e não vários "Ler mais" iguais. */}

@@ -94,7 +94,8 @@ function PaginaDoBlog() {
           ) : (
             <>
               {/* Cartões: 1 coluna no celular, 2 no tablet, 3 na tela larga. */}
-              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Grade simétrica: a última fileira de posts fica centralizada. */}
+              <ul className="grade-simetrica [--col-sm:2] [--col-lg:3]">
                 {consulta.data.posts.map((post) => (
                   <CartaoDoPost key={post.slug} post={post} />
                 ))}

@@ -12,6 +12,15 @@ A plataforma de cursos (`cursos.ib-to.org`) tem o próprio histórico, no reposi
 
 ## [Não lançado]
 
+### Mudado (simetria militar em todo o site, 08/11/2026)
+
+- Todo o conteúdo se alinha num **eixo central**, como numa insígnia: títulos, textos, cartões, formulário de contato, janela de detalhes do curso, faixa "Instale o app" e menu de idiomas.
+- **Cabeçalho** em três colunas: o menu fica no centro exato da tela (no celular, o logo fica no centro).
+- **Textos longos** (Quem Somos, blog, eventos) no padrão de documento militar: margens retas e a última linha centralizada.
+- **Grades** de cartões (cursos, blog, eventos, Rede Nacional, fotos, áreas) com a última fileira centralizada, em vez de encostada à esquerda.
+- **Diretoria:** a foto em cima e o texto embaixo, no centro; as seções que abrem e fecham têm o "+" dos dois lados.
+- Teste de guarda `tests/simetriaMilitar.test.ts`: a esteira barra quem tentar alinhar algo à esquerda ou à direita de novo.
+
 ### Melhorado (rodapé, 07/11/2026)
 
 - O rodapé ganhou uma linha discreta, no estilo de placa tática e simétrica em volta de um losango central: **Desenvolvido por Gleyson Atanazio** de um lado e a **versão do site** do outro.

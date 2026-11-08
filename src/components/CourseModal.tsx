@@ -63,12 +63,14 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
       className="dialog-safe m-auto max-w-lg rounded-2xl border border-white/10 bg-ink p-0 text-white backdrop:bg-black/80"
     >
       {course && (
-        <div className="relative p-6 sm:p-8">
+        // Simetria militar (08/11/2026): tudo no eixo central (text-center), e o
+        // botão de fechar no CENTRO do topo, não no canto direito.
+        <div className="relative p-6 text-center sm:p-8">
           <button
             type="button"
             onClick={() => dialogRef.current?.close()}
             aria-label="Fechar"
-            className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full text-2xl leading-none text-white/70 transition-colors hover:text-white"
+            className="absolute top-2 left-1/2 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full text-2xl leading-none text-white/70 transition-colors hover:text-white"
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -82,7 +84,8 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
             />
           )}
 
-          <div className="flex flex-wrap gap-2 pr-8">
+          {/* Etiquetas no centro. mt-8: o espaço do botão de fechar, em cima. */}
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
             <CourseStatusBadge status={status} />
             {accessModel ? (
               <CourseAccessBadge model={accessModel} />
@@ -92,11 +95,9 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
               </span>
             )}
           </div>
-          <div className="pr-8">
-            <h2 id={titleId} className="mt-4 text-2xl text-white">
-              {course.title}
-            </h2>
-          </div>
+          <h2 id={titleId} className="mt-4 text-2xl text-white">
+            {course.title}
+          </h2>
 
           <p className="mt-4 text-white/70">
             {course.summary ?? 'A descrição completa deste curso será divulgada em breve.'}
@@ -106,7 +107,9 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
           )}
 
           {facts.length > 0 && (
-            <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+            // Cada informação em duas linhas no centro: o nome pequeno em cima
+            // (ex.: "Local") e o valor embaixo (ex.: "Recife - PE").
+            <dl className="mt-6 space-y-2 text-sm">
               {facts.map(([label, value]) => (
                 <Fragment key={label}>
                   <dt className="text-white/50">{label}</dt>
@@ -133,7 +136,8 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
           {course.topics && course.topics.length > 0 && (
             <>
               <h3 className="mt-6 text-sm text-brand-gold-light uppercase">Conteúdo</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/80 marker:text-brand-gold-light">
+              {/* Sem bolinha à esquerda (list-none): cada tópico no centro. */}
+              <ul className="mt-2 list-none space-y-1 text-sm text-white/80">
                 {course.topics.map((topic) => (
                   <li key={topic}>{topic}</li>
                 ))}
@@ -144,7 +148,7 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
           {course.includes && course.includes.length > 0 && (
             <>
               <h3 className="mt-6 text-sm text-brand-gold-light uppercase">Materiais inclusos</h3>
-              <ul className="mt-2 flex flex-wrap gap-2 text-sm">
+              <ul className="mt-2 flex flex-wrap justify-center gap-2 text-sm">
                 {course.includes.map((item) => (
                   <li key={item} className="rounded-full border border-white/15 px-3 py-1 text-white/80">
                     {item}
@@ -161,7 +165,8 @@ export function CourseModal({ course, status, ended, accessModel, cta, onClose }
                 : 'As inscrições para esta turma estão encerradas. Novas datas serão divulgadas aqui.'}
             </p>
           ) : (
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            // Botões de inscrição no centro (justify-center).
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
               {course.whatsapp && course.whatsapp.length > 0 ? (
                 course.whatsapp.map((phone) => (
                   <a

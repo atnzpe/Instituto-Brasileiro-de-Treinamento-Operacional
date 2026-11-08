@@ -50,6 +50,24 @@
     font-family: var(--font-display);
     color: var(--color-ink);
   }
+
+  /* SIMETRIA MILITAR (pedido do Gleyson, 08/11/2026: "em todo o site, sem exceção"):
+     todo o conteúdo das páginas se alinha num EIXO CENTRAL, como numa insígnia.
+     O <main> centraliza tudo o que está dentro dele (títulos, textos, cartões);
+     as partes que precisam de mais cuidado usam as classes "prosa" e
+     "grade-simetrica", logo abaixo. O teste tests/simetriaMilitar.test.ts barra
+     quem tentar alinhar algo de novo à esquerda ou à direita. */
+  main {
+    text-align: center;
+  }
+
+  /* Campos de formulário não herdam o alinhamento sozinhos: centraliza também
+     o que a pessoa digita, para o formulário ficar no mesmo eixo. */
+  main input,
+  main textarea,
+  main select {
+    text-align: center;
+  }
 }
 
 /* Safe Area (issue #10). index.html uses viewport-fit=cover, so the page
@@ -84,12 +102,62 @@ div[vw].enabled {
 }
 
 @layer components {
+  /* TEXTO LONGO no padrão de documento militar: as duas margens retas (justify)
+     e a ÚLTIMA linha centralizada. Assim o bloco fica simétrico e continua fácil de
+     ler (parágrafo longo todo centralizado cansa a vista). "hyphens: auto" quebra
+     as palavras compridas com hífen, em português (o <html> tem lang="pt-BR"),
+     para não abrir buracos entre as palavras. Uso: <div className="prosa">. */
+  .prosa p,
+  .prosa li,
+  p.prosa {
+    text-align: justify;
+    text-align-last: center;
+    hyphens: auto;
+  }
+
+  /* GRADE SIMÉTRICA: cartões em colunas iguais, e a ÚLTIMA fileira, quando não
+     enche, fica CENTRALIZADA (numa grade comum ela fica encostada à esquerda).
+     Ex.: 5 cursos em 3 colunas = 3 em cima e 2 centralizados embaixo.
+     Quantas colunas: --col (celular), --col-sm (a partir de 640 px) e --col-lg
+     (a partir de 1024 px). Ex.: className="grade-simetrica [--col-sm:2] [--col-lg:3]".
+     O espaço entre os cartões: --vao (padrão 1.5rem) e, na vertical, --vao-y. */
+  .grade-simetrica {
+    --col: 1;
+    --vao: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--vao-y, var(--vao)) var(--vao);
+  }
+
+  /* Largura de cada cartão: o espaço todo, menos os vãos, dividido pelas colunas. */
+  .grade-simetrica > * {
+    width: calc((100% - (var(--col) - 1) * var(--vao)) / var(--col));
+  }
+
+  @media (min-width: 40rem) {
+    .grade-simetrica > * {
+      width: calc((100% - (var(--col-sm, var(--col)) - 1) * var(--vao)) / var(--col-sm, var(--col)));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grade-simetrica > * {
+      width: calc(
+        (100% - (var(--col-lg, var(--col-sm, var(--col))) - 1) * var(--vao)) /
+          var(--col-lg, var(--col-sm, var(--col)))
+      );
+    }
+  }
+
   /* QA_REPORT.html P3: no way for keyboard users to bypass the header nav.
-     Hidden until focused, then pinned to the top-left corner. */
+     Hidden until focused, then shown at the top center (simetria militar). */
+  /* Simetria militar: o atalho aparece no CENTRO do topo (left 50% + translate). */
   .skip-link {
     position: absolute;
     top: -100%;
-    left: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 100;
     border-radius: 0 0 0.5rem 0.5rem;
     background-color: var(--color-ink);
@@ -100,6 +168,5 @@ div[vw].enabled {
 
   .skip-link:focus {
     top: env(safe-area-inset-top, 0px);
-    left: max(1rem, env(safe-area-inset-left, 0px));
   }
 }

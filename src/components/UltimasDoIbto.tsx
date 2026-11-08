@@ -41,7 +41,8 @@ export function UltimasDoIbto() {
         </h2>
 
         {/* Cartões: 1 coluna no celular, 3 na tela larga. Título h3 (dentro da seção h2). */}
-        <ul className="mt-8 grid gap-6 sm:grid-cols-3">
+        {/* Grade simétrica: com menos de 3 posts, eles ficam no centro. */}
+        <ul className="grade-simetrica mt-8 [--col-sm:3]">
           {posts.map((post) => (
             <CartaoDoPost key={post.slug} post={post} nivelDoTitulo="h3" />
           ))}

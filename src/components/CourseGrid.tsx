@@ -26,7 +26,8 @@ export function CourseGrid({ data }: { data: CursosContent }) {
         ))}
       </ul>
 
-      <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Grade simétrica: 1, 2 ou 3 colunas, e a última fileira centralizada. */}
+      <ul className="grade-simetrica mt-8 [--col-sm:2] [--col-lg:3] [--vao:0.75rem]">
         {sortByStatus(data.cursos, today).map((course, index) => {
           const model = modelFor(course)
           const status = courseStatus(course, today)
@@ -36,7 +37,8 @@ export function CourseGrid({ data }: { data: CursosContent }) {
                 type="button"
                 aria-haspopup="dialog"
                 onClick={() => setSelected(course)}
-                className={`flex min-h-28 w-full flex-col items-start justify-between gap-4 rounded-xl border border-white/10 p-5 text-left transition-colors hover:border-brand-gold-light/60 ${
+                // Simetria militar: o conteúdo do cartão empilhado no eixo central.
+                className={`flex h-full min-h-28 w-full flex-col items-center justify-between gap-4 rounded-xl border border-white/10 p-5 text-center transition-colors hover:border-brand-gold-light/60 ${
                   index % 2 === 0 ? 'bg-brand-gold/20' : 'bg-white/5'
                 }`}
               >
@@ -52,7 +54,8 @@ export function CourseGrid({ data }: { data: CursosContent }) {
                     <span className="block text-sm text-white/70">{course.schedule}</span>
                   )}
                 </span>
-                <span className="flex w-full items-center justify-between gap-2">
+                {/* Modalidade e "Ver detalhes" empilhados no centro (não um em cada ponta). */}
+                <span className="flex w-full flex-col items-center gap-2">
                   {model ? (
                     <CourseAccessBadge model={model} />
                   ) : (

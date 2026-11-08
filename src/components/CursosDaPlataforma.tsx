@@ -42,8 +42,9 @@ export function CursosDaPlataforma({ limite }: { limite?: number } = {}) {
   }
 
   return (
-    // Cartões: 1 coluna no celular, 2 no tablet, 3 na tela larga.
-    <ul className="mt-6 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-3">
+    // Cartões: 1 coluna no celular, 2 no tablet, 3 na tela larga; a última fileira
+    // fica centralizada e o texto no eixo central (simetria militar).
+    <ul className="grade-simetrica mt-6 [--col-sm:2] [--col-lg:3] [--vao:1rem]">
       {/* slice: corta no limite pedido (sem limite, vão todos). */}
       {cursos.slice(0, limite).map((curso) => (
         <li
@@ -81,7 +82,7 @@ export function CursosDaPlataforma({ limite }: { limite?: number } = {}) {
             {/* Link comum: a página do curso fica na plataforma (outro endereço). */}
             <a
               href={curso.url}
-              className="mt-auto inline-flex min-h-11 items-center font-semibold text-brand-gold-light hover:underline"
+              className="mt-auto inline-flex min-h-11 items-center justify-center self-center font-semibold text-brand-gold-light hover:underline"
             >
               Ver na plataforma
               <span className="sr-only">: {curso.titulo}</span>

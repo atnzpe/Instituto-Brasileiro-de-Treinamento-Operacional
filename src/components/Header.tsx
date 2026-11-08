@@ -25,14 +25,24 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 pt-safe backdrop-blur">
-      {/* max-w-7xl: um pouco mais de largura; gap-6: o logo nunca encosta no menu. */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-safe-4 py-3 sm:px-safe-6">
-        <Link to="/" className="shrink-0" onClick={() => setOpen(false)}>
+      {/* SIMETRIA MILITAR (08/11/2026): três colunas, as das pontas com a MESMA largura
+          (1fr cada) e a do meio só do tamanho do conteúdo (auto). Assim o que fica no
+          meio cai no EIXO CENTRAL exato da tela.
+          - Celular e tablet: [espaço vazio] [logo] [botão do menu].
+          - Computador (xl, 1280 px ou mais): [logo] [links + idiomas] [Entrar].
+          max-w-[90rem]: largura para os links caberem no meio sem apertar as pontas;
+          gap-4: o vão entre as três colunas. */}
+      <div className="mx-auto grid max-w-[90rem] grid-cols-[1fr_auto_1fr] items-center gap-4 px-safe-4 py-3 sm:px-safe-6">
+        {/* COLUNA DA ESQUERDA. No computador: o logo, encostado à esquerda. No celular:
+            um espaço vazio do MESMO tamanho do botão do menu (44 px), que espelha o botão
+            da direita e deixa o logo no centro. aria-hidden: o leitor de tela pula. */}
+        <Link to="/" className="hidden shrink-0 justify-self-start xl:block" onClick={() => setOpen(false)}>
           <img src="/images/logo.webp" alt="IBTO" className="h-12 w-auto" />
         </Link>
+        <span aria-hidden="true" className="h-11 w-11 xl:hidden" />
 
-        {/* Menu completo: só a partir de 1280 px (xl), onde cabe numa linha. */}
-        <nav className="hidden items-center gap-6 xl:flex">
+        {/* COLUNA DO MEIO. No computador: os links e os idiomas. No celular: o logo. */}
+        <nav className="hidden items-center gap-5 xl:flex">
           {nav.map((link) => (
             <Link
               key={link.href}
@@ -46,18 +56,23 @@ export function Header() {
           ))}
           {/* Idiomas (#54): a mesma página traduzida pelo Google. */}
           <MenuIdiomas />
-          {/* Entrar / Área do aluno: abre a plataforma de cursos (link comum: é outro endereço). */}
-          <a
-            href={linkDaPlataforma('/login')}
-            className="inline-flex min-h-11 items-center rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide whitespace-nowrap text-white uppercase transition-colors hover:bg-brand-gold-light hover:text-ink"
-          >
-            Entrar / Área do aluno
-          </a>
         </nav>
+        <Link to="/" className="shrink-0 xl:hidden" onClick={() => setOpen(false)}>
+          <img src="/images/logo.webp" alt="IBTO" className="h-12 w-auto" />
+        </Link>
 
+        {/* COLUNA DA DIREITA. No computador: o botão Entrar, encostado à direita.
+            No celular: o botão que abre e fecha o menu. */}
+        {/* Entrar / Área do aluno: abre a plataforma de cursos (link comum: é outro endereço). */}
+        <a
+          href={linkDaPlataforma('/login')}
+          className="hidden min-h-11 items-center justify-self-end rounded-full bg-brand-gold px-5 font-body text-sm font-semibold tracking-wide whitespace-nowrap text-white uppercase transition-colors hover:bg-brand-gold-light hover:text-ink xl:inline-flex"
+        >
+          Entrar / Área do aluno
+        </a>
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center xl:hidden"
+          className="flex h-11 w-11 items-center justify-center justify-self-end xl:hidden"
           aria-label={open ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -72,7 +87,8 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-white/10 bg-ink px-safe-4 pb-4 xl:hidden">
+        // Menu do celular: tudo no eixo central (items-center + text-center).
+        <nav className="flex flex-col items-center gap-1 border-t border-white/10 bg-ink px-safe-4 pb-4 text-center xl:hidden">
           {nav.map((link) => (
             <Link
               key={link.href}

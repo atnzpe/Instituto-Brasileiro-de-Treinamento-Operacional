@@ -122,9 +122,11 @@ export function ConviteInstalar() {
       aria-label="Instalar o app do IBTO"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-superficie/95 px-safe-4 pt-4 pb-safe-4 backdrop-blur"
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
+      {/* Simetria militar (08/11/2026): ícone, texto e botões empilhados no eixo
+          central, em qualquer tamanho de tela (items-center + text-center). */}
+      <div className="mx-auto flex max-w-3xl flex-col items-center gap-3 text-center">
         <img src="/icons/icon-192.png" alt="" width={48} height={48} className="h-12 w-12 shrink-0 rounded-xl" />
-        <div className="flex-1 text-sm">
+        <div className="text-sm">
           <p className="font-semibold text-white">Instale o app do IBTO</p>
           {modo === 'iphone' ? (
             <p className="text-white/75">
@@ -135,7 +137,8 @@ export function ConviteInstalar() {
             <p className="text-white/75">Abre mais rápido, direto da tela do celular, e funciona até sem internet.</p>
           )}
         </div>
-        <div className="flex gap-3">
+        {/* Os botões lado a lado, centralizados. */}
+        <div className="flex justify-center gap-3">
           {/* No iPhone não há botão de instalar: só "Entendi" (que também conta como recusa por 30 dias). */}
           {modo === 'botao' && (
             <button

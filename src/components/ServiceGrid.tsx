@@ -16,7 +16,8 @@ import type { ServiceTile } from '../../shared/content'
  */
 export function ServiceGrid({ services }: { services: ServiceTile[] }) {
   return (
-    <div className="grid gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+    // Grade simétrica: 1, 3 ou 5 colunas, e a última fileira de emblemas centralizada.
+    <div className="grade-simetrica [--col-sm:3] [--col-lg:5] [--vao-y:2.5rem]">
       {services.map((service) => (
         <div key={service.title} className="group flex flex-col items-center gap-4 text-center">
           {/* O medalhão: o emblema PREENCHE o círculo (o arquivo é quadrado com fundo preto; o círculo
